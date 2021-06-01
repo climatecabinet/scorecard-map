@@ -55,9 +55,9 @@ def shp_to_geojson(geojson_path):
         chamber = 'House' if feature["properties"]["LSAD"] == "LL" else 'Senate'
         
         try:
-            district = feature["properties"]["SLDLST"].strip('0')
+            district = feature["properties"]["SLDLST"].lstrip('0')
         except KeyError:
-            district = feature["properties"]["SLDUST"].strip('0')
+            district = feature["properties"]["SLDUST"].lstrip('0')
 
         # rename features
         bounds = feature["properties"]["bounds"]
