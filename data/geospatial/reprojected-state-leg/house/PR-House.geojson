@@ -6,7 +6,7 @@
 ,
 {"type":"Feature","id":"3","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72006","ccid":"72006L","name":"Puerto Rico State House District 6","chamber":"House","district":"6","bounds":[-66.19,18.35,-66.09,18.46]},"geometry":null,"bbox":[null,null,null,null]}
 ,
-{"type":"Feature","id":"4","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72020","ccid":"72020L","name":"Puerto Rico State House District 20","chamber":"House","district":"2","bounds":[-67.22,17.93,-66.98,18.17]},"geometry":null,"bbox":[null,null,null,null]}
+{"type":"Feature","id":"4","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72020","ccid":"72020L","name":"Puerto Rico State House District 20","chamber":"House","district":"20","bounds":[-67.22,17.93,-66.98,18.17]},"geometry":null,"bbox":[null,null,null,null]}
 ,
 {"type":"Feature","id":"5","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72031","ccid":"72031L","name":"Puerto Rico State House District 31","chamber":"House","district":"31","bounds":[-66.12,18.2,-65.92,18.31]},"geometry":null,"bbox":[null,null,null,null]}
 ,
@@ -22,7 +22,7 @@
 ,
 {"type":"Feature","id":"11","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72037","ccid":"72037L","name":"Puerto Rico State House District 37","chamber":"House","district":"37","bounds":[-65.99,18.25,-65.77,18.46]},"geometry":null,"bbox":[null,null,null,null]}
 ,
-{"type":"Feature","id":"12","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72040","ccid":"72040L","name":"Puerto Rico State House District 40","chamber":"House","district":"4","bounds":[-66.04,18.38,-65.95,18.46]},"geometry":null,"bbox":[null,null,null,null]}
+{"type":"Feature","id":"12","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72040","ccid":"72040L","name":"Puerto Rico State House District 40","chamber":"House","district":"40","bounds":[-66.04,18.38,-65.95,18.46]},"geometry":null,"bbox":[null,null,null,null]}
 ,
 {"type":"Feature","id":"13","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72009","ccid":"72009L","name":"Puerto Rico State House District 9","chamber":"House","district":"9","bounds":[-66.32,18.26,-66.14,18.4]},"geometry":null,"bbox":[null,null,null,null]}
 ,
@@ -64,7 +64,7 @@
 ,
 {"type":"Feature","id":"32","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72029","ccid":"72029L","name":"Puerto Rico State House District 29","chamber":"House","district":"29","bounds":[-66.24,18.04,-66.05,18.23]},"geometry":null,"bbox":[null,null,null,null]}
 ,
-{"type":"Feature","id":"33","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72010","ccid":"72010L","name":"Puerto Rico State House District 10","chamber":"House","district":"1","bounds":[-66.26,18.39,-66.13,18.48]},"geometry":null,"bbox":[null,null,null,null]}
+{"type":"Feature","id":"33","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72010","ccid":"72010L","name":"Puerto Rico State House District 10","chamber":"House","district":"10","bounds":[-66.26,18.39,-66.13,18.48]},"geometry":null,"bbox":[null,null,null,null]}
 ,
 {"type":"Feature","id":"34","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72008","ccid":"72008L","name":"Puerto Rico State House District 8","chamber":"House","district":"8","bounds":[-66.2,18.3,-66.12,18.4]},"geometry":null,"bbox":[null,null,null,null]}
 ,
@@ -74,7 +74,7 @@
 ,
 {"type":"Feature","id":"37","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72005","ccid":"72005L","name":"Puerto Rico State House District 5","chamber":"House","district":"5","bounds":[-66.19,18.2,-66.03,18.37]},"geometry":null,"bbox":[null,null,null,null]}
 ,
-{"type":"Feature","id":"38","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72030","ccid":"72030L","name":"Puerto Rico State House District 30","chamber":"House","district":"3","bounds":[-66.32,17.91,-66.02,18.11]},"geometry":null,"bbox":[null,null,null,null]}
+{"type":"Feature","id":"38","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72030","ccid":"72030L","name":"Puerto Rico State House District 30","chamber":"House","district":"30","bounds":[-66.32,17.91,-66.02,18.11]},"geometry":null,"bbox":[null,null,null,null]}
 ,
 {"type":"Feature","id":"39","properties":{"state_fips":"72","state_abbr":"PR","geoid":"72024","ccid":"72024L","name":"Puerto Rico State House District 24","chamber":"House","district":"24","bounds":[-66.67,17.96,-66.58,18.04]},"geometry":null,"bbox":[null,null,null,null]}
 ,
