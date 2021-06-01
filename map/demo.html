@@ -1,0 +1,62 @@
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title>Test Map</title>
+  <meta name='robots' content='noindex, nofollow'>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <!-- styling -->
+  <style>
+    body {
+      color: #404040;
+      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .map {
+      position: absolute;
+      left: 0%;
+      width: 100%;
+      top: 0;
+      bottom: 0;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id='map' class='map'></div>
+
+  <script>
+
+    // This will let you use the .remove() function later on
+    if (!('remove' in Element.prototype)) {
+      Element.prototype.remove = function () {
+        if (this.parentNode) {
+          this.parentNode.removeChild(this);
+        }
+      };
+    }
+
+    // mapbox public access token
+    // next iteration: retrieve from .yaml file
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2hlbGJ5LWdyZWVuIiwiYSI6ImNrMHNobWdrNTAwZW8zYnA5czQ5cWh4ankifQ.TWYVyG-n0cmhTGvKg31eow';
+
+    // initialize map
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne',
+      zoom: 6.5,
+      center: [11.43, -10.082],
+      scrollZoom: true
+    });
+
+  </script>
+</body>
+
+</html>
