@@ -5,7 +5,7 @@ credit to @developmentseed/dirty-reprojectors
 process:
 1. download national boundary data
 2. using the boundary data, clean the edges of the state leg districts
-3. TODO: reproject from Meractor and Albers
+3. reproject from Meractor and Albers
 """
 
 # import libraries
@@ -61,4 +61,42 @@ if __name__ == "__main__":
                 check=True,
             )
 
-    print("Done refining the geojson files. Look for them in the clean-data folder")
+    print("Reproject geojsons")
+    filenames = []
+    # for house files
+    for filename in sorted(glob.glob("./data/geospatial/state-leg/house/*.geojson")): 
+        newfilename = filename.replace("/state-leg/", "/reprojected-state-leg/")
+        filenames.append(newfilename)
+        if os.path.exists(newfilename):
+            print(f"{newfilename} exists, skipping")
+        else:
+            print(f"{filename} => {newfilename}")
+            subprocess.run(
+                [
+                    "cat " +
+                    filename +
+                    " | dirty-reproject --forward albersUsa > " +
+                    newfilename,
+                ],
+                shell=True
+             )
+
+    # for senate files
+    for filename in sorted(glob.glob("./data/geospatial/state-leg/senate/*.geojson")): 
+        newfilename = filename.replace("/state-leg/", "/reprojected-state-leg/")
+        filenames.append(newfilename)
+        if os.path.exists(newfilename):
+            print(f"{newfilename} exists, skipping")
+        else:
+            print(f"{filename} => {newfilename}")
+            subprocess.run(
+                [
+                    "cat " +
+                    filename +
+                    " | dirty-reproject --forward albersUsa > " +
+                    newfilename,
+                ],
+                shell=True
+             )
+
+    print("Done reprojecting. Check the reprojected-state-leg folder for results")

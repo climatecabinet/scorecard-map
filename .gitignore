@@ -1,2 +1,5 @@
 *data/geospatial/source
 *data/geospatial/all
+*data/source
+*data/geospatial/topo-state-leg
+*scripts/reproject.py
