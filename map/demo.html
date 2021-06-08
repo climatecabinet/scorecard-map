@@ -61,7 +61,7 @@
 
     // back-end data
     // join csv data to geojson data on "ccid"
-    const csvUrl = 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/cc_scorecard_06082021.csv';
+    const csvUrl = 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/cc_scorecard_06082021_geoidstring.csv';
 
     // when the map loads
     map.on('load', function() {
@@ -75,7 +75,7 @@
                     results.data.forEach(row => {
                         map.setFeatureState({
                             source: 'fl-house',
-                            id: row.ccid // feature.id can be string, but only if string can be cast as int #7632
+                            id: row.geoid // feature.id can be string, but only if string can be cast as int #7632
                         },
                         {
                             candidate: row.name,
@@ -112,7 +112,7 @@
             map.addSource("fl-house", {
                 type: "geojson",
                 data: "https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/geospatial/reprojected-state-leg/house/FL-House.geojson",
-                promoteId: 'ccid'
+                promoteId: 'geoid'
             })
 
             map.on('click', 'fl-house', function (e) {
