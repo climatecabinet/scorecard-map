@@ -54,14 +54,14 @@
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne',
-      zoom: 4.5,
+      zoom: 5.5,
       center: [11.43, -10.082],
       scrollZoom: true
     });
 
     // back-end data
     // join csv data to geojson data on "ccid"
-    const csvUrl = 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/cc_scorecard_06082021_geoidstring.csv';
+    const csvUrl = 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/cc_scorecard_06082021_yearstr.csv';
 
     // when the map loads
     map.on('load', function() {
@@ -71,11 +71,11 @@
             dynamicTyping: true,
             complete: function(results) {
                 map.once('idle', () => {
-                    console.log(results.data[0]);
+                    console.log(results.data[0].geoid);
                     results.data.forEach(row => {
                         map.setFeatureState({
-                            source: 'fl-house',
-                            id: row.geoid // feature.id can be string, but only if string can be cast as int #7632
+                            source: 'ga-house',
+                            id: String(row.geoid) // feature.id can be string, but only if string can be cast as int
                         },
                         {
                             candidate: row.name,
@@ -84,20 +84,26 @@
                         });
                     });
 
-                    // FL house fill
+                    // GA house fill
                     map.addLayer({
-                        'id': 'fl-house-fill',
-                        'source': 'fl-house',
+                        'id': 'ga-house-fill',
+                        'source': 'ga-house',
                         'type': 'fill',
                         'layout': {},
                         'paint': {
-                            'fill-color': '#d99f20'
+                          'fill-color':
+                          ['case',
+                            ['<', ['feature-state', 'score'], 1],
+                            'rgba(255,255,255,0.3)',
+                            '#fff',
+                          ]
                         }
                     });
-                    // FL house lines
+
+                    // GA house lines
                     map.addLayer({
-                        'id': 'fl-house-lines',
-                        'source': 'fl-house',
+                        'id': 'ga-house-lines',
+                        'source': 'ga-house',
                         'type': 'line',
                         'layout': {},
                         'paint': {
@@ -109,16 +115,16 @@
             }});
 
         
-            map.addSource("fl-house", {
+            map.addSource("ga-house", {
                 type: "geojson",
-                data: "https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/geospatial/reprojected-state-leg/house/FL-House.geojson",
+                data: "https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/geospatial/reprojected-state-leg/house/GA-House.geojson",
                 promoteId: 'geoid'
             })
 
-            map.on('click', 'fl-house', function (e) {
-                var district = map.queryRenderedFeatures(e.point, { layers: ['fl-house'] });
+            map.on('click', 'ga-house-fill', function (e) {
+                var district = map.queryRenderedFeatures(e.point, { layers: ['ga-house-fill'] });
                 var props = district[0].properties;
-
+                console.log(props);
                 var content = '<b>Candidate:</b></b> ' + props.name + '<br>';
                 content += '<b>Party:</b> ' + props.party + '<br>';
 
