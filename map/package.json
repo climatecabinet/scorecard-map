@@ -1,0 +1,40 @@
+{
+  "name": "scorecard-map",
+  "version": "1.0.0",
+  "description": "a map that visualizes the CCScore of all US State Legislators",
+  "main": "index.js",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "start": "npm run develop",
+    "format": "prettier --write \"src/**/*.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shelbygreen/acc-map.git"
+  },
+  "author": "Climate Cabinet",
+  "license": "ISC",
+  "dependencies": {
+    "@rebass/grid": "^6.1.0",
+    "@styled-system/theme-get": "^5.1.2",
+    "apollo-link-http": "^1.5.17",
+    "fetch": "^1.1.0",
+    "gatsby": "^3.7.1",
+    "gatsby-plugin-react-helmet": "^4.7.1",
+    "gatsby-plugin-styled-components": "^4.7.1",
+    "gatsby-source-graphql": "^3.7.1",
+    "gatsby-source-mongodb": "^3.7.1",
+    "immutable": "^4.0.0-rc.12",
+    "isomorphic-fetch": "^3.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-immutable-proptypes": "^2.2.0",
+    "rebass": "^4.0.7",
+    "styled-components": "^5.3.0",
+    "typeface-lato": "^1.1.13"
+  }
+}
