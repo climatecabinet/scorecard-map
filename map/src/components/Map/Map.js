@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Flex, Box, Text } from '@rebass/grid'
 import mapboxgl from 'mapbox-gl'
 import { fromJS } from 'immutable'
 import { siteMetadata } from '../../../gatsby-config'
@@ -9,37 +10,123 @@ import { useVoteData } from '../Data/votes'
 import { useRollCallData } from '../Data/rollCalls'
 import { useBillData } from '../Data/bills'
 import styled from '../../../util/style'
+import "typeface-lato";
 
 const Wrapper = styled.div`
     height: 100%;
+    font-family: 'Lato', sans-serif;
 `
 
-const MapContainer = styled.div`
-    position: absolute;
-    top: 59px;
-    bottom: 0;
-    left: 0;
-    right: 0; 
+// map header component
+const MapHeader = styled(Box)`
+  color: black;
+  font-size: 24px;
+  font-weight: 700;
+  padding-bottom: 10px;
 `
 
-const Sidebar = styled.div`
-    position: absolute;
-    overflow-y: auto;
-    height: 200px;
-    top: calc(47px + 30px);
-    z-index: 4000;
-    background-color: #fff;
-    width: 340px;
-    padding: 10px;
-    border-radius: 0;
-    color: #29323c;
-    right: 30px;
-    margin: auto;
-    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 1px 1px rgba(16, 22, 26, 0.2), 0 2px 6px rgba(16, 22, 26, 0.2);
+const Select = styled.select`
+    width: 20vw;
+    height: 35px;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    border: 1px solid #C36C27;
 `
 
+// details component
+const DetailsBox = styled(Box)`
+  width: 100%;
+  height: 90%;
+  opacity: 95%;
+  margin: auto;
+  justify-content: space-evenly;
+`
+// background-color: #F3F3F3;
+
+// details text component
+const Details = styled(Box)`
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  margin-left: 15px;
+  margin-top: 15px;
+`
+
+// name component
+const Name = styled(Box)`
+  color: #C36C27;
+  font-size: 26px;
+  font-weight: 700;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  margin-left: 15px;
+`
+
+// party component
+const Party = styled(Box)`
+  color: #000000;
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: 15px;
+  margin-left: 15px;
+`
+
+// CC score & presidential results component
+const ScoreBox = styled(Box)`
+  background-color: white;
+  width: 50vw;
+  height: 15vh;
+  margin-left: 15px;
+  margin-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+`
+
+// styled text in the ^ components
+const Numbers = styled(Box)`
+  font-size: 24px;
+  color: #C36C27;
+  text-align: center;
+`
+
+// styled text for the CC score and presidential results
+const ScoreText = styled(Box)`
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    padding-bottom: 15px;
+`
+
+// past votes box component
+const VotesBox = styled(Box)`
+    margin-left: 15px;
+    margin-top: 15px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #C36C27;
+`
+
+// take action box component
+const ActionBox = styled(Box)`
+    width: 15vw;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    background-color: #C36C27;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    text-transform: uppercase;
+    padding: 10px 10px 10px 10px;
+`
+// store mapbox token
 const mapboxToken = siteMetadata.mapboxToken
 
+// map component
 const Map = () => {
 
     if (!mapboxToken) {
@@ -72,7 +159,7 @@ const Map = () => {
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [11.43, -10.082],
-            zoom: 5.5, 
+            zoom: 6, 
             minZoom: 2
         })
 
@@ -107,6 +194,8 @@ const Map = () => {
             // in the variable 'features'
             const features = map.queryRenderedFeatures(mapElement.point, {
                 layers: ['upperFL-fill', 'upperGA-fill']
+                // layers: ['upperFL-fill', 'upperGA-fill', 'upperAL-fill', 'upperMS-fill', 'upperLA-fill', 'upperAR-fill',
+                // 'upperTN-fill', 'upperKY-fill', 'upperWV-fill', 'upperVA-fill', 'upperNC-fill', 'upperSC-fill']
             })
 
             // also on click, get the ccid and the regions.incumbent.rep id
@@ -114,7 +203,7 @@ const Map = () => {
             const ccidCode = features[0].properties.ccid
             const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
             const legiscanCode = repIndex.getIn([incumbentId, 'legiscan_id'])
-            const rollCallCode = voteIndex.getIn([legiscanCode.toString(), 'roll_call_id'])
+            // const rollCallCode = voteIndex.getIn([legiscanCode.toString(), 'roll_call_id'])
             // const billCode = rollCallIndex.getIn([rollCallCode.toString(), 'bill_id'])
 
             // use the ccidCode to lookup the regions data (stored in the regionsIndex variable) and the representatives data (stored in the repIndex variable)
@@ -122,33 +211,19 @@ const Map = () => {
             // and relay the following information, stored the in the html variable
             // to be displayed in a tooltip
 
-            // TODO:
-            // round to the next integer for the the Score
-            const html = `
-                <center><strong>${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}</strong></center>
-                <br/>
-                <strong>${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}</strong>
-                <br />
-                <strong>${repIndex.getIn([incumbentId, 'party'])}</strong> 
-                <br />
-                <strong>Climate Cabinet Score:</strong>  ${repIndex.getIn([incumbentId, 'cc_score'])} 
-                <br/>
-                <strong>Last Presidential Result:</strong>  NA
-                <br/>
-                Past Climate Votes -- Vote 1, Vote 2, Vote 3, Vote 4, Vote 5
-                
-                <br/>
-                <br/>
+            const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
+            const html_legparty = `${repIndex.getIn([incumbentId, 'party'])}`;
+            const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
+            const html_results = `NA`;
 
-            `; 
             // ${billIndex.getIn([billCode.toString(), 'description'])}
-
-            // create tooltip variable for the floating card div
-            const tooltip = document.getElementById('floating-card')
+            // ${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}
             
-            // store html in the tooltip, which will be displayed in the floating card div
-            tooltip.innerHTML = html
-            // // TODO: add if else statement to show county vs counties when counties count > 1
+            // store html in the sidebar divs
+            document.getElementById('name').innerHTML = html_legname
+            document.getElementById('party').innerHTML = html_legparty
+            document.getElementById('score').innerHTML = html_score
+            document.getElementById('result').innerHTML = html_results
 
         });
 
@@ -158,6 +233,8 @@ const Map = () => {
             // in the variable 'features'
             const features = map.queryRenderedFeatures(mapElement.point, {
                 layers: ['upperFL-fill', 'upperGA-fill']
+                // layers: ['upperFL-fill', 'upperGA-fill', 'upperAL-fill', 'upperMS-fill', 'upperLA-fill', 'upperAR-fill',
+                // 'upperTN-fill', 'upperKY-fill', 'upperWV-fill', 'upperVA-fill', 'upperNC-fill', 'upperSC-fill']
             })
             // if there's something under the point (the features variable is not null)
             // then change the style of the cursor to pointer
@@ -177,60 +254,80 @@ const Map = () => {
     
     }, [])
 
-    // toggle button functionality
-    // onChange, chance the visibility of the upper and lower layers
-    // const handleLayerToggle = newLayer => {
-    //     // rename the current view as map
-    //     // and equal it to the map object
-    //     const { current: map } = mapRef
-    //     // if the map and map style haven't loaded, then don't continue
-    //     if (!(map && map.isStyleLoaded)) return
-    //     // set the activeLayer to the newLayer
-    //     setActiveLayer(newLayer)
-    //     // isUpper is a boolean
-    //     // if the newLayer is upper, T
-    //     // if the newLayer is lower, F
-    //     const isUpper = newLayer === 'upperNJ'
-    //     // change the visibility of the upper layer to none if the newLayer is upper
-    //     map.setLayoutProperty(
-    //         'upperNJ-fill',
-    //         'visibility',
-    //         isUpper ? 'visible' : 'none' // if the layer source is upper, and it's visible, then make it none
-    //     )
-    //     // change the visibility of the lower layer to visible if the newLayer is not lower
-    //     map.setLayoutProperty(
-    //         'lowerNJ-fill',
-    //         'visibility',
-    //         isUpper ? 'none' : 'visible'
-    //     )
-    // }
-
     return (
     <Wrapper>
-        <MapContainer ref={mapContainer} style={{ width: '100%', height: '100%' }}/>
-        <Sidebar>
-            <div id="floating-card">
-                <b>Legislator Details</b>
-            </div>
-            {/* {mapRef.current && mapRef.current.isStyleLoaded && (
-                <> */}
-                    {/* <LayerToggle
-                            value={activeLayer} // senate view; upper is the activeLayer on load
-                            options={[
-                                {value:'upperNJ', label: 'Senate'},
-                                {value:'lowerNJ', label:'House'},
-                            ]}
-                            onChange={handleLayerToggle}
-                        /> */}
-                {/* </>
-            )} */}
-            </Sidebar>
+       <Flex flexWrap='wrap' mx={2} py={4}>
+            <Box
+                px={2}
+                py={0}
+                width={2/3}
+                color='white'
+                height='90vh'>
+                <Box color='black' height='15vh'> 
+                    <MapHeader>Interactive Map</MapHeader>
+                    <Select>
+                        <option value="" hidden>State</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                    </Select>
+                    <Select style={{marginLeft: '20px'}}>
+                        <option value="" hidden>Chamber</option>
+                        <option value="Upper">Senate</option>
+                        <option value="Lower">House</option>
+                    </Select> 
+                    <Select style={{marginLeft: '20px'}}>
+                        <option value="" hidden>District</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </Select> 
+                </Box>
+                <Box height='calc(70% + 2rem)' ref={mapContainer} />
+            </Box>
+            <Box
+                px={2}
+                py={2}
+                width={1/3}
+                height='82vh'
+                color='black'
+                bg='#F3F3F3'
+                opacity='0.95'
+                fontFamily='Lato'>
+                <DetailsBox>
+                    <Details>Candidate Details</Details>
+                    <Name><div id='name'></div></Name>
+                    <Party><div id='party'></div></Party>
+                    <Flex>
+                    <ScoreBox>
+                        <ScoreText>Climate Cabinet Score</ScoreText>
+                        <Numbers><div id='score'></div></Numbers>
+                    </ScoreBox>
+                    <ScoreBox>
+                        <ScoreText>Last Presidential Result</ScoreText>
+                        <Numbers><div id='result'></div></Numbers>
+                    </ScoreBox>
+                    </Flex>
+                    <VotesBox>Past Climate Votes</VotesBox>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <ActionBox>Take Action</ActionBox>
+                </DetailsBox>
+            </Box>
+        </Flex>
     </Wrapper>
     )
 
 }
 
-export default Map
+// style={{ width: '100%', height: '100%' }}
 
-{/* <strong>In the ${regionsIndex.getIn([ccidCode, 'fragments']).count()} counties that make up ${regionsIndex.getIn([ccidCode, 'state_abbr'])} State District ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}...</strong>
-<br /> */}
+export default Map

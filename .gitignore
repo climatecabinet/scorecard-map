@@ -7,6 +7,7 @@
 *scripts/sample.ipynb
 *map/.cache
 *map/node_modules
+*map/src/components/Map/Demo.js
 *package-lock.json
 
 data/cc_scorecard_06082021_yearstr.csv
