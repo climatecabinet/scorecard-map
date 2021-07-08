@@ -6,7 +6,10 @@ export const useData = () => {
   const data = useStaticQuery(graphql`
   query {
     allMongodbRegions {
-      regions(limit: 10000) {
+      regions(
+        limit: 10000, 
+        query: {OR: [{ _cls: "Region.District.StateLegDistUpper"}, {_cls: "Region.District.StateLegDistLower"}]}
+        ) {
         state_abbr
         ccid
         incumbents {
@@ -14,6 +17,7 @@ export const useData = () => {
           rep
         }
         district_no
+        district_type
       }
     }
   }

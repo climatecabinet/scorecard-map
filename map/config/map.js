@@ -85,7 +85,13 @@ export const layers = [
         //     'rgb(140, 140, 140)'
         // ],
         'fill-color': 'orange',
-        'fill-outline-color': 'white'
+        'fill-outline-color': 'white',
+        'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.6, // true, opacity is 0.6
+            1 // false, opacity is 1
+        ]
       },
       layout: {
         visibility: 'visible',
@@ -115,126 +121,126 @@ export const layers = [
             visibility: 'visible',
         },
     },
-    {
-        id: "upperAL-fill",
-        source: 'upperAL',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperMS-fill",
-        source: 'upperMS',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperLA-fill",
-        source: 'upperLA',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperAR-fill",
-        source: 'upperAR',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperTN-fill",
-        source: 'upperTN',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperKY-fill",
-        source: 'upperKY',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperVA-fill",
-        source: 'upperVA',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperWV-fill",
-        source: 'upperWV',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperNC-fill",
-        source: 'upperNC',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    },
-    {
-        id: "upperSC-fill",
-        source: 'upperSC',
-        type: 'fill',
-        paint: { // TODO: choropleth, style by score
-          'fill-color': 'orange',
-          'fill-outline-color': 'white'
-        },
-        layout: {
-            visibility: 'visible',
-        },
-    }
+    // {
+    //     id: "upperAL-fill",
+    //     source: 'upperAL',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperMS-fill",
+    //     source: 'upperMS',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperLA-fill",
+    //     source: 'upperLA',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperAR-fill",
+    //     source: 'upperAR',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperTN-fill",
+    //     source: 'upperTN',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperKY-fill",
+    //     source: 'upperKY',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperVA-fill",
+    //     source: 'upperVA',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperWV-fill",
+    //     source: 'upperWV',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperNC-fill",
+    //     source: 'upperNC',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // },
+    // {
+    //     id: "upperSC-fill",
+    //     source: 'upperSC',
+    //     type: 'fill',
+    //     paint: { // TODO: choropleth, style by score
+    //       'fill-color': 'orange',
+    //       'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    // }
 ]
 
 // map navigation
