@@ -201,6 +201,7 @@ const Map = () => {
             // also on click, get the ccid and the regions.incumbent.rep id
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
+            console.log(features[0])
             const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
             const legiscanCode = repIndex.getIn([incumbentId, 'legiscan_id'])
             // const rollCallCode = voteIndex.getIn([legiscanCode.toString(), 'roll_call_id'])
@@ -228,25 +229,52 @@ const Map = () => {
         });
 
         // change cursor to pointer when hovering over a district
-        map.on('mouseenter', function(mapElement) {
-            // when you hover over a point on the map, query the features under the point and store
-            // in the variable 'features'
-            const features = map.queryRenderedFeatures(mapElement.point, {
-                layers: ['upperFL-fill', 'upperGA-fill']
-                // layers: ['upperFL-fill', 'upperGA-fill', 'upperAL-fill', 'upperMS-fill', 'upperLA-fill', 'upperAR-fill',
-                // 'upperTN-fill', 'upperKY-fill', 'upperWV-fill', 'upperVA-fill', 'upperNC-fill', 'upperSC-fill']
-            })
-            // if there's something under the point (the features variable is not null)
-            // then change the style of the cursor to pointer
-            // to signal that you can click here
-            if (features.length) {
-                map.getCanvas().style.cursor = 'pointer';
-            }
-        });
+        // map.on('mouseenter', function(mapElement) {
+        //     // when you hover over a point on the map, query the features under the point and store
+        //     // in the variable 'features'
+        //     const features = map.queryRenderedFeatures(mapElement.point, {
+        //         layers: ['upperFL-fill', 'upperGA-fill']
+        //         // layers: ['upperFL-fill', 'upperGA-fill', 'upperAL-fill', 'upperMS-fill', 'upperLA-fill', 'upperAR-fill',
+        //         // 'upperTN-fill', 'upperKY-fill', 'upperWV-fill', 'upperVA-fill', 'upperNC-fill', 'upperSC-fill']
+        //     })
+        //     // if there's something under the point (the features variable is not null)
+        //     // then change the style of the cursor to pointer
+        //     // to signal that you can click here
+        //     if (features.length) {
+        //         map.getCanvas().style.cursor = 'pointer';
+        //     }
+        // });
 
         // change the cursor back to the "grabbing" mouse when you're not hovering over a clickable feature -- which is just a district
-        map.on('mouseleave', function () {
-            map.getCanvas().style.cursor = '';
+        // map.on('mouseleave', function () {
+        //     map.getCanvas().style.cursor = '';
+        // });
+
+        // hovering
+        let hoveredDistrictId = null;
+
+        map.on('mousemove', 'upperFL-fill', (e) => {
+            map.getCanvas().style.cursor = 'pointer';
+            if (e.features.length > 0) {
+                if (hoveredDistrictId) {
+                    // set the hover attribute to false with feature state
+                    map.setFeatureState({
+                        source: 'upperFL',
+                        id: hoveredDistrictId
+                    }, {
+                        hover: false
+                    });
+                }
+
+                hoveredDistrictId = e.features[0].id
+                // set the hover attribute to true with feature state
+                map.setFeatureState({
+                    source: 'upperFL',
+                    id: hoveredDistrictId
+                }, {
+                    hover: true
+                });
+            }
         });
 
         // clean up on unmount
