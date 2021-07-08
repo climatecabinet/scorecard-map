@@ -229,6 +229,7 @@ const Map = () => {
         });
 
         // change cursor to pointer when hovering over a district
+      
         // map.on('mouseenter', function(mapElement) {
         //     // when you hover over a point on the map, query the features under the point and store
         //     // in the variable 'features'
