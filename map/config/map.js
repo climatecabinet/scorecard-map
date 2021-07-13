@@ -220,5 +220,5 @@ export const house_bounds = {
 // dictionary: state abbreviation to state
 export const initialsToState = {
     fl: 'Florida',
-	ga: 'Georgia'
+	  ga: 'Georgia'
 }
