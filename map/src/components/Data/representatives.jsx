@@ -13,11 +13,17 @@ export const useRepData = () => {
         cc_score
         party
         role
-        legiscan_id
       }
     }
   }
   `)
+
+  // TODO: add pulling in votes & remove votes file
+  // ccscorecard {
+  //   intro
+  //   votes
+  //   outro
+  // }
 
   const repData = data.allMongodbRegions.representatives.map(representative => {
     const { _id } = representative
