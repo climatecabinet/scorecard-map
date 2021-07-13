@@ -259,6 +259,10 @@ const Map = () => {
     // this ref holds the map DOM node so that we can pass it into Mapbox GL
     const mapContainer = useRef(null)
 
+    // this ref holds the map object once we have instantiated it, so that it
+    // can be used in other hooks
+    const mapRef = useRef(null)
+
     // data from MongoDB/GraphQL query
     // regions Data
     const [regionsData, regionsIndex] = useData()
