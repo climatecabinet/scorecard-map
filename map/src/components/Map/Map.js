@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Flex, Box } from '@rebass/grid'
 import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import 'mapbox-gl/dist/mapbox-gl.js'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
 import { useRepData } from '../Data/representatives'
