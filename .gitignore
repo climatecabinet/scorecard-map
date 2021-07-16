@@ -3,3 +3,13 @@
 *data/source
 *data/geospatial/topo-state-leg
 *scripts/reproject.py
+*scripts/mongo-to-csv.py
+*scripts/sample.ipynb
+*map/.cache
+*map/node_modules
+*map/src/components/Map/OldMap.jsx
+*package-lock.json
+
+data/cc_scorecard_06082021_yearstr.csv
+data/cc_scorecard_06082021_yearstring.csv
+data/cc_scorecard_06082021_yearstring.csv
