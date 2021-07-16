@@ -11,9 +11,9 @@ export const config = {
 
 // sources for the map layers
 export const sources = {
-    upperFL: {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/test-FL-Senate.geojson',
+    upperFL: {  
+        type: 'vector',
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/flhouse1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     lowerFL: {
         type: 'geojson',
@@ -30,6 +30,7 @@ export const layers = [
     {
       id: "upperFL-fill",
       source: 'upperFL',
+	  'source-layer': 'flhouse_0',
       type: 'fill',
       paint: { // TODO: change choropleth color scheme
         'fill-color': {

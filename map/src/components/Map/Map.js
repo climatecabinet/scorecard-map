@@ -277,7 +277,8 @@ const Map = () => {
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
-            center: [11.43, -10.082],
+            center: [-83.36713675985857, 30.208931714822665],
+            // [11.43, -10.082],
             zoom: 6, 
             minZoom: 2
         })
@@ -300,24 +301,24 @@ const Map = () => {
                 map.addLayer(layer)
             })
 
-            // create a list of states using their abbreviations
-            // and sort in alphabetical order
-            let states = Object.keys(senate_bounds)
-            states.sort();
+            // // create a list of states using their abbreviations
+            // // and sort in alphabetical order
+            // let states = Object.keys(senate_bounds)
+            // states.sort();
 
-            // update the select div element by converting the state abbrevations to the full state names
-            const selectElement = document.getElementById('state-select')
-            for (let i = 0; i < states.length; i++) {
-                let currentState = states[i]; 
-                let newOption = new Option(initialsToState[currentState], currentState); 
-                selectElement.add(newOption, undefined); 
-            }
+            // // update the select div element by converting the state abbrevations to the full state names
+            // const selectElement = document.getElementById('state-select')
+            // for (let i = 0; i < states.length; i++) {
+            //     let currentState = states[i]; 
+            //     let newOption = new Option(initialsToState[currentState], currentState); 
+            //     selectElement.add(newOption, undefined); 
+            // }
 
-            // populate the chamber element based on the selected state
-            updateChamberSelect();
+            // // populate the chamber element based on the selected state
+            // updateChamberSelect();
 
-            // populate the district element based on the selected state
-            updateDistrictSelect();
+            // // populate the district element based on the selected state
+            // updateDistrictSelect();
 
             // map.resize();
         });
@@ -362,31 +363,31 @@ const Map = () => {
         });
 
         // after pressing the enter button, zoom to the state/chamber/district
-        document.getElementById('enter-button').addEventListener('click', function () {
-            let coord_dict;
-            let currentState = document.getElementById('state-select').value;
-            let currentDistrict = document.getElementById('district-select').value;
+        // document.getElementById('enter-button').addEventListener('click', function () {
+        //     let coord_dict;
+        //     let currentState = document.getElementById('state-select').value;
+        //     let currentDistrict = document.getElementById('district-select').value;
 
-            if (document.getElementById('chamber-select').value === 'upperFL') {
-                // if the selected chamber is upperFL (or senate), then grab the senate coordinates for the selected state
-                coord_dict = senate_bounds[currentState]
-            } else {
-                // if the selected chamber is lowerFL (or house), then grab the house coordinates for the selected state
-                coord_dict = house_bounds[currentState]
-            }
+        //     if (document.getElementById('chamber-select').value === 'upperFL') {
+        //         // if the selected chamber is upperFL (or senate), then grab the senate coordinates for the selected state
+        //         coord_dict = senate_bounds[currentState]
+        //     } else {
+        //         // if the selected chamber is lowerFL (or house), then grab the house coordinates for the selected state
+        //         coord_dict = house_bounds[currentState]
+        //     }
 
-            let area = coord_dict[currentDistrict][2]
-            let zoomLevel = getZoom(area)
+        //     let area = coord_dict[currentDistrict][2]
+        //     let zoomLevel = getZoom(area)
 
-            // fly to the point
-            map.flyTo({
-                center: coord_dict[currentDistrict],
-                zoom: zoomLevel,
-                essential: true
-            })
+        //     // fly to the point
+        //     map.flyTo({
+        //         center: coord_dict[currentDistrict],
+        //         zoom: zoomLevel,
+        //         essential: true
+        //     })
 
 
-        })
+        // })
 
         // // clean up on unmount
         // return () => {
@@ -399,15 +400,15 @@ const Map = () => {
     return (
         <Wrapper>
             <Box>
-                {/* contains map and navigation bar */}
                 <MapContainer ref={mapContainer}></MapContainer>
-                <Navbar>
+                {/* navigation bar */}
+                {/* <Navbar>
                     <Select id="state-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a State</option></Select>
                     <Select id="chamber-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a Chamber</option></Select>
                     <Select id="district-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a District</option></Select>
-                    <EnterBox id="enter-button" style={{marginLeft: '10px'}}>Enter</EnterBox>
-                {/* contains sidebar */}
-                <Sidebar>
+                    <EnterBox id="enter-button" style={{marginLeft: '10px'}}>Enter</EnterBox> */}
+                {/* sidebar */}
+                {/* <Sidebar>
                     <Details>Candidate Details</Details>
                     <Name id='name'></Name>
                     <Party id='party'></Party>
@@ -421,10 +422,10 @@ const Map = () => {
                         <Numbers id='result'></Numbers>
                     </ScoreBox>
                     </Flex>
-                    <VotesBox>Past Climate Votes</VotesBox>
+                    <VotesBox>Past Climate Votes</VotesBox> */}
                     {/* <ActionBox>Take Action</ActionBox> */}
-                </Sidebar>
-                </Navbar>
+                {/* </Sidebar>
+                </Navbar> */}
             </Box>
         </Wrapper>
     )
