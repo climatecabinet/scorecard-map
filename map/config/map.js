@@ -11,28 +11,28 @@ export const config = {
 
 // sources for the map layers
 export const sources = {
-    upperFL: {  
+    house: {  
         type: 'vector',
         tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/flhouse1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
-    lowerFL: {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/test-FL-House.geojson',
+    senate: {
+        type: 'vector',
+        tiles: ['https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/test-FL-House.geojson'],
     },
-    // upperGA: {
-    //     type: 'geojson',
-    //     data: 'https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/geospatial/reprojected-state-leg/senate/GA-Senate.geojson',
-    // },
+    state: {
+        type: 'vector',
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/us_states1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+    },
 }
 
 // TODO: make layer groups for states, senate, and house, with the help of ArcGIS tilesets
 export const layers = [
     {
-      id: "upperFL-fill",
-      source: 'upperFL',
-	  'source-layer': 'flhouse_0',
+      id: "house-fill",
+      source: 'house',
+	  'source-layer': 'flhouse_0', 
       type: 'fill',
-      paint: { // TODO: change choropleth color scheme
+      paint: {
         'fill-color': {
             property: 'cc_score',
             stops: [
@@ -62,8 +62,9 @@ export const layers = [
         },
     },
     {
-        id: "lowerFL-fill",
-        source: 'lowerFL',
+        id: "senate-fill",
+        source: 'senate',
+		// 'source-layer': 'flhouse_0', // TODO: change before running
         type: 'fill',
         paint: { 
             'fill-color': {
@@ -86,8 +87,21 @@ export const layers = [
         layout: {
           visibility: 'none',
         },
-    },
-}
+    }
+	},
+	{
+        id: "state-fill",
+        source: 'state',
+		'source-layer': 'us_states', 
+        type: 'fill',
+        paint: {
+			'fill-color': '#d99f20',
+			'fill-outline-color': 'white'
+        },
+        layout: {
+          visibility: 'visible',
+        },
+	}
 ]
 
 // bounds for the senate districts
