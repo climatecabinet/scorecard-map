@@ -5,6 +5,7 @@
 *scripts/reproject.py
 *scripts/mongo-to-csv.py
 *scripts/sample.ipynb
+*scripts/test.py
 *map/.cache
 *map/node_modules
 *map/src/components/Map/OldMap.jsx
@@ -13,3 +14,8 @@
 data/cc_scorecard_06082021_yearstr.csv
 data/cc_scorecard_06082021_yearstring.csv
 data/cc_scorecard_06082021_yearstring.csv
+
+
+*.DS_Store
+*data/.DS_Store
+*data/geospatial/.DS_Store

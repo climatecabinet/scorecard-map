@@ -13,24 +13,38 @@ export const config = {
 export const sources = {
     house: {  
         type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/flhouse1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/state_house_districts1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     senate: {
         type: 'vector',
-        tiles: ['https://raw.githubusercontent.com/climatecabinet/scorecard-map/main/data/test-FL-House.geojson'],
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/state_senate_districts/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     state: {
-        type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/us_states1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'geojson',
+        data: ['https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/reprojected_us1/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*'],
     },
 }
 
 // TODO: make layer groups for states, senate, and house, with the help of ArcGIS tilesets
 export const layers = [
+	{
+        id: "state-fill",
+        source: 'state',
+		'source-layer': 'reprojected_us_0', 
+        type: 'fill',
+        paint: {
+			'fill-color': '#d99f20',
+			'fill-outline-color': 'white'
+        },
+        layout: {
+          visibility: 'visible',
+        },
+	},
+
     {
       id: "house-fill",
       source: 'house',
-	  'source-layer': 'flhouse_0', 
+	  'source-layer': 'state_house_districts_0', 
       type: 'fill',
       paint: {
         'fill-color': {
@@ -64,7 +78,7 @@ export const layers = [
     {
         id: "senate-fill",
         source: 'senate',
-		// 'source-layer': 'flhouse_0', // TODO: change before running
+		'source-layer': 'allsenatereduced_0', 
         type: 'fill',
         paint: { 
             'fill-color': {
@@ -82,24 +96,11 @@ export const layers = [
                     [90, '#0061BB'],
                     [100, '#0061BB']
                 ],
+			},
           'fill-outline-color': 'white'
         },
         layout: {
           visibility: 'none',
-        },
-    }
-	},
-	{
-        id: "state-fill",
-        source: 'state',
-		'source-layer': 'us_states', 
-        type: 'fill',
-        paint: {
-			'fill-color': '#d99f20',
-			'fill-outline-color': 'white'
-        },
-        layout: {
-          visibility: 'visible',
         },
 	}
 ]
