@@ -277,9 +277,8 @@ const Map = () => {
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
-            center: [-83.36713675985857, 30.208931714822665],
-            // [11.43, -10.082],
-            zoom: 6, 
+            center: [11.43, -10.082],
+            zoom: 5, 
             minZoom: 2
         })
 
