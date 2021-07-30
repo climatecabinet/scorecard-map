@@ -1,0 +1,56 @@
+.wrapper {
+    display: flex;  
+    flex-flow: row wrap;
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+}
+
+.wrapper > * {
+    padding: 5px;
+    flex: 1 100%;
+}
+
+.mapText {
+    font-size: 28px;
+    padding-bottom: 5px;
+    float: left;
+}
+
+.resetText {
+    font-size: 18px;
+    float: right;
+    padding-right: 55px;
+    padding-top: 10px;
+}
+
+.map {
+    height: 75vh;
+    width: 60vw;
+}
+
+.candidateText {
+    margin-left: 15px;
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.aside-2 {
+    background: #F4F4F4;
+}
+
+@media all and (min-width: 600px) {
+    .aside { flex: 1 0 0; }
+}
+
+@media all and (min-width: 800px) {
+    .main    { flex: 3 0px; }
+    .aside-1 { order: 1; } 
+    .main    { order: 2; }
+    .aside-2 { order: 3; }
+    .footer  { order: 4; }
+}
+
+body {
+    padding: 1em; 
+}
+  
