@@ -6,99 +6,24 @@ import 'mapbox-gl/dist/mapbox-gl.js'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
 import { useRepData } from '../Data/representatives'
-import { sources, layers, senate_bounds, house_bounds, initialsToState} from '../../../config/map'
+import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, initialsToState} from '../../../config/map'
 import styled from '../../../util/style'
 import "typeface-lato";
-
-// wrapper for the map component
-const Wrapper = styled.div`
-    height: 100%;
-    font-family: 'Lato', sans-serif;
-`
-
-// map container component
-// desktop view: 100%vh of the screen
-// mobile & iPad view: 50%vh of the screen
-const MapContainer = styled(Box)`
-    position: absolute!important;
-    top: 0!important;
-    left: 0!important;
-    bottom: 0!important;
-    right: 0!important;
-    width: 100%;
-    @media screen and (min-width: 800px) {
-        height: 100vh!important
-    };
-    @media screen and (max-width: 425px) {
-        height: 50vh!important
-    }
-`
-
-// navigation bar component
-// desktop view: above the map
-// mobile & iPad view: underneath the map, 50% of the view
-const Navbar = styled.div`
-    background-color: #F3F3F3;
-    height: 50vh!important;
-    position: absolute!important;
-    bottom: 0!important;
-    right: 0!important;
-    width: 100%!important;
-    background-color: #fff;
-    padding: 2px;
-    color: #29323c;
-    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 1px 1px rgba(16, 22, 26, 0.2), 0 2px 6px rgba(16, 22, 26, 0.2);
-    @media screen and (min-width: 800px) {
-        top: 0!important;
-        width: 300px!important;
-        height: 100px!important;
-    }
-`
+import './map.css'
 
 // select elements
 const Select = styled.select`
-    width: 30vw;
-    height: 35px;
+    height: 6vh;
+    width: 19vw;
     background: white;
     color: #333;
-    font-size: 14px;
+    font-size: 20px;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
+    margin-bottom: 20px;
+    padding: 10px;
 `
 
-// enter box
-const EnterBox = styled.div`
-    position: absolute;
-    width: 90vw;
-    background-color: #C36C27;
-    color: white;
-    text-align: center;
-    font-size: 20px;
-    text-transform: uppercase;
-    padding: 5px 5px 5px 10px;
-    margin-top: 10px;
-`
-
-// sidebar component
-const Sidebar = styled.div`
-    width: 100%;
-    height: 90%;
-    opacity: 95%;
-    margin-top: 70px;
-    justify-content: space-evenly;
-`
-
-
-// candidate details box
-const Details = styled(Box)`
-  color: #000;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding-bottom: 10px;
-  margin-left: 15px;
-  margin-top: 15px;
-`
 
 // name element
 const Name = styled(Box)`
@@ -107,27 +32,25 @@ const Name = styled(Box)`
   font-weight: 700;
   padding-top: 15px;
   padding-bottom: 10px;
-  margin-left: 15px;
 `
 
 // party element
 const Party = styled(Box)`
   color: #000000;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   padding-bottom: 15px;
-  margin-left: 15px;
 `
 
 // score box
 const ScoreBox = styled(Box)`
   background-color: white;
-  width: 50vw;
-  height: 15vh;
+  width: 15vw;
+  height: 13vh;
   margin-left: 15px;
   margin-right: 15px;
-  padding-top: 5px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 25px;
 `
 
 // score text element
@@ -135,13 +58,13 @@ const ScoreText = styled(Box)`
     text-transform: uppercase;
     text-align: center;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 16px;
     padding-bottom: 15px;
 `
 
 // numbers element
 const Numbers = styled(Box)`
-  font-size: 24px;
+  font-size: 26px;
   color: #C36C27;
   text-align: center;
 `
@@ -149,9 +72,9 @@ const Numbers = styled(Box)`
 // votes box
 const VotesBox = styled(Box)`
     margin-left: 15px;
-    margin-top: 15px;
+    margin-top: 50px;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 24px;
     color: #C36C27;
 `
 
@@ -277,8 +200,11 @@ const Map = () => {
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
-            center: [11.43, -10.082],
-            zoom: 5, 
+            center: [-1.14, -0.98],
+            zoom: 4, 
+            // TODO: detect window size. change zoom based on window size.
+            // desktop: 4.5
+            // mobile/iPad: 2.5
             minZoom: 2
         })
 
@@ -300,41 +226,113 @@ const Map = () => {
                 map.addLayer(layer)
             })
 
-            // // create a list of states using their abbreviations
-            // // and sort in alphabetical order
-            // let states = Object.keys(senate_bounds)
-            // states.sort();
+            // create a list of states using their abbreviations
+            // and sort in alphabetical order
+            let states = Object.keys(state_bounds)
+            states.sort();
 
-            // // update the select div element by converting the state abbrevations to the full state names
-            // const selectElement = document.getElementById('state-select')
-            // for (let i = 0; i < states.length; i++) {
-            //     let currentState = states[i]; 
-            //     let newOption = new Option(initialsToState[currentState], currentState); 
-            //     selectElement.add(newOption, undefined); 
-            // }
+            // update the state element with state options
+            const selectElement = document.getElementById('state-select')
+            for (let i = 0; i < states.length; i++) {
+                let currentState = states[i]; 
+                let newOption = new Option(initialsToState[currentState], currentState); 
+                selectElement.add(newOption, undefined); 
+            }
 
-            // // populate the chamber element based on the selected state
-            // updateChamberSelect();
+            // when a state is selected, zoom to it via bounds
+            document.getElementById('state-select').addEventListener('change', function () {
+                let selectedState = document.getElementById('state-select').value
+                let bounds = state_bounds[selectedState]
+                map.fitBounds(bounds)
+            })
 
-            // // populate the district element based on the selected state
-            // updateDistrictSelect();
+            // update the chamber element with the chamber options
+            let chamberOptions = Object.keys(chambers)
+            chamberOptions.sort();
 
+            const selectChamber = document.getElementById('chamber-select')
+            for (let i = 0; i < chamberOptions.length; i++) {
+                let currentChamber = chamberOptions[i]
+                let newOption = new Option(chambers[currentChamber], currentChamber)
+                selectChamber.add(newOption, undefined)
+            }
+
+            // when a chamber is selected, make it visible
+            document.getElementById('chamber-select').addEventListener('change', function () {
+                let selectedChamber = document.getElementById('chamber-select').value
+                
+                // change all layers visibility to none
+                map.setLayoutProperty('state-fill', 'visibility', 'none')
+                map.setLayoutProperty('senate-fill', 'visibility', 'none')
+                map.setLayoutProperty('house-fill', 'visibility', 'none')
+
+                // change the selected chamber's visibility to visible
+                let clickedLayer = selectedChamber + '-fill'
+                map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
+
+                // change district to empty
+                document.getElementById('district-select').innerHTML = ""
+
+            })       
+        
             // map.resize();
         });
+
+        map.on('idle', function() {
+            // update the district element with the district options
+            if (document.getElementById('chamber-select').value) {
+                let selectedChamber = document.getElementById('chamber-select').value
+                let selectedState = document.getElementById('state-select').value
+                console.log(selectedChamber)
+
+                if (selectedChamber === 'house') {
+                    let districtOptions = Object.keys(house_bounds[selectedState])
+
+                    const selectDistrict = document.getElementById('district-select')
+                    for (let i = 0; i < districtOptions.length; i++) {
+                        let currentDistrict = districtOptions[i]
+                        let newOption = new Option(currentDistrict, currentDistrict)
+                        selectDistrict.add(newOption, undefined)
+                    }
+
+                    document.getElementById('district-select').addEventListener('change', function () {
+                        let selectedDistrict = document.getElementById('district-select').value
+                        let bounds = house_bounds[selectedState][selectedDistrict]
+                        map.fitBounds(bounds)
+                    })
+                } else {
+                    let districtOptions = Object.keys(senate_bounds[selectedState])
+
+                    const selectDistrict = document.getElementById('district-select')
+                    for (let i = 0; i < districtOptions.length; i++) {
+                        let currentDistrict = districtOptions[i]
+                        let newOption = new Option(currentDistrict, currentDistrict)
+                        selectDistrict.add(newOption, undefined)
+                    }
+
+                    document.getElementById('district-select').addEventListener('change', function () {
+                        let selectedDistrict = document.getElementById('district-select').value
+                        let bounds = senate_bounds[selectedState][selectedDistrict]
+                        map.fitBounds(bounds)
+                    })
+                }
+
+            } else {
+                console.log('no chamber selected yet')
+            }
+            
+        })
 
         map.on('click', function(mapElement) {
             // when you click a point on the map, query the features under the point and store
             // in the variable 'features'
             const features = map.queryRenderedFeatures(mapElement.point, {
-                layers: ['upperFL-fill', 'lowerFL-fill']
-                // layers: ['upperFL-fill', 'upperGA-fill', 'upperAL-fill', 'upperMS-fill', 'upperLA-fill', 'upperAR-fill',
-                // 'upperTN-fill', 'upperKY-fill', 'upperWV-fill', 'upperVA-fill', 'upperNC-fill', 'upperSC-fill']
+                layers: ['house-fill', 'senate-fill']
             })
 
             // also on click, get the ccid and the regions.incumbent.rep id
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
-            console.log(features[0])
             const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
             const legiscanCode = repIndex.getIn([incumbentId, 'legiscan_id'])
             // const rollCallCode = voteIndex.getIn([legiscanCode.toString(), 'roll_call_id'])
@@ -361,33 +359,6 @@ const Map = () => {
 
         });
 
-        // after pressing the enter button, zoom to the state/chamber/district
-        // document.getElementById('enter-button').addEventListener('click', function () {
-        //     let coord_dict;
-        //     let currentState = document.getElementById('state-select').value;
-        //     let currentDistrict = document.getElementById('district-select').value;
-
-        //     if (document.getElementById('chamber-select').value === 'upperFL') {
-        //         // if the selected chamber is upperFL (or senate), then grab the senate coordinates for the selected state
-        //         coord_dict = senate_bounds[currentState]
-        //     } else {
-        //         // if the selected chamber is lowerFL (or house), then grab the house coordinates for the selected state
-        //         coord_dict = house_bounds[currentState]
-        //     }
-
-        //     let area = coord_dict[currentDistrict][2]
-        //     let zoomLevel = getZoom(area)
-
-        //     // fly to the point
-        //     map.flyTo({
-        //         center: coord_dict[currentDistrict],
-        //         zoom: zoomLevel,
-        //         essential: true
-        //     })
-
-
-        // })
-
         // // clean up on unmount
         // return () => {
         //     map.remove()
@@ -397,21 +368,29 @@ const Map = () => {
 
 
     return (
-        <Wrapper>
-            <Box>
-                <MapContainer ref={mapContainer}></MapContainer>
+        // container for the entire app
+        <div class="wrapper">
+            {/* map & navigation bar */}
+            <div class="main">
                 {/* navigation bar */}
-                {/* <Navbar>
-                    <Select id="state-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a State</option></Select>
-                    <Select id="chamber-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a Chamber</option></Select>
-                    <Select id="district-select" style={{marginLeft: '10px'}}><option value="" hidden>Select a District</option></Select>
-                    <EnterBox id="enter-button" style={{marginLeft: '10px'}}>Enter</EnterBox> */}
-                {/* sidebar */}
-                {/* <Sidebar>
-                    <Details>Candidate Details</Details>
-                    <Name id='name'></Name>
-                    <Party id='party'></Party>
-                    <Flex>
+                <div class="nav">
+                    <div class="mapText">Interactive Map</div>
+                    <div class="resetText">RESET</div>
+                    <br/><br/><br/>
+                    <Select id="state-select"><option value="" hidden>State</option></Select>
+                    <Select id="chamber-select" style={{marginLeft: '20px'}}><option value="" hidden>Chamber</option></Select>
+                    <Select id="district-select" style={{marginLeft: '20px'}}><option value="" hidden>District</option></Select>
+                </div>
+                {/* map */}
+                <div class="map" ref={mapContainer}></div>
+            </div>
+            {/* sidebar */}
+            <div class="aside aside-2">
+                <div class="candidateText">CANDIDATE DETAILS</div>
+                <br/>
+                <Name id='name' style={{marginLeft: '15px'}}></Name>
+                <Party id='party' style={{marginLeft: '15px'}}></Party>
+                <Flex>
                     <ScoreBox>
                         <ScoreText>Climate Cabinet Score</ScoreText>
                         <Numbers id='score'></Numbers>
@@ -420,13 +399,10 @@ const Map = () => {
                         <ScoreText>Last Presidential Result</ScoreText>
                         <Numbers id='result'></Numbers>
                     </ScoreBox>
-                    </Flex>
-                    <VotesBox>Past Climate Votes</VotesBox> */}
-                    {/* <ActionBox>Take Action</ActionBox> */}
-                {/* </Sidebar>
-                </Navbar> */}
-            </Box>
-        </Wrapper>
+                </Flex>
+                <VotesBox>Past Climate Votes</VotesBox>
+            </div>
+        </div>
     )
 
 }
