@@ -320,6 +320,22 @@ const Map = () => {
             } else {
                 console.log('no chamber selected yet')
             }
+
+            // reset the navigation options if the reset button is clicked
+            document.getElementById('reset').addEventListener('click', function () {
+                // reset options
+                document.getElementById('state-select').value = ""
+                document.getElementById('chamber-select').value = ""
+                document.getElementById('district-select').innerHTML = "District"
+                // change back to states layer
+                map.setLayoutProperty('state-fill', 'visibility', 'visible')
+                map.setLayoutProperty('senate-fill', 'visibility', 'none')
+                map.setLayoutProperty('house-fill', 'visibility', 'none')
+                // zoom out to center
+                map.flyTo({center: [-1.14, -0.98], zoom: 4})
+
+
+            })
             
         })
 
@@ -346,7 +362,7 @@ const Map = () => {
             const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
             const html_legparty = `${repIndex.getIn([incumbentId, 'party'])}`;
             const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
-            const html_results = `NA`;
+            // const html_results = `NA`;
 
             // ${billIndex.getIn([billCode.toString(), 'description'])}
             // ${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}
@@ -355,7 +371,7 @@ const Map = () => {
             document.getElementById('name').innerHTML = html_legname
             document.getElementById('party').innerHTML = html_legparty
             document.getElementById('score').innerHTML = html_score
-            document.getElementById('result').innerHTML = html_results
+            // document.getElementById('result').innerHTML = html_results
 
         });
 
@@ -375,11 +391,11 @@ const Map = () => {
                 {/* navigation bar */}
                 <div class="nav">
                     <div class="mapText">Interactive Map</div>
-                    <div class="resetText">RESET</div>
+                    <div id = "reset" class="resetText">RESET</div>
                     <br/><br/><br/>
                     <Select id="state-select"><option value="" hidden>State</option></Select>
-                    <Select id="chamber-select" style={{marginLeft: '20px'}}><option value="" hidden>Chamber</option></Select>
-                    <Select id="district-select" style={{marginLeft: '20px'}}><option value="" hidden>District</option></Select>
+                    <Select id="chamber-select" style={{marginLeft: '27px'}}><option value="" hidden>Chamber</option></Select>
+                    <Select id="district-select" style={{marginLeft: '27px'}}><option value="" hidden>District</option></Select>
                 </div>
                 {/* map */}
                 <div class="map" ref={mapContainer}></div>
@@ -395,10 +411,10 @@ const Map = () => {
                         <ScoreText>Climate Cabinet Score</ScoreText>
                         <Numbers id='score'></Numbers>
                     </ScoreBox>
-                    <ScoreBox>
+                    {/* <ScoreBox>
                         <ScoreText>Last Presidential Result</ScoreText>
                         <Numbers id='result'></Numbers>
-                    </ScoreBox>
+                    </ScoreBox> */}
                 </Flex>
                 <VotesBox>Past Climate Votes</VotesBox>
             </div>

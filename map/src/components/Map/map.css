@@ -19,14 +19,28 @@
 .resetText {
     font-size: 18px;
     float: right;
-    padding-right: 55px;
+    padding-right: 1vw;
     padding-top: 10px;
+}
+
+.resetText:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .map {
     height: 75vh;
     width: 60vw;
+    padding-right: 15px;
 }
+
+/* .nav {
+    background: pink;
+}
+
+.main {
+    background: blue;
+} */
 
 .candidateText {
     margin-left: 15px;
@@ -43,11 +57,9 @@
 }
 
 @media all and (min-width: 800px) {
-    .main    { flex: 3 0px; }
-    .aside-1 { order: 1; } 
-    .main    { order: 2; }
-    .aside-2 { order: 3; }
-    .footer  { order: 4; }
+    .main    { flex: 1 0px; }
+    .main    { order: 1; }
+    .aside-2 { order: 2; }
 }
 
 body {
