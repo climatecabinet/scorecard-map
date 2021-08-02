@@ -272,7 +272,6 @@ const Map = () => {
 
                 // change district to empty
                 document.getElementById('district-select').innerHTML = ""
-
             })       
         
             // map.resize();
