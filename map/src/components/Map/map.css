@@ -19,7 +19,6 @@
 .resetText {
     font-size: 18px;
     float: right;
-    padding-right: 1vw;
     padding-top: 10px;
 }
 
@@ -31,16 +30,16 @@
 .map {
     height: 75vh;
     width: 60vw;
-    padding-right: 15px;
 }
 
 /* .nav {
     background: pink;
-}
+} */
 
 .main {
-    background: blue;
-} */
+    /* background: blue; */
+    padding-right: 10px;
+}
 
 .candidateText {
     margin-left: 15px;
