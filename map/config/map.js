@@ -3662,7 +3662,7 @@ export const chambers = {
 export const initialsToState = {
 	az: 'Arizona',
 	co: 'Colorado',
-	ct: 'Conneticut',
+	ct: 'Connecticut',
 	fl: 'Florida',
 	ga: 'Georgia',
 	il: 'Illinois',
