@@ -13,8 +13,8 @@ import './map.css'
 
 // select elements
 const Select = styled.select`
-    height: 6vh;
-    width: 19vw;
+    height: 50px;
+    width: 32%;
     background: white;
     color: #333;
     font-size: 20px;
@@ -201,7 +201,7 @@ const Map = () => {
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [-1.14, -0.98],
-            zoom: 4, 
+            zoom: 3.5, 
             // TODO: detect window size. change zoom based on window size.
             // desktop: 4.5
             // mobile/iPad: 2.5
@@ -272,6 +272,7 @@ const Map = () => {
 
                 // change district to empty
                 document.getElementById('district-select').innerHTML = ""
+
             })       
         
             // map.resize();
@@ -331,7 +332,7 @@ const Map = () => {
                 map.setLayoutProperty('senate-fill', 'visibility', 'none')
                 map.setLayoutProperty('house-fill', 'visibility', 'none')
                 // zoom out to center
-                map.flyTo({center: [-1.14, -0.98], zoom: 4})
+                map.flyTo({center: [-1.14, -0.98], zoom: 3.5})
 
 
             })
@@ -393,8 +394,8 @@ const Map = () => {
                     <div id = "reset" class="resetText">RESET</div>
                     <br/><br/><br/>
                     <Select id="state-select"><option value="" hidden>State</option></Select>
-                    <Select id="chamber-select" style={{marginLeft: '27px'}}><option value="" hidden>Chamber</option></Select>
-                    <Select id="district-select" style={{marginLeft: '27px'}}><option value="" hidden>District</option></Select>
+                    <Select id="chamber-select" style={{marginLeft: '15px'}}><option value="" hidden>Chamber</option></Select>
+                    <Select id="district-select" style={{marginLeft: '15px'}}><option value="" hidden>District</option></Select>
                 </div>
                 {/* map */}
                 <div class="map" ref={mapContainer}></div>

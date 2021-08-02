@@ -32,7 +32,7 @@ export const layers = [
 		// 'source-layer': 'reprojected_us_0', 
         type: 'fill',
         paint: {
-			'fill-color': '#d99f20',
+			'fill-color': '#bb6c2f',
 			'fill-outline-color': 'white'
         },
         layout: {
@@ -49,17 +49,17 @@ export const layers = [
         'fill-color': {
             property: 'cc_score',
             stops: [
-                [0, '#BB0000'], // red
-                [10, '#BB0000'],
-                [20, '#7F00BB'], // purple
-                [30, '#7F00BB'],
-                [40, '#7F00BB'],
-                [50, '#7F00BB'],
-                [60, '#7F00BB'],
-                [70, '#0061BB'], // blue
-                [80, '#0061BB'],
-                [90, '#0061BB'],
-                [100, '#0061BB']
+                [0, '#edcfb7'], // red
+                [10, '#edcfb7'],
+                [20, '#e0aa81'], // purple
+                [30, '#e0aa81'],
+                [40, '#e0aa81'],
+                [50, '#e0aa81'],
+                [60, '#e0aa81'],
+                [70, '#d2864b'], // blue
+                [80, '#d2864b'],
+                [90, '#d2864b'],
+                [100, '#d2864b']
             ]
         },
         'fill-outline-color': 'white',
