@@ -11250,21 +11250,17 @@ const Numbers = (0,_util_style__WEBPACK_IMPORTED_MODULE_8__.default)(_rebass_gri
 const VotesBox = (0,_util_style__WEBPACK_IMPORTED_MODULE_8__.default)(_rebass_grid__WEBPACK_IMPORTED_MODULE_1__.Box)`
     margin-left: 15px;
     margin-top: 50px;
-    font-weight: 700;
-    font-size: 24px;
-    color: #C36C27;
-    overflow-y: auto;
-    height: 200px;
+    margin-right: 15px;
 `; // action box
 
 const ActionBox = (0,_util_style__WEBPACK_IMPORTED_MODULE_8__.default)(_rebass_grid__WEBPACK_IMPORTED_MODULE_1__.Box)`
-    width: 15vw;
+    width: 250px;
     margin-left: 15px;
     margin-bottom: 15px;
     background-color: #C36C27;
     color: white;
     text-align: center;
-    font-size: 20px;
+    font-size: 24px;
     text-transform: uppercase;
     padding: 10px 10px 10px 10px;
 `; // store mapbox token
@@ -11272,82 +11268,7 @@ const ActionBox = (0,_util_style__WEBPACK_IMPORTED_MODULE_8__.default)(_rebass_g
 const mapboxToken = _gatsby_config__WEBPACK_IMPORTED_MODULE_4__.siteMetadata.mapboxToken; // map component
 
 const Map = () => {
-  // function to quantify zoom level, based on area
-  function getZoom(area) {
-    if (area <= 0.01) {
-      return 13;
-    } else if (area <= 0.05) {
-      return 12;
-    } else if (area <= 0.1) {
-      return 11;
-    } else if (area <= 0.5) {
-      return 10;
-    } else if (area <= 0.9) {
-      return 9;
-    } else {
-      return 8;
-    }
-  } // function to show options for chamber after a state is selected
-
-
-  let updateChamberSelect = function () {
-    let currentState = document.getElementById('state-select').value;
-
-    if (currentState) {
-      // create a list of chambers 
-      let chambers = Object.keys(_config_map__WEBPACK_IMPORTED_MODULE_7__.sources); // update the chamber div element with the map sources
-
-      const selectChamber = document.getElementById('chamber-select');
-
-      for (let i = 0; i < chambers.length; i++) {
-        let currentChamber = chambers[i];
-        let newOption = new Option(currentChamber);
-        selectChamber.add(newOption, undefined);
-      }
-    } else {
-      document.getElementById('chamber-select').value = 'Select a State';
-    }
-  }; // function to update the district values when a state is selected
-
-
-  let updateDistrictSelect = function () {
-    let coord_dict;
-    let currentState = document.getElementById('state-select').value;
-    let currentChamber = document.getElementById('chamber-select').value;
-
-    if (currentState) {
-      if (currentChamber === 'upperFL') {
-        // if the selected chamber is upperFL (or senate), then grab the senate coordinates for the selected state
-        coord_dict = _config_map__WEBPACK_IMPORTED_MODULE_7__.senate_bounds[currentState];
-      } else {
-        // if the selected chamber is lowerFL (or house), then grab the house coordinates for the selected state
-        coord_dict = _config_map__WEBPACK_IMPORTED_MODULE_7__.house_bounds[currentState];
-      }
-
-      let districts = Object.keys(coord_dict);
-      districts = districts.map(Number);
-      districts.sort(function (a, b) {
-        return a - b;
-      }); // store the current, selected district
-
-      var selectElement = document.getElementById('district-select'); // Ggt the old options and remove them
-
-      var selectOptions = selectElement.options;
-
-      while (selectOptions.length > 0) {
-        selectElement.remove(0);
-      } // Add new options
-
-
-      for (let i = 0; i < districts.length; i++) {
-        let currentDistrict = districts[i];
-        let newOption = new Option(currentDistrict, currentDistrict);
-        selectElement.add(newOption, undefined);
-      }
-    }
-  }; // if there's no mapbox token, raise an error in the console
-
-
+  // if there's no mapbox token, raise an error in the console
   if (!mapboxToken) {
     console.error('ERROR: Mapbox token is required in gatsby-config.js siteMetadata');
   } // this ref holds the map DOM node so that we can pass it into Mapbox GL
@@ -11514,51 +11435,82 @@ const Map = () => {
       const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
       const html_legparty = `${repIndex.getIn([incumbentId, 'party'])}`;
       const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
-      const html_intro = `${repIndex.getIn([incumbentId, 'ccscorecard', 'intro'])}`;
-      const html_outro = `${repIndex.getIn([incumbentId, 'ccscorecard', 'outro'])}`;
       const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
       const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
       const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
       const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
-      const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`; // ${billIndex.getIn([billCode.toString(), 'description'])}
-      // ${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}
-      // store html in the sidebar divs
+      const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`; // store html in the sidebar divs
 
       document.getElementById('name').innerHTML = html_legname;
       document.getElementById('party').innerHTML = html_legparty;
-      document.getElementById('score').innerHTML = html_score;
-      document.getElementById('intro').innerHTML = html_intro;
-      document.getElementById('outro').innerHTML = html_outro;
+      document.getElementById('score').innerHTML = html_score; // store the votes in the hidden div
 
       if (html_vote1 === 'undefined') {
-        document.getElementById('vote1').innerHTML = '';
+        document.getElementById('vote1').style.display = "none";
+        document.getElementById('vote1').innerHTML = 'Vote information not available.';
       } else {
+        document.getElementById('vote1').style.display = "none";
         document.getElementById('vote1').innerHTML = html_vote1;
       }
 
       if (html_vote2 === 'undefined') {
-        document.getElementById('vote2').innerHTML = '';
+        document.getElementById('vote2').style.display = "none";
+        document.getElementById('vote2').innerHTML = 'Vote information not available.';
       } else {
+        document.getElementById('vote2').style.display = "none";
         document.getElementById('vote2').innerHTML = html_vote2;
       }
 
       if (html_vote3 === 'undefined') {
-        document.getElementById('vote3').innerHTML = '';
+        document.getElementById('vote3').style.display = "none";
+        document.getElementById('vote3').innerHTML = 'Vote information not available.';
       } else {
+        document.getElementById('vote3').style.display = "none";
         document.getElementById('vote3').innerHTML = html_vote3;
       }
 
       if (html_vote4 === 'undefined') {
-        document.getElementById('vote4').innerHTML = '';
+        document.getElementById('vote4').style.display = "none";
+        document.getElementById('vote4').innerHTML = 'Vote information not available.';
       } else {
+        document.getElementById('vote4').style.display = "none";
         document.getElementById('vote4').innerHTML = html_vote4;
       }
 
       if (html_vote5 === 'undefined') {
-        document.getElementById('vote5').innerHTML = '';
+        document.getElementById('vote5').style.display = "none";
+        document.getElementById('vote5').innerHTML = 'Vote information not available.';
       } else {
+        document.getElementById('vote5').style.display = "none";
         document.getElementById('vote5').innerHTML = html_vote5;
-      }
+      } // when the vote item is clicked, make the vote appear
+
+
+      document.getElementById('vote1Tab').addEventListener('click', function () {
+        document.getElementById('vote1').style.display = 'block';
+      });
+      document.getElementById('vote2Tab').addEventListener('click', function () {
+        document.getElementById('vote1').style.display = 'none';
+        document.getElementById('vote2').style.display = 'block';
+      });
+      document.getElementById('vote3Tab').addEventListener('click', function () {
+        document.getElementById('vote1').style.display = 'none';
+        document.getElementById('vote2').style.display = 'none';
+        document.getElementById('vote3').style.display = 'block';
+      });
+      document.getElementById('vote4Tab').addEventListener('click', function () {
+        document.getElementById('vote1').style.display = 'none';
+        document.getElementById('vote2').style.display = 'none';
+        document.getElementById('vote3').style.display = 'none';
+        document.getElementById('vote4').style.display = 'block';
+      });
+      document.getElementById('vote5Tab').addEventListener('click', function () {
+        document.getElementById('vote1').style.display = 'none';
+        document.getElementById('vote2').style.display = 'none';
+        document.getElementById('vote3').style.display = 'none';
+        document.getElementById('vote4').style.display = 'none';
+        document.getElementById('vote5').style.display = 'block';
+      });
     }); // // clean up on unmount
     // return () => {
     //     map.remove()
@@ -11586,7 +11538,7 @@ const Map = () => {
     }, "State")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Select, {
       id: "chamber-select",
       style: {
-        marginLeft: '15px'
+        marginLeft: '10px'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
       value: "",
@@ -11594,7 +11546,7 @@ const Map = () => {
     }, "Chamber")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Select, {
       id: "district-select",
       style: {
-        marginLeft: '15px'
+        marginLeft: '10px'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
       value: "",
@@ -11648,20 +11600,38 @@ const Map = () => {
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_rebass_grid__WEBPACK_IMPORTED_MODULE_1__.Flex, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ScoreBox, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ScoreText, null, "Climate Cabinet Score"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Numbers, {
       id: "score"
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(VotesBox, null, "Past Climate Votes", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "intro"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(VotesBox, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      class: "votesText"
+    }, "Past Climate Votes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote5Tab",
+      class: "vote5Tab"
+    }, "Vote 5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote4Tab",
+      class: "vote4Tab"
+    }, "Vote 4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote3Tab",
+      class: "vote3Tab"
+    }, "Vote 3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote2Tab",
+      class: "vote2Tab"
+    }, "Vote 2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote1Tab",
+      class: "vote1Tab"
+    }, "Vote 1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "vote1",
+      class: "vote1"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "vote1"
+      id: "vote2",
+      class: "vote2"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "vote2"
+      id: "vote3",
+      class: "vote3"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "vote3"
+      id: "vote4",
+      class: "vote4"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "vote4"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "vote5"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "outro"
+      id: "vote5",
+      class: "vote5"
     }))))
   );
 };
