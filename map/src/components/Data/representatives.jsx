@@ -7,23 +7,28 @@ export const useRepData = () => {
   const data = useStaticQuery(graphql` 
   query {
     allMongodbRegions {
-      representatives(limit: 10000) {
+      representatives(
+        query: {office: {is_current: true}, OR: [{state_abbr: "AZ"}, {state_abbr: "CO"}, {state_abbr: "CT"}, {state_abbr: "FL"}]} 
+        limit: 10000
+        ) {
         _id
         full_name
         cc_score
         party
         role
+        state_abbr
+        office {
+          is_current
+        }
+        ccscorecard {
+          intro
+          votes
+          outro
+        }
       }
     }
   }
   `)
-
-  // TODO: add pulling in votes & remove votes file
-  // ccscorecard {
-  //   intro
-  //   votes
-  //   outro
-  // }
 
   const repData = data.allMongodbRegions.representatives.map(representative => {
     const { _id } = representative

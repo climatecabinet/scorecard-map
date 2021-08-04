@@ -76,6 +76,8 @@ const VotesBox = styled(Box)`
     font-weight: 700;
     font-size: 24px;
     color: #C36C27;
+    overflow-y: auto;
+    height: 200px;
 `
 
 // action box
@@ -327,6 +329,9 @@ const Map = () => {
                 document.getElementById('state-select').value = ""
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').innerHTML = "District"
+                document.getElementById('name').innerHTML = ""
+                document.getElementById('party').innerHTML = ""
+                document.getElementById('score').innerHTML = ""
                 // change back to states layer
                 map.setLayoutProperty('state-fill', 'visibility', 'visible')
                 map.setLayoutProperty('senate-fill', 'visibility', 'none')
@@ -362,7 +367,11 @@ const Map = () => {
             const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
             const html_legparty = `${repIndex.getIn([incumbentId, 'party'])}`;
             const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
-            // const html_results = `NA`;
+            const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
+            const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
+            const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
+            const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
+            const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
 
             // ${billIndex.getIn([billCode.toString(), 'description'])}
             // ${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}
@@ -371,7 +380,31 @@ const Map = () => {
             document.getElementById('name').innerHTML = html_legname
             document.getElementById('party').innerHTML = html_legparty
             document.getElementById('score').innerHTML = html_score
-            // document.getElementById('result').innerHTML = html_results
+            if (html_vote1 === 'undefined') {
+                document.getElementById('vote1').innerHTML = ''
+            } else {
+                document.getElementById('vote1').innerHTML = html_vote1
+            }
+            if (html_vote2 === 'undefined') {
+                document.getElementById('vote2').innerHTML = ''
+            } else {
+                document.getElementById('vote2').innerHTML = html_vote2
+            }
+            if (html_vote3 === 'undefined') {
+                document.getElementById('vote3').innerHTML = ''
+            } else {
+                document.getElementById('vote3').innerHTML = html_vote3
+            }
+            if (html_vote4 === 'undefined') {
+                document.getElementById('vote4').innerHTML = ''
+            } else {
+                document.getElementById('vote4').innerHTML = html_vote4
+            }
+            if (html_vote5 === 'undefined') {
+                document.getElementById('vote5').innerHTML = ''
+            } else {
+                document.getElementById('vote5').innerHTML = html_vote5
+            }
 
         });
 
@@ -399,6 +432,19 @@ const Map = () => {
                 </div>
                 {/* map */}
                 <div class="map" ref={mapContainer}></div>
+                {/* map legend */}
+                <div class='my-legend'>
+			        <div class='legend-scale'>
+				        <ul class='legend-labels'>
+                            <li><span style={{background:'#8C510A'}}></span>0</li>
+                            <li><span style={{background:'#D8B365'}}></span>1-25</li>
+                            <li><span style={{background:'#F6E8C3'}}></span>26-50</li>
+                            <li><span style={{background:'#C7EAE5'}}></span>51-75</li>
+                            <li><span style={{background:'#5AB4AC'}}></span>76-99</li>
+                            <li><span style={{background:'#01665E'}}></span>100</li>
+				        </ul>
+                    </div>
+                </div>
             </div>
             {/* sidebar */}
             <div class="aside aside-2">
@@ -416,7 +462,18 @@ const Map = () => {
                         <Numbers id='result'></Numbers>
                     </ScoreBox> */}
                 </Flex>
-                <VotesBox>Past Climate Votes</VotesBox>
+                <VotesBox>
+                    Past Climate Votes
+                    {/* TODO: create its own div for this ^, float left */}
+                    {/* TODO: create div for votes, float right */}
+                    {/* TODO: Change the font for the vote text */}
+                    <br/>
+                    <div id="vote1"></div>
+                    <div id="vote2"></div>
+                    <div id="vote3"></div>
+                    <div id="vote4"></div>
+                    <div id="vote5"></div>
+                </VotesBox>
             </div>
         </div>
     )
