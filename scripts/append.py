@@ -25,7 +25,7 @@ if __name__ == "__main__":
     username = urllib.parse.quote_plus('browse-data')
     password = urllib.parse.quote_plus('climate-cabinet-1963')
     client = pymongo.MongoClient(f'mongodb+srv://{username}:{password}@cluster1.kmeus.mongodb.net/test?retryWrites=true&w=majority')
-    db = client['ccscorecard-experimental']
+    db = client['production-7-26-2021']
     collection = db.region
     df = pd.DataFrame(list(collection.find()))
     client.close()
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     username = urllib.parse.quote_plus('browse-data')
     password = urllib.parse.quote_plus('climate-cabinet-1963')
     client = pymongo.MongoClient(f'mongodb+srv://{username}:{password}@cluster1.kmeus.mongodb.net/test?retryWrites=true&w=majority')
-    db = client['ccscorecard-experimental']
+    db = client['production-7-26-2021']
     collection = db.representative
     df1 = pd.DataFrame(list(collection.find()))
     client.close()
