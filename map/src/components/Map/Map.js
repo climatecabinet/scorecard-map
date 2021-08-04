@@ -73,22 +73,18 @@ const Numbers = styled(Box)`
 const VotesBox = styled(Box)`
     margin-left: 15px;
     margin-top: 50px;
-    font-weight: 700;
-    font-size: 24px;
-    color: #C36C27;
-    overflow-y: auto;
-    height: 200px;
+    margin-right: 15px;
 `
 
 // action box
 const ActionBox = styled(Box)`
-    width: 15vw;
+    width: 250px;
     margin-left: 15px;
     margin-bottom: 15px;
     background-color: #C36C27;
     color: white;
     text-align: center;
-    font-size: 20px;
+    font-size: 24px;
     text-transform: uppercase;
     padding: 10px 10px 10px 10px;
 `
@@ -98,83 +94,6 @@ const mapboxToken = siteMetadata.mapboxToken
 
 // map component
 const Map = () => {
-
-    // function to quantify zoom level, based on area
-    function getZoom(area) {
-        if (area <= 0.01) {
-            return 13;
-        } else if (area <= 0.05) {
-            return 12;
-        } else if (area <= 0.1) {
-            return 11;
-        } else if (area <= 0.5) {
-            return 10;
-        } else if (area <= 0.9) {
-            return 9;
-        } else {
-            return 8;
-        }
-    }
-
-    // function to show options for chamber after a state is selected
-    let updateChamberSelect = function () {
-        let currentState = document.getElementById('state-select').value;
-
-        if (currentState) {
-            // create a list of chambers 
-            let chambers = Object.keys(sources)
-
-            // update the chamber div element with the map sources
-            const selectChamber = document.getElementById('chamber-select')
-            for (let i = 0; i < chambers.length; i++) {
-                let currentChamber = chambers[i]
-                let newOption = new Option(currentChamber)
-                selectChamber.add(newOption, undefined)
-            }
-        } else {
-            document.getElementById('chamber-select').value = 'Select a State'
-        }
-    }
-
-    // function to update the district values when a state is selected
-    let updateDistrictSelect = function () {
-        let coord_dict;
-        let currentState = document.getElementById('state-select').value;
-        let currentChamber = document.getElementById('chamber-select').value;
-
-        if (currentState) {
-            if (currentChamber === 'upperFL') {
-                // if the selected chamber is upperFL (or senate), then grab the senate coordinates for the selected state
-                coord_dict = senate_bounds[currentState]
-            } else {
-                // if the selected chamber is lowerFL (or house), then grab the house coordinates for the selected state
-                coord_dict = house_bounds[currentState]
-            }
-        
-
-        let districts = Object.keys(coord_dict)
-        districts = districts.map(Number);
-        districts.sort(function (a, b) {
-            return a - b;
-        });
-
-        // store the current, selected district
-        var selectElement = document.getElementById('district-select');
-
-        // Ggt the old options and remove them
-        var selectOptions = selectElement.options;
-        while (selectOptions.length > 0) {
-            selectElement.remove(0);
-        }
-
-        // Add new options
-        for (let i = 0; i < districts.length; i++) {
-            let currentDistrict = districts[i];
-            let newOption = new Option(currentDistrict, currentDistrict);
-            selectElement.add(newOption, undefined);
-        }
-    }
-    }
 
     // if there's no mapbox token, raise an error in the console
     if (!mapboxToken) {
@@ -372,39 +291,79 @@ const Map = () => {
             const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
             const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
             const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
-
-            // ${billIndex.getIn([billCode.toString(), 'description'])}
-            // ${regionsIndex.getIn([ccidCode, 'state_abbr'])}, Senate, ${parseInt(regionsIndex.getIn([ccidCode, 'district_no']), 10)}
             
             // store html in the sidebar divs
             document.getElementById('name').innerHTML = html_legname
             document.getElementById('party').innerHTML = html_legparty
             document.getElementById('score').innerHTML = html_score
+
+            // store the votes in the hidden div
             if (html_vote1 === 'undefined') {
-                document.getElementById('vote1').innerHTML = ''
+                document.getElementById('vote1').style.display = "none"
+                document.getElementById('vote1').innerHTML = 'Vote information not available.'
             } else {
+                document.getElementById('vote1').style.display = "none"
                 document.getElementById('vote1').innerHTML = html_vote1
             }
             if (html_vote2 === 'undefined') {
-                document.getElementById('vote2').innerHTML = ''
+                document.getElementById('vote2').style.display = "none"
+                document.getElementById('vote2').innerHTML = 'Vote information not available.'
             } else {
+                document.getElementById('vote2').style.display = "none"
                 document.getElementById('vote2').innerHTML = html_vote2
             }
             if (html_vote3 === 'undefined') {
-                document.getElementById('vote3').innerHTML = ''
+                document.getElementById('vote3').style.display = "none"
+                document.getElementById('vote3').innerHTML = 'Vote information not available.'
             } else {
+                document.getElementById('vote3').style.display = "none"
                 document.getElementById('vote3').innerHTML = html_vote3
             }
             if (html_vote4 === 'undefined') {
-                document.getElementById('vote4').innerHTML = ''
+                document.getElementById('vote4').style.display = "none"
+                document.getElementById('vote4').innerHTML = 'Vote information not available.'
             } else {
+                document.getElementById('vote4').style.display = "none"
                 document.getElementById('vote4').innerHTML = html_vote4
             }
             if (html_vote5 === 'undefined') {
-                document.getElementById('vote5').innerHTML = ''
+                document.getElementById('vote5').style.display = "none"
+                document.getElementById('vote5').innerHTML = 'Vote information not available.'
             } else {
+                document.getElementById('vote5').style.display = "none"
                 document.getElementById('vote5').innerHTML = html_vote5
             }
+
+            // when the vote item is clicked, make the vote appear
+            document.getElementById('vote1Tab').addEventListener('click', function () {
+                document.getElementById('vote1').style.display = 'block';
+            });
+
+            document.getElementById('vote2Tab').addEventListener('click', function () {
+                document.getElementById('vote1').style.display = 'none';
+                document.getElementById('vote2').style.display = 'block';
+            });
+
+            document.getElementById('vote3Tab').addEventListener('click', function () {
+                document.getElementById('vote1').style.display = 'none';
+                document.getElementById('vote2').style.display = 'none';
+                document.getElementById('vote3').style.display = 'block';
+            });
+
+            document.getElementById('vote4Tab').addEventListener('click', function () {
+                document.getElementById('vote1').style.display = 'none';
+                document.getElementById('vote2').style.display = 'none';
+                document.getElementById('vote3').style.display = 'none';
+                document.getElementById('vote4').style.display = 'block';
+            });
+
+            document.getElementById('vote5Tab').addEventListener('click', function () {
+                document.getElementById('vote1').style.display = 'none';
+                document.getElementById('vote2').style.display = 'none';
+                document.getElementById('vote3').style.display = 'none';
+                document.getElementById('vote4').style.display = 'none';
+                document.getElementById('vote5').style.display = 'block';
+            });
 
         });
 
@@ -414,7 +373,6 @@ const Map = () => {
         // };
     
     }, [])
-
 
     return (
         // container for the entire app
@@ -427,8 +385,8 @@ const Map = () => {
                     <div id = "reset" class="resetText">RESET</div>
                     <br/><br/><br/>
                     <Select id="state-select"><option value="" hidden>State</option></Select>
-                    <Select id="chamber-select" style={{marginLeft: '15px'}}><option value="" hidden>Chamber</option></Select>
-                    <Select id="district-select" style={{marginLeft: '15px'}}><option value="" hidden>District</option></Select>
+                    <Select id="chamber-select" style={{marginLeft: '10px'}}><option value="" hidden>Chamber</option></Select>
+                    <Select id="district-select" style={{marginLeft: '10px'}}><option value="" hidden>District</option></Select>
                 </div>
                 {/* map */}
                 <div class="map" ref={mapContainer}></div>
@@ -463,16 +421,19 @@ const Map = () => {
                     </ScoreBox> */}
                 </Flex>
                 <VotesBox>
-                    Past Climate Votes
-                    {/* TODO: create its own div for this ^, float left */}
-                    {/* TODO: create div for votes, float right */}
-                    {/* TODO: Change the font for the vote text */}
+                    <div class="votesText">Past Climate Votes</div>
+                    <div id='vote5Tab' class="vote5Tab">Vote 5</div>
+                    <div id='vote4Tab' class="vote4Tab">Vote 4</div>
+                    <div id='vote3Tab' class="vote3Tab">Vote 3</div>
+                    <div id='vote2Tab' class="vote2Tab">Vote 2</div>
+                    <div id='vote1Tab' class="vote1Tab">Vote 1</div>
                     <br/>
-                    <div id="vote1"></div>
-                    <div id="vote2"></div>
-                    <div id="vote3"></div>
-                    <div id="vote4"></div>
-                    <div id="vote5"></div>
+                    <br/>
+                    <div id="vote1" class="vote1"></div>
+                    <div id="vote2" class="vote2"></div>
+                    <div id="vote3" class="vote3"></div>
+                    <div id="vote4" class="vote4"></div>
+                    <div id="vote5" class="vote5"></div>
                 </VotesBox>
             </div>
         </div>

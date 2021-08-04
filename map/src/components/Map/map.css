@@ -38,7 +38,7 @@
 
 .main {
     /* background: blue; */
-    padding-right: 10px;
+    padding-right: 15px;
 }
 
 .candidateText {
@@ -62,14 +62,14 @@
 }
 
 body {
-    padding: 1em; 
+    padding: 0em; 
     background: white;
 }
 
 .my-legend {
 	position: absolute;
-	bottom: 100px;
-	left: 400px;
+	bottom: 50px;
+	left: 20%;
 	padding: 10px;
     background: white;
 }
@@ -106,5 +106,38 @@ body {
 
 .my-legend a {
 	color: #777;
+}
+
+.votesText {
+    font-weight: 700;
+    font-size: 16px;
+    color: #C36C27;
+    float: left;
+    /* overflow-y: auto;
+    height: 200px; */
+}
+
+.vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab {
+    font-size: 14px;
+    color: #C36C27;
+    text-decoration: underline;
+    float: right;
+    margin-top: 2px;
+    margin-right: 15px;
+}
+
+.vote1Tab:hover, .vote2Tab:hover, .vote3Tab:hover, .vote4Tab:hover, .vote5Tab:hover {
+    cursor: pointer;
+}
+
+.vote1Tab:active, .vote2Tab:active, .vote3Tab:active, .vote4Tab:active, .vote5Tab:active {
+    color: #000000;
+    text-decoration: none;
+}
+
+.vote1, .vote2, .vote3, .vote4, .vote5 {
+    display: none;
+    font-size: 20px;
+    font-weight: 400;
 }
   
