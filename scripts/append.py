@@ -9,6 +9,8 @@ process:
 6. QA/QC in Mapshaper 
 7. Export as 1 file: geojson-merge house/*.geojson > all-house.geojson or geojson-merge senate/*.geojson > all-senate.geojson
 8. QA/QC in Mapshaper (and reduce file size if needed)
+
+script 4/4
 """
 
 # import libraries

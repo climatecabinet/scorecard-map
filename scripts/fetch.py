@@ -19,6 +19,8 @@ data fields:
 process:
 step 1: download shp files from the Census
 step 2: unzip and store them
+
+script 1/4
 """
 
 # import libraries

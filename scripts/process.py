@@ -22,6 +22,8 @@ step 2: add column for bounds
 step 3: parse into json
 step 4: add fields for chamber, district, state, ...
 step 5: export as geojson
+
+script 2/4
 """
 
 # import libraries
