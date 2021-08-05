@@ -87,8 +87,8 @@ if __name__ == "__main__":
     # check to see if all of the files were downloaded
     if len(sys.argv) == 1:
         files = sorted(glob.glob("data/geospatial/source/tl*.shp"))
-        if len(files) != 102:
-            raise AssertionError(f"Expecting 102 shapefiles, got {len(files)}).")
+        if len(files) != 101: 
+            raise AssertionError(f"Expecting 101 shapefiles, got {len(files)}).")
     else:
         files = sys.argv[1:]
 

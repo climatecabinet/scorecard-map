@@ -29,7 +29,7 @@ import us
 
 # download shp files from the Census
 # note: The Census download URLs are case-sensitive
-YEAR = "2019"
+YEAR = "2020"
 URL = "https://www2.census.gov/geo/tiger/TIGER{year}/SLD{chamber_uppercase}/tl_{year}_{fips}_sld{chamber}.zip"
 
 # make folder if it doesnt exist
