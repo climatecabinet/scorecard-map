@@ -18,6 +18,7 @@ export const useData = () => {
         }
         district_no
         district_type
+        name
       }
     }
   }
