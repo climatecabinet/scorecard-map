@@ -13,15 +13,15 @@ export const config = {
 export const sources = {
     house: {  
         type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/state_house_districts1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/allhouse1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     senate: {
         type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/state_senate_districts/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/allsenate1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     state: {
         type: 'geojson',
-        data: 'https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/reprojected_us1/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*',
+        data: 'https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/all_states_reprojected/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*',
     },
 }
 
@@ -36,14 +36,14 @@ export const layers = [
 			'fill-outline-color': 'white'
         },
         layout: {
-          visibility: 'visible',
+          visibility: 'none',
         },
 	},
 
     {
       id: "house-fill",
       source: 'house',
-	  'source-layer': 'state_house_districts_0', 
+	  'source-layer': 'allhouse_0', 
       type: 'fill',
       paint: {
         'fill-color': {
@@ -54,7 +54,8 @@ export const layers = [
 				[50, '#F6E8C3'], // from 26 - 50
                 [75, '#C7EAE5'], // from 51 - 75
                 [99, '#5AB4AC'], // from 76 - 99
-				[100, '#01665E'] // 100
+				[100, '#01665E'], // 100
+				[999, '#808080'] // 999, score is not available
             ]
         },
         'fill-outline-color': 'white',
@@ -72,7 +73,7 @@ export const layers = [
     {
         id: "senate-fill",
         source: 'senate',
-		'source-layer': 'allsenatereduced_0', 
+		'source-layer': 'allsenate_0', 
         type: 'fill',
         paint: { 
             'fill-color': {
@@ -83,18 +84,20 @@ export const layers = [
 					[50, '#F6E8C3'], // from 26 - 50
 					[75, '#C7EAE5'], // from 51 - 75
 					[99, '#5AB4AC'], // from 76 - 99
-					[100, '#01665E'] // 100
+					[100, '#01665E'], // 100
+					[999, '#808080'] // 999, score is not available
                 ],
 			},
           'fill-outline-color': 'white'
         },
         layout: {
-          visibility: 'none',
+          visibility: 'visible',
         },
 	}
 ]
 
 // bounds for the state districts
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const state_bounds = {
 	az: [-15.21, -6.65, -9.82, -0.37],
 	co: [-9.82, -1.57, -4.06, 2.99],
@@ -129,6 +132,7 @@ export const state_bounds = {
 }
 
 // bounds for the senate districts
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const senate_bounds = {
     az: {
 		27: [-13.02, -4.44, -12.67, -4.16],
@@ -1172,6 +1176,7 @@ export const senate_bounds = {
 }
 
 // bounds for the house districts
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const house_bounds = {
 	az: {
 		27: [-13.02, -4.44, -12.67, -4.16],
@@ -3649,6 +3654,7 @@ export const chambers = {
 }
 
 // dictionary: state abbreviation to state
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const initialsToState = {
 	az: 'Arizona',
 	co: 'Colorado',
@@ -3684,13 +3690,17 @@ export const initialsToState = {
 
 // dictionary: state abbreviation to state fips code
 export const statesToCodes = {
-    'WA': '53',
+	'AL': '01',
+	'AK': '02',
+	'AR': '05',
+	'CA': '06',
 	'DE': '10',
 	'DC': '11',
+    'FL': '12',
+	'HI': '15',
+    'WA': '53',
 	'WI': '55',
 	'WV': '54',
-	'HI': '15',
-    'FL': '12',
 	'WY': '56',
 	'PR': '72',
 	'NJ': '34', 
@@ -3703,14 +3713,10 @@ export const statesToCodes = {
 	'TN': '47',
 	'NY': '36',
     'PA': '42',
-	'AK': '02',
 	'NV': '32',
 	'NH': '33',
 	'VA': '51',
 	'CO': '08',
-    'CA': '06',
-	'AL': '01',
-	'AR': '05',
 	'VT': '50',
 	'IL': '17',
 	'GA': '13',
