@@ -477,8 +477,9 @@ const Map = () => {
                 document.getElementById('vote5').innerHTML = ""
 
                 // change back to states layer
-                map.setLayoutProperty('state-fill', 'visibility', 'visible')
-                map.setLayoutProperty('senate-fill', 'visibility', 'none')
+                // TODO: change to senate layer
+                map.setLayoutProperty('state-fill', 'visibility', 'none')
+                map.setLayoutProperty('senate-fill', 'visibility', 'visible')
                 map.setLayoutProperty('house-fill', 'visibility', 'none')
                 // zoom out to center
                 map.flyTo({center: [-1.14, -0.98], zoom: 3.5})
@@ -632,6 +633,7 @@ const Map = () => {
                 <div class='my-legend'>
 			        <div class='legend-scale'>
 				        <ul class='legend-labels'>
+                            <li><span style={{background:'#808080'}}></span>NA</li>
                             <li><span style={{background:'#8C510A'}}></span>0</li>
                             <li><span style={{background:'#D8B365'}}></span>1-25</li>
                             <li><span style={{background:'#F6E8C3'}}></span>26-50</li>

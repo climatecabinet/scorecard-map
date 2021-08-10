@@ -24,6 +24,8 @@ step 4: add fields for chamber, district, state, ...
 step 5: export as geojson
 
 script 2/4
+
+TODO: MD, NJ, NY, and WI house won't output for this script. figure out why. 
 """
 
 # import libraries
