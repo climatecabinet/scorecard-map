@@ -165,13 +165,27 @@ const Map = () => {
             // when a state is selected, zoom to it via bounds
             document.getElementById('state-select').addEventListener('change', function () {
                 let selectedState = document.getElementById('state-select').value
+                // reset the chamber and district options
+                document.getElementById('chamber-select').value = ""
+                document.getElementById('district-select').value = ""
+                // reset legislator details
+                document.getElementById('details').style.visibility = "hidden" 
+                document.getElementById('name').innerHTML = ""
+                document.getElementById('party').innerHTML = ""
+                document.getElementById('score').innerHTML = ""
+                document.getElementById('rep').innerHTML = ""
+                document.getElementById('vote1').innerHTML = ""
+                document.getElementById('vote2').innerHTML = ""
+                document.getElementById('vote3').innerHTML = ""
+                document.getElementById('vote4').innerHTML = ""
+                document.getElementById('vote5').innerHTML = ""
+                // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
             })
 
             // update the chamber element with the chamber options
             let chamberOptions = Object.keys(chambers)
-            chamberOptions.sort();
 
             const selectChamber = document.getElementById('chamber-select')
             for (let i = 0; i < chamberOptions.length; i++) {
@@ -192,9 +206,23 @@ const Map = () => {
                 // change the selected chamber's visibility to visible
                 let clickedLayer = selectedChamber + '-fill'
                 map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
+                
+                // reset the district options
+                document.getElementById('district-select').value = ""
 
-                // change district to empty
-                document.getElementById('district-select').innerHTML = "District"
+                // reset legislator details
+                document.getElementById('details').style.visibility = "hidden" 
+                document.getElementById('name').innerHTML = ""
+                document.getElementById('party').innerHTML = ""
+                document.getElementById('score').innerHTML = ""
+                document.getElementById('rep').innerHTML = ""
+                document.getElementById('vote1').innerHTML = ""
+                document.getElementById('vote2').innerHTML = ""
+                document.getElementById('vote3').innerHTML = ""
+                document.getElementById('vote4').innerHTML = ""
+                document.getElementById('vote5').innerHTML = ""
+
+                // TODO: zoom out to the state view
 
             }) 
 
@@ -476,8 +504,7 @@ const Map = () => {
                 document.getElementById('vote4').innerHTML = ""
                 document.getElementById('vote5').innerHTML = ""
 
-                // change back to states layer
-                // TODO: change to senate layer
+                // change back to senate layer
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
                 map.setLayoutProperty('senate-fill', 'visibility', 'visible')
                 map.setLayoutProperty('house-fill', 'visibility', 'none')
@@ -620,7 +647,7 @@ const Map = () => {
             <div class="main">
                 {/* navigation bar */}
                 <div class="nav">
-                    <div class="mapText">Interactive Map</div>
+                    <div class="mapText">Climate Cabinet Scorecard Map</div>
                     <div id = "reset" class="resetText">RESET</div>
                     <br/><br/><br/>
                     <Select id="state-select"><option value="" hidden>State</option></Select>
