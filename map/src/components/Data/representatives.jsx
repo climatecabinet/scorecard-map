@@ -2,13 +2,13 @@ import { graphql, useStaticQuery } from 'gatsby'
 import { fromJS } from 'immutable'
 import { isDebug } from '../../../util/dom'
 
-// TODO: only bring in the ones where is_current is True
+// OR: [{state_abbr: "AZ"}, {state_abbr: "CO"}, {state_abbr: "CT"}, {state_abbr: "FL"}]
 export const useRepData = () => {
   const data = useStaticQuery(graphql` 
   query {
     allMongodbRegions {
       representatives(
-        query: {office: {is_current: true}, OR: [{state_abbr: "AZ"}, {state_abbr: "CO"}, {state_abbr: "CT"}, {state_abbr: "FL"}]} 
+        query: {office: {is_current: true}} 
         limit: 10000
         ) {
         _id
@@ -19,11 +19,6 @@ export const useRepData = () => {
         state_abbr
         office {
           is_current
-        }
-        ccscorecard {
-          intro
-          votes
-          outro
         }
       }
     }
@@ -54,3 +49,9 @@ export const useRepData = () => {
 // helpful documentation for working with immutable lists:
 // https://thomastuts.com/blog/immutable-js-101-maps-lists.html
 // https://immutable-js.github.io/immutable-js/, specifically the Nested Structures section
+
+// ccscorecard {
+//   intro
+//   votes
+//   outro
+// }
