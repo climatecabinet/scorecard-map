@@ -12,7 +12,7 @@ import "typeface-lato";
 import './map.css'
 
 // select elements
-const Select = styled.select`
+const SelectState = styled.select`
     height: 50px;
     width: 32%;
     background: white;
@@ -22,6 +22,61 @@ const Select = styled.select`
     border: 1px solid #C36C27;
     margin-bottom: 20px;
     padding: 10px;
+    @media only screen and (max-width: 1059px) { 
+        width: 31.25vw;
+    }
+    @media only screen and (max-width: 895px) { 
+        display: block;
+        width: 95.75vw;
+    }
+`
+
+const SelectChamber = styled.select`
+    height: 50px;
+    background: white;
+    color: #333;
+    font-size: 20px;
+    font-family: 'Lato', sans-serif;
+    border: 1px solid #C36C27;
+    margin-bottom: 20px;
+    padding: 10px;
+    @media only screen and (min-width: 1060px) { 
+        width: 32%;
+        margin-left: 12px;
+    }
+    @media only screen and (max-width: 1059px) { 
+        width: 31.25vw;
+        margin-left: 10px;
+    }
+    @media only screen and (max-width: 895px) { 
+        display: block;
+        width: 95.75vw;
+        margin-left: 0px;
+    }
+`
+
+const SelectDistrict = styled.select`
+    height: 50px;
+    background: white;
+    color: #333;
+    font-size: 20px;
+    font-family: 'Lato', sans-serif;
+    border: 1px solid #C36C27;
+    margin-bottom: 20px;
+    padding: 10px;
+    @media only screen and (min-width: 1060px) { 
+        width: 32%;
+        margin-left: 12px;
+    }
+    @media only screen and (max-width: 1059px) { 
+        width: 31.25vw;
+        margin-left: 10px;
+    }
+    @media only screen and (max-width: 895px) { 
+        display: block;
+        width: 95.75vw;
+        margin-left: 0px;
+    }
 `
 
 
@@ -43,31 +98,31 @@ const Representation = styled(Box)`
 `
 
 // score box
-const ScoreBox = styled(Box)`
-  background-color: white;
-  width: 15vw;
-  height: 13vh;
-  margin-left: 15px;
-  margin-right: 15px;
-  padding-top: 10px;
-  padding-bottom: 25px;
-`
+// const ScoreBox = styled(Box)`
+//   background-color: white;
+//   width: 15vw;
+//   height: 13vh;
+//   margin-left: 15px;
+//   margin-right: 15px;
+//   padding-top: 10px;
+//   padding-bottom: 25px;
+// `
 
 // score text element
-const ScoreText = styled(Box)`
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: 700;
-    font-size: 16px;
-    padding-bottom: 15px;
-`
+// const ScoreText = styled(Box)`
+//     text-transform: uppercase;
+//     text-align: center;
+//     font-weight: 700;
+//     font-size: 16px;
+//     padding-bottom: 15px;
+// `
 
 // numbers element
-const Numbers = styled(Box)`
-  font-size: 26px;
-  color: #C36C27;
-  text-align: center;
-`
+// const Numbers = styled(Box)`
+//   font-size: 26px;
+//   color: #C36C27;
+//   text-align: center;
+// `
 
 // votes box
 const VotesBox = styled(Box)`
@@ -95,7 +150,7 @@ const zeroPad = (num, places) => String(num).padStart(places, '0')
 const mapboxToken = siteMetadata.mapboxToken
 
 // map component
-const Map = () => {
+const Map = ({data}) => {
 
     // if there's no mapbox token, raise an error in the console
     if (!mapboxToken) {
@@ -228,14 +283,14 @@ const Map = () => {
 
         });
 
-        map.on('idle', function() {     
+        map.on('idle', function() {  
             
             if (document.getElementById('chamber-select').value) {
                 let selectedChamber = document.getElementById('chamber-select').value
                 let selectedState = document.getElementById('state-select').value
                 console.log("state: " + selectedState + " chamber: " + selectedChamber)
 
-                if (selectedChamber === 'house') {
+                if (selectedState && selectedChamber === 'house') {
                     let districtOptions = Object.keys(house_bounds[selectedState])
 
                     // load the district options
@@ -250,18 +305,19 @@ const Map = () => {
                     document.getElementById('district-select').addEventListener('change', function () {
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = house_bounds[selectedState][selectedDistrict]
+                        // zoom to the district
                         map.fitBounds(bounds)
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                         // populate the legislator details
                         const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
-                        // make the contents of the legislator details component visible
-                        document.getElementById('details').style.visibility = "visible" 
+                        // console.log("selected district's representative " + incumbentId + ", " + `${repIndex.getIn([incumbentId, 'full_name'])}` )
 
-                        // use the ccidCode to lookup the regions data (stored in the regionsIndex variable) and the representatives data (stored in the repIndex variable)
-                        // the lookup will find the data associated to the district
-                        // and relay the following information, stored the in the html variable
-                        // to be displayed in a tooltip
+                        // run query
+                        // console.log(data.allMongodbRegions.representatives.full_name)
+
+                        // make the contents of the legislator details component visible
+                        document.getElementById('details').style.visibility = "visible"
 
                         const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
                         const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
@@ -281,9 +337,13 @@ const Map = () => {
 
                         // store the votes in the hidden div
                         if (html_vote1 === 'undefined') {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
                             document.getElementById('vote1').style.display = "block"
                             document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
                         } else {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
                             document.getElementById('vote1').style.display = "block"
                             document.getElementById('vote1').innerHTML = html_vote1
                         }
@@ -318,38 +378,93 @@ const Map = () => {
 
                         // when the vote item is clicked, make the vote appear
                         document.getElementById('vote1Tab').addEventListener('click', function () {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'block';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote2Tab').addEventListener('click', function () {
+                            document.getElementById('vote2Tab').style.color = "black"
+                            document.getElementById('vote2Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'block';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote3Tab').addEventListener('click', function () {
+                            document.getElementById('vote3Tab').style.color = "black"
+                            document.getElementById('vote3Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'block';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote4Tab').addEventListener('click', function () {
+                            document.getElementById('vote4Tab').style.color = "black"
+                            document.getElementById('vote4Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'block';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote5Tab').addEventListener('click', function () {
+                            document.getElementById('vote5Tab').style.color = "black"
+                            document.getElementById('vote5Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
@@ -357,10 +472,10 @@ const Map = () => {
                             document.getElementById('vote5').style.display = 'block';
                         });
                     })
-                } else {
+                } else if (selectedState && selectedChamber === "senate") {
                     let districtOptions = Object.keys(senate_bounds[selectedState])
                     
-                    // created district options for the senate
+                    // create district options for the senate
                     const selectDistrict = document.getElementById('district-select')
                     for (let i = 0; i < districtOptions.length; i++) {
                         let currentDistrict = districtOptions[i]
@@ -372,6 +487,7 @@ const Map = () => {
                     document.getElementById('district-select').addEventListener('change', function () {
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = senate_bounds[selectedState][selectedDistrict]
+                        // zoom to the district
                         map.fitBounds(bounds)
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
@@ -379,11 +495,6 @@ const Map = () => {
                         const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
                         // make the contents of the legislator details component visible
                         document.getElementById('details').style.visibility = "visible" 
-
-                        // use the ccidCode to lookup the regions data (stored in the regionsIndex variable) and the representatives data (stored in the repIndex variable)
-                        // the lookup will find the data associated to the district
-                        // and relay the following information, stored the in the html variable
-                        // to be displayed in a tooltip
 
                         const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
                         const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
@@ -403,9 +514,13 @@ const Map = () => {
 
                         // store the votes in the hidden div
                         if (html_vote1 === 'undefined') {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
                             document.getElementById('vote1').style.display = "block"
                             document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
                         } else {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
                             document.getElementById('vote1').style.display = "block"
                             document.getElementById('vote1').innerHTML = html_vote1
                         }
@@ -440,38 +555,93 @@ const Map = () => {
 
                         // when the vote item is clicked, make the vote appear
                         document.getElementById('vote1Tab').addEventListener('click', function () {
+                            document.getElementById('vote1Tab').style.color = "black"
+                            document.getElementById('vote1Tab').style.textDecoration = "none"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'block';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote2Tab').addEventListener('click', function () {
+                            document.getElementById('vote2Tab').style.color = "black"
+                            document.getElementById('vote2Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'block';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote3Tab').addEventListener('click', function () {
+                            document.getElementById('vote3Tab').style.color = "black"
+                            document.getElementById('vote3Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'block';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote4Tab').addEventListener('click', function () {
+                            document.getElementById('vote4Tab').style.color = "black"
+                            document.getElementById('vote4Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote5Tab').style.color = "#C36C27"
+                            document.getElementById('vote5Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'block';
                             document.getElementById('vote5').style.display = 'none';
                         });
-
+            
                         document.getElementById('vote5Tab').addEventListener('click', function () {
+                            document.getElementById('vote5Tab').style.color = "black"
+                            document.getElementById('vote5Tab').style.textDecoration = "none"
+                            document.getElementById('vote1Tab').style.color = "#C36C27"
+                            document.getElementById('vote1Tab').style.textDecoration = "underline"
+                            document.getElementById('vote2Tab').style.color = "#C36C27"
+                            document.getElementById('vote2Tab').style.textDecoration = "underline"
+                            document.getElementById('vote3Tab').style.color = "#C36C27"
+                            document.getElementById('vote3Tab').style.textDecoration = "underline"
+                            document.getElementById('vote4Tab').style.color = "#C36C27"
+                            document.getElementById('vote4Tab').style.textDecoration = "underline"
+            
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
@@ -555,9 +725,13 @@ const Map = () => {
 
             // store the votes in the hidden div
             if (html_vote1 === 'undefined') {
+                document.getElementById('vote1Tab').style.color = "black"
+                document.getElementById('vote1Tab').style.textDecoration = "none"
                 document.getElementById('vote1').style.display = "block"
                 document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
             } else {
+                document.getElementById('vote1Tab').style.color = "black"
+                document.getElementById('vote1Tab').style.textDecoration = "none"
                 document.getElementById('vote1').style.display = "block"
                 document.getElementById('vote1').innerHTML = html_vote1
             }
@@ -592,6 +766,17 @@ const Map = () => {
 
             // when the vote item is clicked, make the vote appear
             document.getElementById('vote1Tab').addEventListener('click', function () {
+                document.getElementById('vote1Tab').style.color = "black"
+                document.getElementById('vote1Tab').style.textDecoration = "none"
+                document.getElementById('vote2Tab').style.color = "#C36C27"
+                document.getElementById('vote2Tab').style.textDecoration = "underline"
+                document.getElementById('vote3Tab').style.color = "#C36C27"
+                document.getElementById('vote3Tab').style.textDecoration = "underline"
+                document.getElementById('vote4Tab').style.color = "#C36C27"
+                document.getElementById('vote4Tab').style.textDecoration = "underline"
+                document.getElementById('vote5Tab').style.color = "#C36C27"
+                document.getElementById('vote5Tab').style.textDecoration = "underline"
+
                 document.getElementById('vote1').style.display = 'block';
                 document.getElementById('vote2').style.display = 'none';
                 document.getElementById('vote3').style.display = 'none';
@@ -600,6 +785,17 @@ const Map = () => {
             });
 
             document.getElementById('vote2Tab').addEventListener('click', function () {
+                document.getElementById('vote2Tab').style.color = "black"
+                document.getElementById('vote2Tab').style.textDecoration = "none"
+                document.getElementById('vote1Tab').style.color = "#C36C27"
+                document.getElementById('vote1Tab').style.textDecoration = "underline"
+                document.getElementById('vote3Tab').style.color = "#C36C27"
+                document.getElementById('vote3Tab').style.textDecoration = "underline"
+                document.getElementById('vote4Tab').style.color = "#C36C27"
+                document.getElementById('vote4Tab').style.textDecoration = "underline"
+                document.getElementById('vote5Tab').style.color = "#C36C27"
+                document.getElementById('vote5Tab').style.textDecoration = "underline"
+
                 document.getElementById('vote1').style.display = 'none';
                 document.getElementById('vote2').style.display = 'block';
                 document.getElementById('vote3').style.display = 'none';
@@ -608,6 +804,17 @@ const Map = () => {
             });
 
             document.getElementById('vote3Tab').addEventListener('click', function () {
+                document.getElementById('vote3Tab').style.color = "black"
+                document.getElementById('vote3Tab').style.textDecoration = "none"
+                document.getElementById('vote1Tab').style.color = "#C36C27"
+                document.getElementById('vote1Tab').style.textDecoration = "underline"
+                document.getElementById('vote2Tab').style.color = "#C36C27"
+                document.getElementById('vote2Tab').style.textDecoration = "underline"
+                document.getElementById('vote4Tab').style.color = "#C36C27"
+                document.getElementById('vote4Tab').style.textDecoration = "underline"
+                document.getElementById('vote5Tab').style.color = "#C36C27"
+                document.getElementById('vote5Tab').style.textDecoration = "underline"
+
                 document.getElementById('vote1').style.display = 'none';
                 document.getElementById('vote2').style.display = 'none';
                 document.getElementById('vote3').style.display = 'block';
@@ -616,6 +823,17 @@ const Map = () => {
             });
 
             document.getElementById('vote4Tab').addEventListener('click', function () {
+                document.getElementById('vote4Tab').style.color = "black"
+                document.getElementById('vote4Tab').style.textDecoration = "none"
+                document.getElementById('vote1Tab').style.color = "#C36C27"
+                document.getElementById('vote1Tab').style.textDecoration = "underline"
+                document.getElementById('vote2Tab').style.color = "#C36C27"
+                document.getElementById('vote2Tab').style.textDecoration = "underline"
+                document.getElementById('vote3Tab').style.color = "#C36C27"
+                document.getElementById('vote3Tab').style.textDecoration = "underline"
+                document.getElementById('vote5Tab').style.color = "#C36C27"
+                document.getElementById('vote5Tab').style.textDecoration = "underline"
+
                 document.getElementById('vote1').style.display = 'none';
                 document.getElementById('vote2').style.display = 'none';
                 document.getElementById('vote3').style.display = 'none';
@@ -624,6 +842,17 @@ const Map = () => {
             });
 
             document.getElementById('vote5Tab').addEventListener('click', function () {
+                document.getElementById('vote5Tab').style.color = "black"
+                document.getElementById('vote5Tab').style.textDecoration = "none"
+                document.getElementById('vote1Tab').style.color = "#C36C27"
+                document.getElementById('vote1Tab').style.textDecoration = "underline"
+                document.getElementById('vote2Tab').style.color = "#C36C27"
+                document.getElementById('vote2Tab').style.textDecoration = "underline"
+                document.getElementById('vote3Tab').style.color = "#C36C27"
+                document.getElementById('vote3Tab').style.textDecoration = "underline"
+                document.getElementById('vote4Tab').style.color = "#C36C27"
+                document.getElementById('vote4Tab').style.textDecoration = "underline"
+
                 document.getElementById('vote1').style.display = 'none';
                 document.getElementById('vote2').style.display = 'none';
                 document.getElementById('vote3').style.display = 'none';
@@ -650,9 +879,9 @@ const Map = () => {
                     <div class="mapText">Climate Cabinet Scorecard Map</div>
                     <div id = "reset" class="resetText">RESET</div>
                     <br/><br/><br/>
-                    <Select id="state-select"><option value="" hidden>State</option></Select>
-                    <Select id="chamber-select" style={{marginLeft: '10px'}}><option value="" hidden>Chamber</option></Select>
-                    <Select id="district-select" style={{marginLeft: '10px'}}><option value="" hidden>District</option></Select>
+                    <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
+                    <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
+                    <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
                 </div>
                 {/* map */}
                 <div class="map" ref={mapContainer}></div>
@@ -679,22 +908,24 @@ const Map = () => {
                     <Name id='name' style={{marginLeft: '15px'}}></Name>
                     <Representation id='rep' style={{marginLeft: '15px'}}></Representation>
                     <Flex>
-                        <ScoreBox>
-                            <ScoreText>Climate Cabinet Score</ScoreText>
-                            <Numbers id='score'></Numbers>
-                        </ScoreBox>
-                        <ScoreBox>
-                            <ScoreText>Party</ScoreText>
-                            <Numbers id='party'></Numbers>
-                        </ScoreBox>
+                        <div class="scoreBox">
+                            <div class="scoreTitle">Climate Cabinet Score</div>
+                            <div class="scoreText" id='score'></div>
+                        </div>
+                        <div class="scoreBox">
+                            <div class="partyTitle">Party</div>
+                            <div class="partyText" id='party'></div>
+                        </div>
                     </Flex>
                     <VotesBox>
                         <div class="votesText">Selected Climate Votes</div>
-                        <div id='vote5Tab' class="vote5Tab">Vote 5</div>
-                        <div id='vote4Tab' class="vote4Tab">Vote 4</div>
-                        <div id='vote3Tab' class="vote3Tab">Vote 3</div>
-                        <div id='vote2Tab' class="vote2Tab">Vote 2</div>
-                        <div id='vote1Tab' class="vote1Tab">Vote 1</div>
+                        <div class="voteTabs">
+                            <div id='vote5Tab' class="vote5Tab">Vote 5</div>
+                            <div id='vote4Tab' class="vote4Tab">Vote 4</div>
+                            <div id='vote3Tab' class="vote3Tab">Vote 3</div>
+                            <div id='vote2Tab' class="vote2Tab">Vote 2</div>
+                            <div id='vote1Tab' class="vote1Tab">Vote 1</div>
+                        </div>
                         <br/>
                         <br/>
                         <div id="vote1" class="vote1"></div>
@@ -709,5 +940,7 @@ const Map = () => {
     )
 
 }
+
+
 
 export default Map
