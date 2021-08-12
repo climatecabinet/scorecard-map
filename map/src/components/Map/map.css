@@ -53,8 +53,8 @@ body {
 
 .my-legend {
 	position: absolute;
-	left: 20%;
-    bottom: 0%;
+	left: 15%;
+    top: 90vh;
 	padding: 10px;
     background: white;
 }
@@ -172,19 +172,22 @@ div .details {
 /* tablet view */
 @media only screen and (max-width: 1059px) { 
     .mapText { font-size: 28px; }
-    .map { height: 450px; width: 96vw; }
+    .map { height: 450px; width: 94vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
+    .aside-2 { padding: 0.5em; }
     /* .voteTabs { float: right;} */
 }
 
 /* 895px and below */
 /* mobile view */
 @media only screen and (max-width: 895px) { 
-    .map { height: 450px; width: 96vw; }
-    .mapText { font-size: 28px; }
-    .my-legend { bottom: -25%; left: 30%; }
+    .map { height: 450px; width: 85vw; }
+    .mapText { font-size: 18px; }
+    .resetText { padding-top: 0px; }
+    .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
+    .aside-2 { padding: 0.5em; }
 }
 
 /* 600px and up */
