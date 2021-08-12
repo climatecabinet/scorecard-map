@@ -32,12 +32,7 @@
     width: 60vw;
 }
 
-/* .nav {
-    background: pink;
-} */
-
 .main {
-    /* background: blue; */
     padding-right: 15px;
 }
 
@@ -51,16 +46,6 @@
     background: #F4F4F4;
 }
 
-@media all and (min-width: 600px) {
-    .aside { flex: 1 0 0; }
-}
-
-@media all and (min-width: 800px) {
-    .main    { flex: 1 0px; }
-    .main    { order: 1; }
-    .aside-2 { order: 2; }
-}
-
 body {
     padding: 0em; 
     background: white;
@@ -68,8 +53,8 @@ body {
 
 .my-legend {
 	position: absolute;
-	bottom: 50px;
 	left: 20%;
+    bottom: 0%;
 	padding: 10px;
     background: white;
 }
@@ -108,6 +93,44 @@ body {
 	color: #777;
 }
 
+.scoreBox {
+    background-color: white;
+    width: 15vw;
+    height: 13vh;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.scoreTitle {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    padding-bottom: 15px;
+}
+
+.scoreText {
+    font-size: 26px;
+    color: #C36C27;
+    text-align: center;
+}
+
+.partyTitle {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    padding-bottom: 15px;
+}
+
+.partyText {
+    font-size: 26px;
+    color: #C36C27;
+    text-align: center;
+}
+
 .votesText {
     font-weight: 700;
     font-size: 16px;
@@ -117,8 +140,13 @@ body {
     height: 200px; */
 }
 
+.voteTabs {
+    float: right;
+    /* margin-bottom: 30px; */
+}
+
 .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab {
-    font-size: 14px;
+    font-size: 12px;
     color: #C36C27;
     text-decoration: underline;
     float: right;
@@ -130,17 +158,44 @@ body {
     cursor: pointer;
 }
 
-.vote1Tab:active, .vote2Tab:active, .vote3Tab:active, .vote4Tab:active, .vote5Tab:active {
-    color: #000000;
-    text-decoration: none;
-}
-
 .vote1, .vote2, .vote3, .vote4, .vote5 {
     display: none;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 400;
 }
 
 div .details {
     visibility: hidden;
 }
+
+/* 1059px and below */
+/* tablet view */
+@media only screen and (max-width: 1059px) { 
+    .mapText { font-size: 28px; }
+    .map { height: 450px; width: 96vw; }
+    .scoreBox { width: 45vw; height: 13vh; }
+    .my-legend { bottom: 0%; left: 30%; }
+    /* .voteTabs { float: right;} */
+}
+
+/* 895px and below */
+/* mobile view */
+@media only screen and (max-width: 895px) { 
+    .map { height: 450px; width: 96vw; }
+    .mapText { font-size: 28px; }
+    .my-legend { bottom: -25%; left: 30%; }
+    .scoreBox { width: 45vw; height: 13vh; }
+}
+
+/* 600px and up */
+@media all and (min-width: 600px) { 
+    .aside { flex: 1 0 0; }
+}
+
+/* 800px and up */
+@media all and (min-width: 800px) {
+    .main    { flex: 1 0px; }
+    .main    { order: 1; }
+    .aside-2 { order: 2; }
+}
+
