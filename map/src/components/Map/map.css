@@ -67,10 +67,14 @@ body {
 
 .my-legend {
 	position: absolute;
-	left: 15%;
-    top: 90vh;
+	bottom: 0!important;
+    width: 350px;
+    right: 30%;
 	padding: 10px;
     background: white;
+    z-index: 1!important;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
 }
 
 .my-legend .legend-scale ul {
@@ -84,7 +88,6 @@ body {
 	display: block;
 	float: left;
 	width: 50px;
-	margin-bottom: 6px;
 	text-align: center;
 	font-size: 80%;
 	list-style: none;
@@ -204,7 +207,6 @@ div .details {
     .my-legend { bottom: 0%; left: 30%; }
     .aside { padding: 5px; }
     .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
-    /* .voteTabs { float: right;} */
 }
 
 /* 895px and below */
@@ -229,6 +231,7 @@ div .details {
     .scoreBox { width: 45vw; height: 13vh; }
     .aside { padding: 5px; width: 80vw; }
     .map .mapboxgl-map { width: 100vw; }
+    .my-legend { left: 20%; }
 }
 
 /* 600px and up */

@@ -210,6 +210,7 @@ const Map = ({data}) => {
                 map.fitBounds(bounds)
                 // make chamber available
                 document.getElementById('chamber-select').disabled = false
+                document.getElementById('district-select').disabled = false
             })
 
             // update the chamber element with the chamber options
@@ -737,6 +738,10 @@ const Map = ({data}) => {
             const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
             const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
             
+            // hide instructions text
+            document.getElementById('instructions').style.display = "none"
+
+
             // store html in the sidebar divs
             document.getElementById('name').innerHTML = html_legname
             document.getElementById('rep').innerHTML = html_legrep
@@ -900,9 +905,9 @@ const Map = ({data}) => {
                 </div>
                 {/* map */}
                 <div class="mapContainer">
-                        {/* map legend */}
-                        <div class="map" ref={mapContainer}></div>
-                        {/* <div class='my-legend'>
+                    <div class="map" ref={mapContainer}>
+                        {/* legend */}
+                        <div class='my-legend'>
                             <div class='legend-scale'>
                                 <ul class='legend-labels'>
                                     <li><span style={{background:'#808080'}}></span>NA</li>
@@ -914,9 +919,11 @@ const Map = ({data}) => {
                                     <li><span style={{background:'#01665E'}}></span>100</li>
                                 </ul>
                             </div>
-                        </div> */}
+                        </div>
+                    </div>
                 </div>
             </div>
+            
             {/* sidebar */}
             <div class="aside" id="aside">
                 <div class="candidateText">LEGISLATOR DETAILS</div>
@@ -927,7 +934,7 @@ const Map = ({data}) => {
                     <Representation id='rep' style={{marginLeft: '15px'}}></Representation>
                     <Flex>
                         <div class="scoreBox">
-                            <div class="scoreTitle">Climate Cabinet Score</div>
+                            <div class="scoreTitle">Climate Score</div>
                             <div class="scoreText" id='score'></div>
                         </div>
                         <div class="scoreBox">
