@@ -49,6 +49,7 @@ export const useRepData = () => {
 // helpful documentation for working with immutable lists:
 // https://thomastuts.com/blog/immutable-js-101-maps-lists.html
 // https://immutable-js.github.io/immutable-js/, specifically the Nested Structures section
+
 // ccscorecard {
 //   intro
 //   votes
