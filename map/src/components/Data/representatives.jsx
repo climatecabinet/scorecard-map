@@ -8,7 +8,7 @@ export const useRepData = () => {
   query {
     allMongodbRegions {
       representatives(
-        query: {office: {is_current: true} OR: [{state_abbr: "AZ"}, {state_abbr: "CO"}, {state_abbr: "CT"}, {state_abbr: "FL"}]} 
+        query: {office: {is_current: true}} 
         limit: 10000
         ) {
         _id

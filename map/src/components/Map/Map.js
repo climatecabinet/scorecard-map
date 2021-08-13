@@ -16,8 +16,9 @@ const SelectState = styled.select`
     height: 50px;
     width: 32%;
     background: white;
-    color: #333;
+    color: #C36C27;
     font-size: 20px;
+    font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
     margin-bottom: 20px;
@@ -36,8 +37,9 @@ const SelectChamber = styled.select`
     background: white;
     color: #333;
     font-size: 20px;
+    font-weight: bold;
     font-family: 'Lato', sans-serif;
-    border: 1px solid #C36C27;
+    border: 1px solid #333;
     margin-bottom: 20px;
     padding: 10px;
     @media only screen and (min-width: 1060px) { 
@@ -59,9 +61,10 @@ const SelectDistrict = styled.select`
     height: 50px;
     background: white;
     color: #333;
+    font-weight: bold;
     font-size: 20px;
     font-family: 'Lato', sans-serif;
-    border: 1px solid #C36C27;
+    border: 1px solid #333;
     margin-bottom: 20px;
     padding: 10px;
     @media only screen and (min-width: 1060px) { 
@@ -97,33 +100,6 @@ const Representation = styled(Box)`
   padding-bottom: 15px;
 `
 
-// score box
-// const ScoreBox = styled(Box)`
-//   background-color: white;
-//   width: 15vw;
-//   height: 13vh;
-//   margin-left: 15px;
-//   margin-right: 15px;
-//   padding-top: 10px;
-//   padding-bottom: 25px;
-// `
-
-// score text element
-// const ScoreText = styled(Box)`
-//     text-transform: uppercase;
-//     text-align: center;
-//     font-weight: 700;
-//     font-size: 16px;
-//     padding-bottom: 15px;
-// `
-
-// numbers element
-// const Numbers = styled(Box)`
-//   font-size: 26px;
-//   color: #C36C27;
-//   text-align: center;
-// `
-
 // votes box
 const VotesBox = styled(Box)`
     margin-left: 15px;
@@ -131,18 +107,6 @@ const VotesBox = styled(Box)`
     margin-right: 15px;
 `
 
-// action box
-const ActionBox = styled(Box)`
-    width: 250px;
-    margin-left: 15px;
-    margin-bottom: 15px;
-    background-color: #C36C27;
-    color: white;
-    text-align: center;
-    font-size: 24px;
-    text-transform: uppercase;
-    padding: 10px 10px 10px 10px;
-`
 // function to add leading zeros
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
@@ -223,6 +187,10 @@ const Map = ({data}) => {
             // when a state is selected, zoom to it via bounds
             document.getElementById('state-select').addEventListener('change', function () {
                 let selectedState = document.getElementById('state-select').value
+                // change reset color to black
+                document.getElementById('reset').style.color = "#000000"
+                // change instructions text 
+                document.getElementById('instructions').innerHTML = "Please Select A Chamber"
                 // reset the chamber and district options
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
@@ -240,6 +208,8 @@ const Map = ({data}) => {
                 // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
+                // make chamber available
+                document.getElementById('chamber-select').disabled = false
             })
 
             // update the chamber element with the chamber options
@@ -255,6 +225,17 @@ const Map = ({data}) => {
             // when a chamber is selected, make it visible
             document.getElementById('chamber-select').addEventListener('change', function () {
                 let selectedChamber = document.getElementById('chamber-select').value
+
+                // change text and border to orange
+                document.getElementById('chamber-select').style.color = "#C36C27"
+                document.getElementById('chamber-select').style.borderColor = "#C36C27"
+
+                // change district text and border to grey
+                document.getElementById('district-select').style.color = "#333"
+                document.getElementById('district-select').style.borderColor = "#333"
+
+                // change instructions text 
+                document.getElementById('instructions').innerHTML = "Please Select A District"
                 
                 // change all layers visibility to none
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
@@ -282,6 +263,10 @@ const Map = ({data}) => {
 
                 // TODO: zoom out to the state view
 
+                document.getElementById('state-select').style.color = "#FFFFFF"
+                document.getElementById('state-select').style.backgroundColor = "#C36C27"
+                document.getElementById('state-select').disabled = true
+
             }) 
 
         });
@@ -308,6 +293,14 @@ const Map = ({data}) => {
                     document.getElementById('district-select').addEventListener('change', function () {
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = house_bounds[selectedState][selectedDistrict]
+
+                        // hide instructions text
+                        document.getElementById('instructions').style.display = "none"
+
+                        // change 'district' color and border to orange
+                        document.getElementById('district-select').style.color = "#C36C27"
+                        document.getElementById('district-select').style.borderColor = "#C36C27"
+
                         // zoom to the district
                         map.fitBounds(bounds)
                         // compute ccid for selected district
@@ -321,7 +314,6 @@ const Map = ({data}) => {
 
                         // make the contents of the legislator details component visible
                         document.getElementById('details').style.visibility = "visible"
-
                         const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
                         const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
                         const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
@@ -488,6 +480,13 @@ const Map = ({data}) => {
 
                     // when the district is selected, zoom in and populate legislator details
                     document.getElementById('district-select').addEventListener('change', function () {
+                        // change 'district' color and border to orange
+                        document.getElementById('district-select').style.color = "#C36C27"
+                        document.getElementById('district-select').style.borderColor = "#C36C27"
+
+                        // hide instructions
+                        document.getElementById('instructions').style.display = "none"
+
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = senate_bounds[selectedState][selectedDistrict]
                         // zoom to the district
@@ -660,6 +659,24 @@ const Map = ({data}) => {
 
             // reset the navigation options, and hide components, when the reset button is clicked
             document.getElementById('reset').addEventListener('click', function () {
+                document.getElementById('state-select').disabled = false
+                document.getElementById('chamber-select').disabled = true
+                document.getElementById('district-select').disabled = true
+
+                // change instructions text
+                document.getElementById('instructions').style.display = "block"
+                document.getElementById('instructions').innerHTML = "Please Select A State"
+
+                // reset styles
+                document.getElementById('state-select').style.color = "#C36C27"
+                document.getElementById('chamber-select').style.color = "#333"
+                document.getElementById('district-select').style.color = "#333"
+                document.getElementById('state-select').style.backgroundColor = "white"
+                document.getElementById('chamber-select').style.backgroundColor = "white"
+                document.getElementById('district-select').style.backgroundColor = "white"
+                document.getElementById('chamber-select').style.borderColor = "#333"
+                document.getElementById('district-select').style.borderColor = "#333"
+
                 // reset navigation options
                 document.getElementById('state-select').value = ""
                 document.getElementById('chamber-select').value = ""
@@ -864,11 +881,6 @@ const Map = ({data}) => {
             });
 
         });
-
-        // // clean up on unmount
-        // return () => {
-        //     map.remove()
-        // };
     
     }, [])
 
@@ -906,8 +918,9 @@ const Map = ({data}) => {
                 </div>
             </div>
             {/* sidebar */}
-            <div class="aside aside-2" id="aside">
+            <div class="aside" id="aside">
                 <div class="candidateText">LEGISLATOR DETAILS</div>
+                <div class="instructions" id="instructions">Please Select A State</div>
                 <div id='details' class='details'>
                     <br/>
                     <Name id='name' style={{marginLeft: '15px'}}></Name>
@@ -939,6 +952,7 @@ const Map = ({data}) => {
                         <div id="vote4" class="vote4"></div>
                         <div id="vote5" class="vote5"></div>
                     </VotesBox>
+                    <div class="actionButton">Take Action</div>
                 </div>
             </div>
         </div>
