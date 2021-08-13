@@ -5,6 +5,7 @@
     font-family: 'Lato', sans-serif;
 }
 
+/* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
     padding: 5px;
     flex: 1 100%;
@@ -18,14 +19,25 @@
 
 .resetText {
     font-size: 18px;
+    color: #333;
     float: right;
     padding-top: 10px;
+    text-decoration: underline;
 }
 
 .resetText:hover {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.instructions {
+    font-size: 24px;
+    color: #C36C27;
+    text-align: center;
+    padding-top: 20px;
+    font-style: italic;
+}
+
 
 .map {
     height: 75vh;
@@ -42,8 +54,10 @@
     font-size: 20px;
 }
 
-.aside-2 {
+.aside {
     background: #F4F4F4;
+    /* background: #000000; */
+    /* display: none; */
 }
 
 body {
@@ -140,10 +154,10 @@ body {
     height: 200px; */
 }
 
-.voteTabs {
-    float: right;
+/* .voteTabs {
+    float: right; */
     /* margin-bottom: 30px; */
-}
+/* } */
 
 .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab {
     font-size: 12px;
@@ -168,37 +182,64 @@ div .details {
     visibility: hidden;
 }
 
+.actionButton {
+    width: 250px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    background-color: #C36C27;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    text-transform: uppercase;
+    padding: 10px 10px 10px 10px;
+}
+
 /* 1059px and below */
 /* tablet view */
 @media only screen and (max-width: 1059px) { 
     .mapText { font-size: 28px; }
-    .map { height: 450px; width: 94vw; }
+    .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .aside-2 { padding: 0.5em; }
+    .aside { padding: 5px; }
+    .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
     /* .voteTabs { float: right;} */
 }
 
 /* 895px and below */
-/* mobile view */
-@media only screen and (max-width: 895px) { 
-    .map { height: 450px; width: 85vw; }
+/* transition view */
+@media only screen and (max-width: 859px) { 
+    .map { height: 450px; width: 95vw; }
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
-    .aside-2 { padding: 0.5em; }
+    .aside { padding: 5px; width: 80vw; }
+    .map .mapboxgl-map { width: 100vw; }
+}
+
+/* 500px and below */
+/* mobile view */
+@media only screen and (max-width: 500px) { 
+    .map { height: 450px; width: 95vw; }
+    .mapText { font-size: 18px; }
+    .resetText { padding-top: 0px; }
+    .my-legend { bottom: 0%; left: 30%; }
+    .scoreBox { width: 45vw; height: 13vh; }
+    .aside { padding: 5px; width: 80vw; }
+    .map .mapboxgl-map { width: 100vw; }
 }
 
 /* 600px and up */
 @media all and (min-width: 600px) { 
-    .aside { flex: 1 0 0; }
+    .aside { flex: 1; }
 }
 
 /* 800px and up */
 @media all and (min-width: 800px) {
     .main    { flex: 1 0px; }
     .main    { order: 1; }
-    .aside-2 { order: 2; }
+    .aside { order: 2; }
 }
 
