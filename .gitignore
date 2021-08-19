@@ -22,3 +22,11 @@ data/cc_scorecard_06082021_yearstring.csv
 *.DS_Store
 *data/.DS_Store
 *data/geospatial/.DS_Store
+map/public/chunk-map.json
+map/public/render-page.js
+map/public/page-data/sq/d/2449685071.json
+
+map/src/components/Map/screenshots.css
+map/src/components/Map/Screenshots.js
+map/config/screenshots.js
+
