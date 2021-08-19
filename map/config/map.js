@@ -94,6 +94,7 @@ export const layers = [
 				999,
 				'#808080' // 999 and greater
 			],
+
           'fill-outline-color': 'white'
         },
         layout: {
@@ -103,6 +104,7 @@ export const layers = [
 ]
 
 // bounds for the state districts
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const state_bounds = {
 	az: [-15.21, -6.65, -9.82, -0.37],
 	ca: [-20.67, -4.5, -14.31, 6.38],
@@ -1499,6 +1501,7 @@ export const senate_bounds = {
 }
 
 // bounds for the house districts
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const house_bounds = {
 	az: {
 		27: [-13.02, -4.44, -12.67, -4.16],
@@ -4869,6 +4872,7 @@ export const chambers = {
 }
 
 // dictionary: state abbreviation to state
+// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const initialsToState = {
 	az: 'Arizona',
 	ca: 'California',
