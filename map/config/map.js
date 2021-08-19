@@ -46,25 +46,26 @@ export const layers = [
 	  'source-layer': 'allhouse_0', 
       type: 'fill',
       paint: {
-        'fill-color': {
-            property: 'cc_score',
-            stops: [
-                [0, '#8C510A'], // 0
-                [25, '#D8B365'], // from 1 - 25
-				[50, '#F6E8C3'], // from 26 - 50
-                [75, '#C7EAE5'], // from 51 - 75
-                [99, '#5AB4AC'], // from 76 - 99
-				[100, '#01665E'], // 100
-				[999, '#808080'] // 999, score is not available
-            ]
-        },
+        'fill-color': [
+            'step',
+            ['get', 'cc_score'],
+            '#8C510A', // 0
+			1,
+			'#D8B365', // 1 to 25
+			26,
+			'#F6E8C3', // 26 to 50
+			51,
+			'#C7EAE5', // 51 to 75
+			76,
+			'#5AB4AC', // 76 to 99
+			100,
+			'#01665E', // 100 to 998
+			999,
+			'#808080' // 999 and greater
+			// equal to 100
+			// equal to 999
+        ],
         'fill-outline-color': 'white',
-        'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            0.6, // if true, opacity is 0.6
-            1 // if false, opacity is 1
-        ]
       },
       layout: {
         visibility: 'none'
@@ -76,18 +77,23 @@ export const layers = [
 		'source-layer': 'allsenate_0', 
         type: 'fill',
         paint: { 
-            'fill-color': {
-                property: 'cc_score',
-                stops: [
-                    [0, '#8C510A'], // 0
-					[25, '#D8B365'], // from 1 - 25
-					[50, '#F6E8C3'], // from 26 - 50
-					[75, '#C7EAE5'], // from 51 - 75
-					[99, '#5AB4AC'], // from 76 - 99
-					[100, '#01665E'], // 100
-					[999, '#808080'] // 999, score is not available
-                ],
-			},
+            'fill-color': [
+				'step',
+				['get', 'cc_score'],
+				'#8C510A', // 0
+				1,
+				'#D8B365', // 1 to 25
+				26,
+				'#F6E8C3', // 26 to 50
+				51,
+				'#C7EAE5', // 51 to 75
+				76,
+				'#5AB4AC', // 76 to 99
+				100,
+				'#01665E', // 100 to 998
+				999,
+				'#808080' // 999 and greater
+			],
           'fill-outline-color': 'white'
         },
         layout: {
