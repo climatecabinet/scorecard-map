@@ -188,8 +188,13 @@ const Map = ({data}) => {
             // when a state is selected, zoom to it via bounds
             document.getElementById('state-select').addEventListener('change', function () {
                 let selectedState = document.getElementById('state-select').value
+
+                // Update the reset button
                 // change reset color to black
-                document.getElementById('reset').style.color = "#000000"
+                const reset = document.getElementById('reset');
+                reset.style.color = "#000000"
+                reset.classList.remove('hidden');
+
                 // change instructions text
                 document.getElementById('instructions').innerHTML = "Please Select A Chamber"
                 // reset the chamber and district options
@@ -705,6 +710,8 @@ const Map = ({data}) => {
                 // zoom out to center
                 map.flyTo({center: [-1.14, -0.98], zoom: 3.5})
 
+                // Hide the reset button
+                document.getElementById('reset').classList.add('hidden');
 
             })
 
@@ -900,7 +907,7 @@ const Map = ({data}) => {
                 {/* navigation bar */}
                 <div className="nav">
                     <div className="mapText">Climate Cabinet Scorecard Map</div>
-                    <div id = "reset" className="resetText">RESET</div>
+                    <div id="reset" className="resetText hidden">RESET</div>
                     <br/><br/><br/>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>

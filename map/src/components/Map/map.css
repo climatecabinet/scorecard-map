@@ -17,6 +17,10 @@
     float: left;
 }
 
+.hidden {
+    display: none;
+}
+
 .resetText {
     font-size: 18px;
     color: #333;
