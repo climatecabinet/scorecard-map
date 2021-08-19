@@ -894,25 +894,25 @@ const Map = ({data}) => {
 
     return (
         // container for the entire app
-        <div class="wrapper">
+        <div className="wrapper">
             {/* map & navigation bar */}
-            <div class="main">
+            <div className="main">
                 {/* navigation bar */}
-                <div class="nav">
-                    <div class="mapText">Climate Cabinet Scorecard Map</div>
-                    <div id = "reset" class="resetText">RESET</div>
+                <div className="nav">
+                    <div className="mapText">Climate Cabinet Scorecard Map</div>
+                    <div id = "reset" className="resetText">RESET</div>
                     <br/><br/><br/>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
                 </div>
                 {/* map */}
-                <div class="mapContainer">
-                    <div class="map" ref={mapContainer}>
+                <div className="mapContainer">
+                    <div className="map" ref={mapContainer}>
                         {/* legend */}
-                        <div class='my-legend'>
-                            <div class='legend-scale'>
-                                <ul class='legend-labels'>
+                        <div className='my-legend'>
+                            <div className='legend-scale'>
+                                <ul className='legend-labels'>
                                     <li><span style={{background:'#808080'}}></span>NA</li>
                                     <li><span style={{background:'#8C510A'}}></span>0</li>
                                     <li><span style={{background:'#D8B365'}}></span>1-25</li>
@@ -928,46 +928,46 @@ const Map = ({data}) => {
             </div>
 
             {/* sidebar */}
-            <div class="aside" id="aside">
-                <div class="candidateText">LEGISLATOR DETAILS</div>
-                <div class="instructions" id="instructions">Please Select A State</div>
-                <a id='details' class='details'>
+            <div className="aside" id="aside">
+                <div className="candidateText">LEGISLATOR DETAILS</div>
+                <div className="instructions" id="instructions">Please Select A State</div>
+                <div id='details' className='details'>
                     <br/>
                     <Name id='name' style={{marginLeft: '15px'}}></Name>
                     <Representation id='rep' style={{marginLeft: '15px'}}></Representation>
                     <Flex>
-                        <div class="scoreBox">
-                            <div class="scoreTitle">Climate Score</div>
-                            <div class="scoreText" id='score'></div>
+                        <div className="scoreBox">
+                            <div className="scoreTitle">Climate Score</div>
+                            <div className="scoreText" id='score'></div>
                         </div>
-                        <div class="scoreBox">
-                            <div class="partyTitle">Party</div>
-                            <div class="partyText" id='party'></div>
+                        <div className="scoreBox">
+                            <div className="partyTitle">Party</div>
+                            <div className="partyText" id='party'></div>
                         </div>
                     </Flex>
                     <VotesBox>
-                        <div class="votesText">Selected Climate Votes</div>
-                        <div class="voteTabs">
-                            <div id='vote5Tab' class="vote5Tab">Vote 5</div>
-                            <div id='vote4Tab' class="vote4Tab">Vote 4</div>
-                            <div id='vote3Tab' class="vote3Tab">Vote 3</div>
-                            <div id='vote2Tab' class="vote2Tab">Vote 2</div>
-                            <div id='vote1Tab' class="vote1Tab">Vote 1</div>
+                        <div className="votesText">Selected Climate Votes</div>
+                        <div className="voteTabs">
+                            <div id='vote5Tab' className="vote5Tab">Vote 5</div>
+                            <div id='vote4Tab' className="vote4Tab">Vote 4</div>
+                            <div id='vote3Tab' className="vote3Tab">Vote 3</div>
+                            <div id='vote2Tab' className="vote2Tab">Vote 2</div>
+                            <div id='vote1Tab' className="vote1Tab">Vote 1</div>
                         </div>
                         <br/>
                         <br/>
-                        <div id="vote1" class="vote1"></div>
-                        <div id="vote2" class="vote2"></div>
-                        <div id="vote3" class="vote3"></div>
-                        <div id="vote4" class="vote4"></div>
-                        <div id="vote5" class="vote5"></div>
+                        <div id="vote1" className="vote1"></div>
+                        <div id="vote2" className="vote2"></div>
+                        <div id="vote3" className="vote3"></div>
+                        <div id="vote4" className="vote4"></div>
+                        <div id="vote5" className="vote5"></div>
                     </VotesBox>
-                    <div class="actionButton">
-                        <a id="takeActionCTA" href="https://climatecabinetaction.org" target="_blank">
+                    <div className="actionButton">
+                        <a id="takeActionCTA" href="https://climatecabinetaction.org" target="_blank" rel="noreferrer">
                             Take Action
                         </a>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     )
