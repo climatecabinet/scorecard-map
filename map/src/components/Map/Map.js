@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Flex, Box } from '@rebass/grid'
 import mapboxgl from '!mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-// import 'mapbox-gl/dist/mapbox-gl.js'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
 import { useRepData } from '../Data/representatives'
@@ -10,6 +9,8 @@ import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, in
 import styled from '../../../util/style'
 import "typeface-lato";
 import './map.css'
+
+const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
 // select elements
 const SelectState = styled.select`
@@ -23,10 +24,10 @@ const SelectState = styled.select`
     border: 1px solid #C36C27;
     margin-bottom: 20px;
     padding: 10px;
-    @media only screen and (max-width: 1059px) { 
+    @media only screen and (max-width: 1059px) {
         width: 31.25vw;
     }
-    @media only screen and (max-width: 895px) { 
+    @media only screen and (max-width: 895px) {
         display: block;
         width: 95.75vw;
     }
@@ -42,15 +43,15 @@ const SelectChamber = styled.select`
     border: 1px solid #333;
     margin-bottom: 20px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) { 
+    @media only screen and (min-width: 1060px) {
         width: 32%;
         margin-left: 12px;
     }
-    @media only screen and (max-width: 1059px) { 
+    @media only screen and (max-width: 1059px) {
         width: 31.25vw;
         margin-left: 10px;
     }
-    @media only screen and (max-width: 895px) { 
+    @media only screen and (max-width: 895px) {
         display: block;
         width: 95.75vw;
         margin-left: 0px;
@@ -67,15 +68,15 @@ const SelectDistrict = styled.select`
     border: 1px solid #333;
     margin-bottom: 20px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) { 
+    @media only screen and (min-width: 1060px) {
         width: 32%;
         margin-left: 12px;
     }
-    @media only screen and (max-width: 1059px) { 
+    @media only screen and (max-width: 1059px) {
         width: 31.25vw;
         margin-left: 10px;
     }
-    @media only screen and (max-width: 895px) { 
+    @media only screen and (max-width: 895px) {
         display: block;
         width: 95.75vw;
         margin-left: 0px;
@@ -132,9 +133,9 @@ const Map = ({data}) => {
 
     // data from MongoDB/GraphQL query
     // regions Data
-    const [regionsData, regionsIndex] = useData()
+    const [, regionsIndex] = useData()
     // representatives Data
-    const [repData, repIndex] = useRepData()
+    const [, repIndex] = useRepData()
 
     // initialize map when component mounts
     useEffect(() => {
@@ -143,7 +144,7 @@ const Map = ({data}) => {
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [-1.14, -0.98],
-            zoom: 3.5, 
+            zoom: 3.5,
             // TODO: detect window size. change zoom based on window size.
             // desktop: 4.5
             // mobile/iPad: 2.5
@@ -156,17 +157,17 @@ const Map = ({data}) => {
         mapRef.current = map
         window.map = map
 
-        map.on('load', () => { 
+        map.on('load', () => {
 
             // make a pointer cursor
             map.getCanvas().style.cursor = 'default';
-            
+
             // add every source to the map
             Object.entries(sources).forEach(([id, source]) => {
                 map.addSource(id, source)
             })
-            
-            // add every layer to the map 
+
+            // add every layer to the map
             layers.forEach(layer => {
                 map.addLayer(layer)
             })
@@ -179,9 +180,9 @@ const Map = ({data}) => {
             // update the state element with state options
             const selectElement = document.getElementById('state-select')
             for (let i = 0; i < states.length; i++) {
-                let currentState = states[i]; 
-                let newOption = new Option(initialsToState[currentState], currentState); 
-                selectElement.add(newOption, undefined); 
+                let currentState = states[i];
+                let newOption = new Option(initialsToState[currentState], currentState);
+                selectElement.add(newOption, undefined);
             }
 
             // when a state is selected, zoom to it via bounds
@@ -189,13 +190,13 @@ const Map = ({data}) => {
                 let selectedState = document.getElementById('state-select').value
                 // change reset color to black
                 document.getElementById('reset').style.color = "#000000"
-                // change instructions text 
+                // change instructions text
                 document.getElementById('instructions').innerHTML = "Please Select A Chamber"
                 // reset the chamber and district options
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
                 // reset legislator details
-                document.getElementById('details').style.visibility = "hidden" 
+                document.getElementById('details').style.visibility = "hidden"
                 document.getElementById('name').innerHTML = ""
                 document.getElementById('party').innerHTML = ""
                 document.getElementById('score').innerHTML = ""
@@ -235,9 +236,9 @@ const Map = ({data}) => {
                 document.getElementById('district-select').style.color = "#333"
                 document.getElementById('district-select').style.borderColor = "#333"
 
-                // change instructions text 
+                // change instructions text
                 document.getElementById('instructions').innerHTML = "Please Select A District"
-                
+
                 // change all layers visibility to none
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
                 map.setLayoutProperty('senate-fill', 'visibility', 'none')
@@ -246,12 +247,12 @@ const Map = ({data}) => {
                 // change the selected chamber's visibility to visible
                 let clickedLayer = selectedChamber + '-fill'
                 map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
-                
+
                 // reset the district options
                 document.getElementById('district-select').value = ""
 
                 // reset legislator details
-                document.getElementById('details').style.visibility = "hidden" 
+                document.getElementById('details').style.visibility = "hidden"
                 document.getElementById('name').innerHTML = ""
                 document.getElementById('party').innerHTML = ""
                 document.getElementById('score').innerHTML = ""
@@ -268,12 +269,12 @@ const Map = ({data}) => {
                 document.getElementById('state-select').style.backgroundColor = "#C36C27"
                 document.getElementById('state-select').disabled = true
 
-            }) 
+            })
 
         });
 
-        map.on('idle', function() {  
-            
+        map.on('idle', function() {
+
             if (document.getElementById('chamber-select').value) {
                 let selectedChamber = document.getElementById('chamber-select').value
                 let selectedState = document.getElementById('state-select').value
@@ -308,7 +309,6 @@ const Map = ({data}) => {
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                         // populate the legislator details
                         const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
-                        // console.log("selected district's representative " + incumbentId + ", " + `${repIndex.getIn([incumbentId, 'full_name'])}` )
 
                         // run query
                         // console.log(data.allMongodbRegions.representatives.full_name)
@@ -324,12 +324,15 @@ const Map = ({data}) => {
                         const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
                         const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
                         const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
-                        
-                        // store html in the sidebar divs
+
+                        // Update html in the sidebar divs
                         document.getElementById('name').innerHTML = html_legname
                         document.getElementById('rep').innerHTML = html_legrep
                         document.getElementById('score').innerHTML = html_score
                         document.getElementById('party').innerHTML = html_party
+                        const legislatorSlug = repIndex.getIn([incumbentId, 'slug']);
+                        const ctaHref = `${LEGISLATOR_PAGE_URL_PREFIX}${legislatorSlug}`;
+                        document.getElementById('takeActionCTA').setAttribute('href', ctaHref)
 
                         // store the votes in the hidden div
                         if (html_vote1 === 'undefined') {
@@ -384,14 +387,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'block';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote2Tab').addEventListener('click', function () {
                             document.getElementById('vote2Tab').style.color = "black"
                             document.getElementById('vote2Tab').style.textDecoration = "none"
@@ -403,14 +406,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'block';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote3Tab').addEventListener('click', function () {
                             document.getElementById('vote3Tab').style.color = "black"
                             document.getElementById('vote3Tab').style.textDecoration = "none"
@@ -422,14 +425,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'block';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote4Tab').addEventListener('click', function () {
                             document.getElementById('vote4Tab').style.color = "black"
                             document.getElementById('vote4Tab').style.textDecoration = "none"
@@ -441,14 +444,14 @@ const Map = ({data}) => {
                             document.getElementById('vote3Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'block';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote5Tab').addEventListener('click', function () {
                             document.getElementById('vote5Tab').style.color = "black"
                             document.getElementById('vote5Tab').style.textDecoration = "none"
@@ -460,7 +463,7 @@ const Map = ({data}) => {
                             document.getElementById('vote3Tab').style.textDecoration = "underline"
                             document.getElementById('vote4Tab').style.color = "#C36C27"
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
@@ -470,7 +473,7 @@ const Map = ({data}) => {
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let districtOptions = Object.keys(senate_bounds[selectedState])
-                    
+
                     // create district options for the senate
                     const selectDistrict = document.getElementById('district-select')
                     for (let i = 0; i < districtOptions.length; i++) {
@@ -497,7 +500,7 @@ const Map = ({data}) => {
                         // populate the legislator details
                         const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
                         // make the contents of the legislator details component visible
-                        document.getElementById('details').style.visibility = "visible" 
+                        document.getElementById('details').style.visibility = "visible"
 
                         const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
                         const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
@@ -508,7 +511,7 @@ const Map = ({data}) => {
                         const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
                         const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
                         const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
-                        
+
                         // store html in the sidebar divs
                         document.getElementById('name').innerHTML = html_legname
                         document.getElementById('rep').innerHTML = html_legrep
@@ -568,14 +571,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'block';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote2Tab').addEventListener('click', function () {
                             document.getElementById('vote2Tab').style.color = "black"
                             document.getElementById('vote2Tab').style.textDecoration = "none"
@@ -587,14 +590,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'block';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote3Tab').addEventListener('click', function () {
                             document.getElementById('vote3Tab').style.color = "black"
                             document.getElementById('vote3Tab').style.textDecoration = "none"
@@ -606,14 +609,14 @@ const Map = ({data}) => {
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'block';
                             document.getElementById('vote4').style.display = 'none';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote4Tab').addEventListener('click', function () {
                             document.getElementById('vote4Tab').style.color = "black"
                             document.getElementById('vote4Tab').style.textDecoration = "none"
@@ -625,14 +628,14 @@ const Map = ({data}) => {
                             document.getElementById('vote3Tab').style.textDecoration = "underline"
                             document.getElementById('vote5Tab').style.color = "#C36C27"
                             document.getElementById('vote5Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
                             document.getElementById('vote4').style.display = 'block';
                             document.getElementById('vote5').style.display = 'none';
                         });
-            
+
                         document.getElementById('vote5Tab').addEventListener('click', function () {
                             document.getElementById('vote5Tab').style.color = "black"
                             document.getElementById('vote5Tab').style.textDecoration = "none"
@@ -644,7 +647,7 @@ const Map = ({data}) => {
                             document.getElementById('vote3Tab').style.textDecoration = "underline"
                             document.getElementById('vote4Tab').style.color = "#C36C27"
                             document.getElementById('vote4Tab').style.textDecoration = "underline"
-            
+
                             document.getElementById('vote1').style.display = 'none';
                             document.getElementById('vote2').style.display = 'none';
                             document.getElementById('vote3').style.display = 'none';
@@ -684,7 +687,7 @@ const Map = ({data}) => {
                 document.getElementById('district-select').value = ""
 
                 // hide legislator components
-                document.getElementById('details').style.visibility = "hidden" 
+                document.getElementById('details').style.visibility = "hidden"
                 document.getElementById('name').innerHTML = ""
                 document.getElementById('party').innerHTML = ""
                 document.getElementById('score').innerHTML = ""
@@ -704,8 +707,8 @@ const Map = ({data}) => {
 
 
             })
-            
-            
+
+
         })
 
         map.on('click', function(mapElement) {
@@ -721,7 +724,7 @@ const Map = ({data}) => {
             const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
 
             // make the contents of the legislator details component visible
-            document.getElementById('details').style.visibility = "visible" 
+            document.getElementById('details').style.visibility = "visible"
 
             // use the ccidCode to lookup the regions data (stored in the regionsIndex variable) and the representatives data (stored in the repIndex variable)
             // the lookup will find the data associated to the district
@@ -737,7 +740,7 @@ const Map = ({data}) => {
             const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
             const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
             const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
-            
+
             // hide instructions text
             document.getElementById('instructions').style.display = "none"
 
@@ -886,30 +889,30 @@ const Map = ({data}) => {
             });
 
         });
-    
-    }, [])
+
+    }, [regionsIndex, repIndex])
 
     return (
         // container for the entire app
-        <div class="wrapper">
+        <div className="wrapper">
             {/* map & navigation bar */}
-            <div class="main">
+            <div className="main">
                 {/* navigation bar */}
-                <div class="nav">
-                    <div class="mapText">Climate Cabinet Scorecard Map</div>
-                    <div id = "reset" class="resetText">RESET</div>
+                <div className="nav">
+                    <div className="mapText">Climate Cabinet Scorecard Map</div>
+                    <div id = "reset" className="resetText">RESET</div>
                     <br/><br/><br/>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
                 </div>
                 {/* map */}
-                <div class="mapContainer">
-                    <div class="map" ref={mapContainer}>
+                <div className="mapContainer">
+                    <div className="map" ref={mapContainer}>
                         {/* legend */}
-                        <div class='my-legend'>
-                            <div class='legend-scale'>
-                                <ul class='legend-labels'>
+                        <div className='my-legend'>
+                            <div className='legend-scale'>
+                                <ul className='legend-labels'>
                                     <li><span style={{background:'#808080'}}></span>NA</li>
                                     <li><span style={{background:'#8C510A'}}></span>0</li>
                                     <li><span style={{background:'#D8B365'}}></span>1-25</li>
@@ -923,43 +926,47 @@ const Map = ({data}) => {
                     </div>
                 </div>
             </div>
-            
+
             {/* sidebar */}
-            <div class="aside" id="aside">
-                <div class="candidateText">LEGISLATOR DETAILS</div>
-                <div class="instructions" id="instructions">Please Select A State</div>
-                <div id='details' class='details'>
+            <div className="aside" id="aside">
+                <div className="candidateText">LEGISLATOR DETAILS</div>
+                <div className="instructions" id="instructions">Please Select A State</div>
+                <div id='details' className='details'>
                     <br/>
                     <Name id='name' style={{marginLeft: '15px'}}></Name>
                     <Representation id='rep' style={{marginLeft: '15px'}}></Representation>
                     <Flex>
-                        <div class="scoreBox">
-                            <div class="scoreTitle">Climate Score</div>
-                            <div class="scoreText" id='score'></div>
+                        <div className="scoreBox">
+                            <div className="scoreTitle">Climate Score</div>
+                            <div className="scoreText" id='score'></div>
                         </div>
-                        <div class="scoreBox">
-                            <div class="partyTitle">Party</div>
-                            <div class="partyText" id='party'></div>
+                        <div className="scoreBox">
+                            <div className="partyTitle">Party</div>
+                            <div className="partyText" id='party'></div>
                         </div>
                     </Flex>
                     <VotesBox>
-                        <div class="votesText">Selected Climate Votes</div>
-                        <div class="voteTabs">
-                            <div id='vote5Tab' class="vote5Tab">Vote 5</div>
-                            <div id='vote4Tab' class="vote4Tab">Vote 4</div>
-                            <div id='vote3Tab' class="vote3Tab">Vote 3</div>
-                            <div id='vote2Tab' class="vote2Tab">Vote 2</div>
-                            <div id='vote1Tab' class="vote1Tab">Vote 1</div>
+                        <div className="votesText">Selected Climate Votes</div>
+                        <div className="voteTabs">
+                            <div id='vote5Tab' className="vote5Tab">Vote 5</div>
+                            <div id='vote4Tab' className="vote4Tab">Vote 4</div>
+                            <div id='vote3Tab' className="vote3Tab">Vote 3</div>
+                            <div id='vote2Tab' className="vote2Tab">Vote 2</div>
+                            <div id='vote1Tab' className="vote1Tab">Vote 1</div>
                         </div>
                         <br/>
                         <br/>
-                        <div id="vote1" class="vote1"></div>
-                        <div id="vote2" class="vote2"></div>
-                        <div id="vote3" class="vote3"></div>
-                        <div id="vote4" class="vote4"></div>
-                        <div id="vote5" class="vote5"></div>
+                        <div id="vote1" className="vote1"></div>
+                        <div id="vote2" className="vote2"></div>
+                        <div id="vote3" className="vote3"></div>
+                        <div id="vote4" className="vote4"></div>
+                        <div id="vote5" className="vote5"></div>
                     </VotesBox>
-                    <div class="actionButton">Take Action</div>
+                        <a id="takeActionCTA" href="https://www.climatecabinetaction.org" target="_blank" rel="noreferrer">
+                            <div className="actionButton">
+                                    Take Action
+                            </div>
+                        </a>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 .wrapper {
-    display: flex;  
+    display: flex;
     flex-flow: row wrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
@@ -61,7 +61,7 @@
 }
 
 body {
-    padding: 0em; 
+    padding: 0em;
     background: white;
 }
 
@@ -198,9 +198,21 @@ div .details {
     padding: 10px 10px 10px 10px;
 }
 
+#takeActionCTA {
+    text-decoration: none;
+}
+
+#takeActionCTA a:link {
+    color: white;
+}
+
+#takeActionCTA a:visited {
+    color: white;
+}
+
 /* 1059px and below */
 /* tablet view */
-@media only screen and (max-width: 1059px) { 
+@media only screen and (max-width: 1059px) {
     .mapText { font-size: 28px; }
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
@@ -211,7 +223,7 @@ div .details {
 
 /* 895px and below */
 /* transition view */
-@media only screen and (max-width: 859px) { 
+@media only screen and (max-width: 859px) {
     .map { height: 450px; width: 95vw; }
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
@@ -223,7 +235,7 @@ div .details {
 
 /* 500px and below */
 /* mobile view */
-@media only screen and (max-width: 500px) { 
+@media only screen and (max-width: 500px) {
     .map { height: 450px; width: 95vw; }
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
@@ -235,7 +247,7 @@ div .details {
 }
 
 /* 600px and up */
-@media all and (min-width: 600px) { 
+@media all and (min-width: 600px) {
     .aside { flex: 1; }
 }
 
@@ -245,4 +257,3 @@ div .details {
     .main    { order: 1; }
     .aside { order: 2; }
 }
-

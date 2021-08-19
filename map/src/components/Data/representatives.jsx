@@ -4,11 +4,11 @@ import { isDebug } from '../../../util/dom'
 
 // OR: [{state_abbr: "AZ"}, {state_abbr: "CO"}, {state_abbr: "CT"}, {state_abbr: "FL"}]
 export const useRepData = () => {
-  const data = useStaticQuery(graphql` 
+  const data = useStaticQuery(graphql`
   query {
     allMongodbRegions {
       representatives(
-        query: {office: {is_current: true}} 
+        query: {office: {is_current: true}}
         limit: 10000
         ) {
         _id
@@ -17,6 +17,7 @@ export const useRepData = () => {
         party
         role
         state_abbr
+        slug
         office {
           is_current
         }
@@ -28,7 +29,7 @@ export const useRepData = () => {
   const repData = data.allMongodbRegions.representatives.map(representative => {
     const { _id } = representative
 
-    return { 
+    return {
       ...representative
     }
   })
