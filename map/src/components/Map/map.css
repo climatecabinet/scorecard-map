@@ -198,13 +198,15 @@ div .details {
     padding: 10px 10px 10px 10px;
 }
 
-.actionButton a {
+#takeActionCTA {
     text-decoration: none;
 }
-.actionButton a:link {
+
+#takeActionCTA a:link {
     color: white;
 }
-.actionButton a:visited {
+
+#takeActionCTA a:visited {
     color: white;
 }
 

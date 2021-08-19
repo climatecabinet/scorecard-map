@@ -962,11 +962,11 @@ const Map = ({data}) => {
                         <div id="vote4" className="vote4"></div>
                         <div id="vote5" className="vote5"></div>
                     </VotesBox>
-                    <div className="actionButton">
-                        <a id="takeActionCTA" href="https://climatecabinetaction.org" target="_blank" rel="noreferrer">
-                            Take Action
+                        <a id="takeActionCTA" href="https://www.climatecabinetaction.org" target="_blank" rel="noreferrer">
+                            <div className="actionButton">
+                                    Take Action
+                            </div>
                         </a>
-                    </div>
                 </div>
             </div>
         </div>
