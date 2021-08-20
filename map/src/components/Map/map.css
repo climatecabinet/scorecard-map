@@ -1,6 +1,6 @@
 .wrapper {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
 }
@@ -44,11 +44,6 @@
     width: 60vw;
 }
 
-.main {
-    /* width: 100%; */
-    /* padding-right: 15px; */
-}
-
 
 .candidateText {
     margin-left: 15px;
@@ -58,9 +53,6 @@
 
 .aside {
     background: #F4F4F4;
-    /* width: 100%; */
-    /* background: #000000; */
-    /* display: none; */
 }
 
 body {
@@ -69,46 +61,29 @@ body {
 }
 
 .my-legend {
-	bottom: 0!important;
-    width: 350px;
-    right: 30%;
+    width: min(90%, 350px);
 	padding: 10px;
     background: white;
-    z-index: 1!important;
     font-size: 16px;
     font-family: 'Lato', sans-serif;
 }
 
-.my-legend .legend-scale .legend-labels {
+.legend-labels {
     display: flex;
 }
 
-.my-legend .legend-scale ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.my-legend .legend-scale ul li {
-	display: block;
-	width: 50px;
-	text-align: center;
-	font-size: 80%;
-	list-style: none;
-}
-
-.my-legend .legend-labels div {
+.legend-labels div {
     text-align: center;
     font-size: 80%;
+	width: calc(100% / 7);
 }
 
-.my-legend .legend-labels div span {
+.legend-labels div span {
 	display: block;
 	height: 15px;
-	width: 50px;
 }
 
-.my-legend .legend-source {
+.legend-source {
 	font-size: 70%;
 	color: #999;
 	clear: both;
