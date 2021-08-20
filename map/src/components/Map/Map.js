@@ -17,6 +17,7 @@ const Header = styled.div`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: baseline;
+    margin-bottom: 5vh;
 `;
 
 // select elements
@@ -917,7 +918,6 @@ const Map = ({data}) => {
                         <div className="mapText">Climate Cabinet Scorecard Map</div>
                         <div id="reset" className="resetText hidden">RESET</div>
                     </Header>
-                    <br/><br/><br/>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
