@@ -45,8 +45,9 @@
 
 .main {
     width: 100%;
-    padding-right: 15px;
+    /* padding-right: 15px; */
 }
+
 
 .candidateText {
     margin-left: 15px;
@@ -56,6 +57,7 @@
 
 .aside {
     background: #F4F4F4;
+    width: 100%;
     /* background: #000000; */
     /* display: none; */
 }
@@ -222,7 +224,6 @@ div .details {
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .aside { padding: 5px; }
     .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
 }
 
@@ -234,7 +235,6 @@ div .details {
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
-    .aside { padding: 5px; width: 80vw; }
     .map .mapboxgl-map { width: 100vw; }
 }
 
@@ -246,7 +246,6 @@ div .details {
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
-    .aside { padding: 5px; width: 80vw; }
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
 }
