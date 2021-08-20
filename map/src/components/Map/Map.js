@@ -12,6 +12,12 @@ import './map.css'
 
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
+const Header = styled.div`
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+`;
+
 // select elements
 const SelectState = styled.select`
     height: 50px;
@@ -906,8 +912,10 @@ const Map = ({data}) => {
             <div className="main">
                 {/* navigation bar */}
                 <div className="nav">
-                    <div className="mapText">Climate Cabinet Scorecard Map</div>
-                    <div id="reset" className="resetText hidden">RESET</div>
+                    <Header>
+                        <div className="mapText">Climate Cabinet Scorecard Map</div>
+                        <div id="reset" className="resetText hidden">RESET</div>
+                    </Header>
                     <br/><br/><br/>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
