@@ -1,13 +1,12 @@
 .wrapper {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
 }
 
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
-    padding: 5px;
     flex: 1 100%;
 }
 
@@ -70,7 +69,6 @@ body {
 }
 
 .my-legend {
-	position: absolute;
 	bottom: 0!important;
     width: 350px;
     right: 30%;
@@ -81,25 +79,31 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
+.my-legend .legend-scale .legend-labels {
+    display: flex;
+}
+
 .my-legend .legend-scale ul {
 	margin: 0;
 	padding: 0;
-	float: left;
 	list-style: none;
 }
 
 .my-legend .legend-scale ul li {
 	display: block;
-	float: left;
 	width: 50px;
 	text-align: center;
 	font-size: 80%;
 	list-style: none;
 }
 
-.my-legend ul.legend-labels li span {
+.my-legend .legend-labels div {
+    text-align: center;
+    font-size: 80%;
+}
+
+.my-legend .legend-labels div span {
 	display: block;
-	float: left;
 	height: 15px;
 	width: 50px;
 }
@@ -258,6 +262,5 @@ div .details {
 /* 800px and up */
 @media all and (min-width: 800px) {
     .main    { flex: 1 0px; }
-    .main    { order: 1; }
-    .aside { order: 2; }
+    .wrapper { flex-flow: row wrap }
 }
