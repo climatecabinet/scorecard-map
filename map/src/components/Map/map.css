@@ -51,6 +51,14 @@
     font-size: 20px;
 }
 
+.repText {
+  color: #000000;
+  font-size: 24px;
+  font-weight: 700;
+  padding-bottom: 15px;
+  margin-left: 15px;
+}
+
 .aside {
     background: #F4F4F4;
 }
@@ -203,7 +211,7 @@ div .details {
     .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
 }
 
-/* 895px and below */
+/* 859px and below */
 /* transition view */
 @media only screen and (max-width: 859px) {
     .map { height: 450px; width: 95vw; }
@@ -211,19 +219,35 @@ div .details {
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
+    .scoreTitle { font-size: 12px; }
+    .partyTitle { font-size: 12px; }
+    .scoreText { font-size: 24px; }
+    .partyText { font-size: 24px; }
+    .aside { padding: 5px; width: 80vw; }
     .map .mapboxgl-map { width: 100vw; }
 }
 
 /* 500px and below */
 /* mobile view */
 @media only screen and (max-width: 500px) {
-    .map { height: 450px; width: 95vw; }
+    .wrapper { overflow-x: hidden }
+    .map { height: 350px; width: 95vw; }
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox { width: 45vw; height: 13vh; }
+    .scoreTitle { font-size: 12px; }
+    .partyTitle { font-size: 12px; }
+    .scoreText { font-size: 24px; }
+    .partyText { font-size: 24px; }
+    .aside { padding: 5px; width: 80vw; }
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
+    .repText { font-size: 18px; }
+    .actionButton { width: 421px; }
+    .voteTabs { position: absolute; padding-top: 20px; }
+    .vote1, .vote2, .vote3, .vote4, .vote5 { padding-top: 20px; }
+
 }
 
 /* 600px and up */
