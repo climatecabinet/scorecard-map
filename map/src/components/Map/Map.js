@@ -641,19 +641,17 @@ const Map = ({data}) => {
                     <VotesBox>
                         <div className="votesText">Selected Climate Votes</div>
                         <div className="voteTabs">
-                            <div id='vote5Tab' className="vote5Tab">Vote 5</div>
-                            <div id='vote4Tab' className="vote4Tab">Vote 4</div>
-                            <div id='vote3Tab' className="vote3Tab">Vote 3</div>
-                            <div id='vote2Tab' className="vote2Tab">Vote 2</div>
-                            <div id='vote1Tab' className="vote1Tab">Vote 1</div>
+                            <div id='vote1Tab' className="voteTab">Vote 1</div>
+                            <div id='vote2Tab' className="voteTab">Vote 2</div>
+                            <div id='vote3Tab' className="voteTab">Vote 3</div>
+                            <div id='vote4Tab' className="voteTab">Vote 4</div>
+                            <div id='vote5Tab' className="voteTab">Vote 5</div>
                         </div>
-                        <br/>
-                        <br/>
-                        <div id="vote1" className="vote1"></div>
-                        <div id="vote2" className="vote2"></div>
-                        <div id="vote3" className="vote3"></div>
-                        <div id="vote4" className="vote4"></div>
-                        <div id="vote5" className="vote5"></div>
+                        <div id="vote1" className="vote"></div>
+                        <div id="vote2" className="vote"></div>
+                        <div id="vote3" className="vote"></div>
+                        <div id="vote4" className="vote"></div>
+                        <div id="vote5" className="vote"></div>
                     </VotesBox>
                         <a id="takeActionCTA" href="https://www.climatecabinetaction.org" target="_blank" rel="noreferrer">
                             <div className="actionButton">
