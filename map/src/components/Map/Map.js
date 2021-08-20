@@ -114,7 +114,7 @@ const zeroPad = (num, places) => String(num).padStart(places, '0')
 // store mapbox token
 const mapboxToken = siteMetadata.mapboxToken
 
-const updateSidebar = ({ccidCode, regionsIndex, repIndex}) => {
+const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
     const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
 
     // make the contents of the legislator details component visible
@@ -477,8 +477,9 @@ const Map = ({data}) => {
                         map.fitBounds(bounds)
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
+
                         // populate the legislator details
-                        updateSidebar({ccidCode, regionsIndex, repIndex});
+                        updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let districtOptions = Object.keys(senate_bounds[selectedState])
@@ -506,7 +507,8 @@ const Map = ({data}) => {
                         map.fitBounds(bounds)
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
-                        updateSidebar({ccidCode, regionsIndex, repIndex});
+
+                        updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
                     })
                 }
 
@@ -576,7 +578,8 @@ const Map = ({data}) => {
             // also on click, get the ccid and the regions.incumbent.rep id
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
-            updateSidebar({ccidCode, regionsIndex, repIndex});
+
+            updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
 
         });
 
