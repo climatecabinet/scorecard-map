@@ -521,7 +521,7 @@ const Map = ({data}) => {
                     // compute ccid for selected district
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                     // populate the legislator details
-                    updateSidebar({ccidCode, regionsIndex, repIndex});
+                    updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
