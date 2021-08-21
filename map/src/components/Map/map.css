@@ -7,9 +7,9 @@
 
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
-    /* padding: 5px; */
     width: 100%;
-/*     flex: 1 100%; */
+    /* width: auto; */
+    flex: 1 100%;
 }
 
 .mapText {
@@ -182,6 +182,7 @@ div .details {
 .actionButton {
     width: 250px;
     margin-left: 15px;
+    margin-right: 15px;
     margin-bottom: 15px;
     margin-top: 30px;
     background-color: #C36C27;
@@ -247,7 +248,7 @@ div .details {
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
     .repText { font-size: 18px; }
-    .actionButton { width: 421px; }
+    .actionButton { width: auto; }
     .voteTabs { position: absolute; padding-top: 20px; }
     .vote1, .vote2, .vote3, .vote4, .vote5 { padding-top: 20px; }
 
