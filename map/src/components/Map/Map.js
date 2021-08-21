@@ -9,7 +9,8 @@ import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, in
 import styled from '../../../util/style'
 import "typeface-lato";
 import './map.css'
-import { remove } from 'immutable'
+import { gql, GraphQLClient } from 'graphql-request';
+import * as Realm from "realm-web";
 
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
@@ -133,7 +134,63 @@ const zeroPad = (num, places) => String(num).padStart(places, '0')
 // store mapbox token
 const mapboxToken = siteMetadata.mapboxToken
 
-const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
+const app = new Realm.App('climate-cabinet-production-esyps');
+
+async function loginAnonymous() {
+    // Create an API Key credential
+    const credentials = Realm.Credentials.anonymous()
+    try {
+      // Authenticate the user
+      const user = await app.logIn(credentials);
+    //   `App.currentUser` updates to match the logged in user
+    //   assert(user.id === app.currentUser.id)
+      return user
+    } catch(err) {
+      console.error("Failed to log in", err);
+    }
+  }
+
+
+async function getValidAccessToken() {
+    // Guarantee that there's a logged in user with a valid access token
+    if (!app.currentUser) {
+      // If no user is logged in, log in an anonymous user. The logged in user will have a valid
+      // access token.
+      const user = await loginAnonymous()
+      console.log("Successfully logged in!", user)
+    } else {
+      // An already logged in user's access token might be stale. To guarantee that the token is
+      // valid, we refresh the user's custom data which also refreshes their access token.
+      await app.currentUser.refreshCustomData();
+    }
+
+    return app.currentUser.accessToken;
+}
+
+const fetchWithAccessToken = async (uri, options) => {
+    const accessToken = await getValidAccessToken();
+    options.headers.Authorization = `Bearer ${accessToken}`;
+    return fetch(uri, options);
+  };
+
+const getVotesQuery = gql`
+    query rep($repId: ObjectId!) {
+        representative(query: {_id: $repId}) {
+            ccscorecard {
+            votes
+            }
+        }
+    }
+`;
+
+const endpoint = 'https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/climate-cabinet-production-esyps/graphql';
+const client = new GraphQLClient(endpoint, { fetch: fetchWithAccessToken })
+
+const getVotes = async (repId) => {
+    return client.request(getVotesQuery, { repId }).then(resp => resp.representative.ccscorecard.votes);
+}
+
+const updateSidebarForRepresentative = async ({ccidCode, regionsIndex, repIndex}) => {
     const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
 
     // make the contents of the legislator details component visible
@@ -143,11 +200,15 @@ const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
     const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
     const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
     const html_party = `${repIndex.getIn([incumbentId, 'party'])}`;
-    const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
-    const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
-    const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
-    const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
-    const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
+
+    // TODO(mike): Figure out loading state. Don't block on votes query.
+    const votes = await getVotes(incumbentId);
+    // const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
+    // const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
+    // const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
+    // const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
+    // const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
+    const [ html_vote1, html_vote2, html_vote3, html_vote4, html_vote5 ] = votes;
 
     // Update html in the sidebar divs
     document.getElementById('name').innerHTML = html_legname
@@ -160,7 +221,7 @@ const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
     document.getElementById('takeActionCTA').setAttribute('href', ctaHref)
 
     // store the votes in the hidden div
-    if (html_vote1 === 'undefined') {
+    if (html_vote1 === undefined) {
         document.getElementById('vote1Tab').style.color = "black"
         document.getElementById('vote1Tab').style.textDecoration = "none"
         document.getElementById('vote1').style.display = "block"
@@ -171,28 +232,28 @@ const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
         document.getElementById('vote1').style.display = "block"
         document.getElementById('vote1').innerHTML = html_vote1
     }
-    if (html_vote2 === 'undefined') {
+    if (html_vote2 === undefined) {
         document.getElementById('vote2').style.display = "none"
         document.getElementById('vote2').innerHTML = 'No featured votes available for this legislator.'
     } else {
         document.getElementById('vote2').style.display = "none"
         document.getElementById('vote2').innerHTML = html_vote2
     }
-    if (html_vote3 === 'undefined') {
+    if (html_vote3 === undefined) {
         document.getElementById('vote3').style.display = "none"
         document.getElementById('vote3').innerHTML = 'No featured votes available for this legislator.'
     } else {
         document.getElementById('vote3').style.display = "none"
         document.getElementById('vote3').innerHTML = html_vote3
     }
-    if (html_vote4 === 'undefined') {
+    if (html_vote4 === undefined) {
         document.getElementById('vote4').style.display = "none"
         document.getElementById('vote4').innerHTML = 'No featured votes available for this legislator.'
     } else {
         document.getElementById('vote4').style.display = "none"
         document.getElementById('vote4').innerHTML = html_vote4
     }
-    if (html_vote5 === 'undefined') {
+    if (html_vote5 === undefined) {
         document.getElementById('vote5').style.display = "none"
         document.getElementById('vote5').innerHTML = 'No featured votes available for this legislator.'
     } else {
@@ -299,7 +360,7 @@ const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
 }
 
 // map component
-const Map = ({data}) => {
+const Map = () => {
 
     // if there's no mapbox token, raise an error in the console
     if (!mapboxToken) {
@@ -321,14 +382,6 @@ const Map = ({data}) => {
     // representatives Data
     const [, repIndex] = useRepData()
 
-    // function to remove all district options
-    function removeAll(selectBox) {
-        if (selectBox) {
-            while (selectBox.options.length > 0) {
-                selectBox.remove(0);
-            }
-        }
-    }
 
     // initialize map when component mounts
     useEffect(() => {
@@ -506,7 +559,7 @@ const Map = ({data}) => {
             if (document.getElementById('chamber-select').value) {
                 if (selectedState && selectedChamber === "house") {
                 // when the district is selected, zoom to it
-                document.getElementById('district-select').addEventListener('change', function () {
+                document.getElementById('district-select').addEventListener('change', async function () {
                     let selectedDistrict = document.getElementById('district-select').value
                     let bounds = house_bounds[selectedState][selectedDistrict]
                     // hide instructions text
@@ -521,14 +574,14 @@ const Map = ({data}) => {
                     // compute ccid for selected district
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                     // populate the legislator details
-                    updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                    await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
                     let selectedChamber = document.getElementById('chamber-select').value
 
                     // when the district is selected, zoom in and populate legislator details
-                    document.getElementById('district-select').addEventListener('change', function () {
+                    document.getElementById('district-select').addEventListener('change', async function () {
                         // change 'district' color and border to orange
                         document.getElementById('district-select').style.color = "#C36C27"
                         document.getElementById('district-select').style.borderColor = "#C36C27"
@@ -543,7 +596,7 @@ const Map = ({data}) => {
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
-                        updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                        await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
                     })
                 }
 
@@ -603,7 +656,7 @@ const Map = ({data}) => {
 
         })
 
-        map.on('click', function(mapElement) {
+        map.on('click', async function(mapElement) {
             // when you click a point on the map, query the features under the point and store
             // in the variable 'features'
             const features = map.queryRenderedFeatures(mapElement.point, {
@@ -614,7 +667,7 @@ const Map = ({data}) => {
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
 
-            updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+            await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
 
         });
 
