@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react'
-import { Flex, Box } from '@rebass/grid'
+import React, { useEffect, useRef, useState } from 'react'
 import mapboxgl from '!mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { siteMetadata } from '../../../gatsby-config'
@@ -11,6 +10,8 @@ import "typeface-lato";
 import './map.css'
 import { gql, GraphQLClient } from 'graphql-request';
 import * as Realm from "realm-web";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import LegislatorDetails from './LegislatorDetails'
 
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
@@ -117,22 +118,6 @@ const SelectDistrict = styled.select`
 `
 
 
-// name element
-const Name = styled(Box)`
-  color: #C36C27;
-  font-size: 26px;
-  font-weight: 700;
-  padding-top: 15px;
-  padding-bottom: 10px;
-`
-
-// votes box
-const VotesBox = styled(Box)`
-    margin-left: 15px;
-    margin-top: 50px;
-    margin-right: 15px;
-`
-
 // function to add leading zeros
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
@@ -142,13 +127,9 @@ const mapboxToken = siteMetadata.mapboxToken
 const app = new Realm.App('climate-cabinet-production-esyps');
 
 async function loginAnonymous() {
-    // Create an API Key credential
     const credentials = Realm.Credentials.anonymous()
     try {
-      // Authenticate the user
       const user = await app.logIn(credentials);
-    //   `App.currentUser` updates to match the logged in user
-    //   assert(user.id === app.currentUser.id)
       return user
     } catch(err) {
       console.error("Failed to log in", err);
@@ -190,6 +171,13 @@ const getVotesQuery = gql`
 
 const endpoint = 'https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/climate-cabinet-production-esyps/graphql';
 const client = new GraphQLClient(endpoint, { fetch: fetchWithAccessToken })
+const apolloClient = new ApolloClient({
+    link: new HttpLink({
+      uri: endpoint,
+      fetch: fetchWithAccessToken,
+    }),
+    cache: new InMemoryCache(),
+  });
 
 const getVotes = async (repId) => {
     return client.request(getVotesQuery, { repId }).then(resp => resp.representative.ccscorecard.votes);
@@ -208,11 +196,6 @@ const updateSidebarForRepresentative = async ({ccidCode, regionsIndex, repIndex}
 
     // TODO(mike): Figure out loading state. Don't block on votes query.
     const votes = await getVotes(incumbentId);
-    // const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
-    // const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
-    // const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
-    // const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
-    // const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
     const [ html_vote1, html_vote2, html_vote3, html_vote4, html_vote5 ] = votes;
 
     // Update html in the sidebar divs
@@ -386,6 +369,8 @@ const Map = () => {
     const [, regionsIndex] = useData()
     // representatives Data
     const [, repIndex] = useRepData()
+
+    const [selectedCcid, setSelectedCcid] = useState(null);
 
 
     // initialize map when component mounts
@@ -580,6 +565,7 @@ const Map = () => {
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                     // populate the legislator details
                     await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                    setSelectedCcid(ccidCode);
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
@@ -602,6 +588,7 @@ const Map = () => {
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
                         await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                        setSelectedCcid(ccidCode);
                     })
                 }
 
@@ -673,6 +660,7 @@ const Map = () => {
             const ccidCode = features[0].properties.ccid
 
             await updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+            setSelectedCcid(ccidCode);
 
         });
 
@@ -713,49 +701,8 @@ const Map = () => {
                 </div>
             </div>
 
-
             {/* sidebar */}
-            <div className="aside" id="aside">
-                <div className="candidateText">LEGISLATOR DETAILS</div>
-                <div className="instructions" id="instructions">Please Select A State</div>
-                <div id='details' className='details'>
-                    <br/>
-                    <Name id='name' style={{marginLeft: '15px'}}></Name>
-                    <div id='rep' className='repText'></div>
-                    <Flex>
-                        <div className="scoreBox">
-                            <div className="scoreTitle">Climate Score</div>
-                            <div className="scoreText" id='score'></div>
-                        </div>
-                        <div className="scoreBox">
-                            <div className="partyTitle">Party</div>
-                            <div className="partyText" id='party'></div>
-                        </div>
-                    </Flex>
-                    <VotesBox>
-                        <div className="votesText">Selected Climate Votes</div>
-                        <div className="voteTabs">
-                            <div id='vote5Tab' className="vote5Tab">Vote 5</div>
-                            <div id='vote4Tab' className="vote4Tab">Vote 4</div>
-                            <div id='vote3Tab' className="vote3Tab">Vote 3</div>
-                            <div id='vote2Tab' className="vote2Tab">Vote 2</div>
-                            <div id='vote1Tab' className="vote1Tab">Vote 1</div>
-                        </div>
-                        <br/>
-                        <br/>
-                        <div id="vote1" className="vote1"></div>
-                        <div id="vote2" className="vote2"></div>
-                        <div id="vote3" className="vote3"></div>
-                        <div id="vote4" className="vote4"></div>
-                        <div id="vote5" className="vote5"></div>
-                    </VotesBox>
-                        <a id="takeActionCTA" href="https://www.climatecabinetaction.org" target="_blank" rel="noreferrer">
-                            <div className="actionButton">
-                                Take Action
-                            </div>
-                        </a>
-                </div>
-            </div>
+            <LegislatorDetails />
         </div>
     )
 

@@ -17,6 +17,7 @@
   "author": "Climate Cabinet",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.4.8",
     "@rebass/grid": "^6.1.0",
     "@styled-system/theme-get": "^5.1.2",
     "apollo-link-http": "^1.5.17",
