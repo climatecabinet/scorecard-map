@@ -445,7 +445,7 @@ const Map = () => {
             </div>
 
             {/* sidebar */}
-            <LegislatorDetails representativeId={incumbentId} regionName={regionName}/>
+            <LegislatorDetails key={incumbentId} representativeId={incumbentId} regionName={regionName}/>
         </div>
     )
 

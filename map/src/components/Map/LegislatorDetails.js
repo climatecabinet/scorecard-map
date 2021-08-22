@@ -50,6 +50,7 @@ const VoteTab = ({ tabNumber, isActive, onClick }) => {
 };
 
 const LegislatorDetails = ({ representativeId, regionName }) => {
+    // TODO(mike0: Render *something* while loading instead of just null?
   const [selectedVoteNumber, setSelectedVoteNumber] = useState(1);
   const { loading, error, data } = useQuery(GET_REP_DETAILS, {
     variables: { representativeId },
