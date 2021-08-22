@@ -10,7 +10,6 @@ import "typeface-lato";
 import './map.css'
 import { gql, GraphQLClient } from 'graphql-request';
 import * as Realm from "realm-web";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import LegislatorDetails from './LegislatorDetails'
 
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
@@ -124,226 +123,219 @@ const zeroPad = (num, places) => String(num).padStart(places, '0')
 // store mapbox token
 const mapboxToken = siteMetadata.mapboxToken
 
-const app = new Realm.App('climate-cabinet-production-esyps');
+// const app = new Realm.App('climate-cabinet-production-esyps');
 
-async function loginAnonymous() {
-    const credentials = Realm.Credentials.anonymous()
-    try {
-      const user = await app.logIn(credentials);
-      return user
-    } catch(err) {
-      console.error("Failed to log in", err);
-    }
-  }
+// async function loginAnonymous() {
+//     const credentials = Realm.Credentials.anonymous()
+//     try {
+//       const user = await app.logIn(credentials);
+//       return user
+//     } catch(err) {
+//       console.error("Failed to log in", err);
+//     }
+//   }
 
 
-async function getValidAccessToken() {
-    // Guarantee that there's a logged in user with a valid access token
-    if (!app.currentUser) {
-      // If no user is logged in, log in an anonymous user. The logged in user will have a valid
-      // access token.
-      const user = await loginAnonymous()
-      console.log("Successfully logged in!", user)
-    } else {
-      // An already logged in user's access token might be stale. To guarantee that the token is
-      // valid, we refresh the user's custom data which also refreshes their access token.
-      await app.currentUser.refreshCustomData();
-    }
+// async function getValidAccessToken() {
+//     // Guarantee that there's a logged in user with a valid access token
+//     if (!app.currentUser) {
+//       // If no user is logged in, log in an anonymous user. The logged in user will have a valid
+//       // access token.
+//       const user = await loginAnonymous()
+//       console.log("Successfully logged in!", user)
+//     } else {
+//       // An already logged in user's access token might be stale. To guarantee that the token is
+//       // valid, we refresh the user's custom data which also refreshes their access token.
+//       await app.currentUser.refreshCustomData();
+//     }
 
-    return app.currentUser.accessToken;
-}
+//     return app.currentUser.accessToken;
+// }
 
-const fetchWithAccessToken = async (uri, options) => {
-    const accessToken = await getValidAccessToken();
-    options.headers.Authorization = `Bearer ${accessToken}`;
-    return fetch(uri, options);
-  };
+// const fetchWithAccessToken = async (uri, options) => {
+//     const accessToken = await getValidAccessToken();
+//     options.headers.Authorization = `Bearer ${accessToken}`;
+//     return fetch(uri, options);
+//   };
 
-const getVotesQuery = gql`
-    query rep($repId: ObjectId!) {
-        representative(query: {_id: $repId}) {
-            ccscorecard {
-            votes
-            }
-        }
-    }
-`;
+// const getVotesQuery = gql`
+//     query rep($repId: ObjectId!) {
+//         representative(query: {_id: $repId}) {
+//             ccscorecard {
+//             votes
+//             }
+//         }
+//     }
+// `;
 
-const endpoint = 'https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/climate-cabinet-production-esyps/graphql';
-const client = new GraphQLClient(endpoint, { fetch: fetchWithAccessToken })
-const apolloClient = new ApolloClient({
-    link: new HttpLink({
-      uri: endpoint,
-      fetch: fetchWithAccessToken,
-    }),
-    cache: new InMemoryCache(),
-  });
+// const endpoint = 'https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/climate-cabinet-production-esyps/graphql';
+// const client = new GraphQLClient(endpoint, { fetch: fetchWithAccessToken })
 
-const getVotes = async (repId) => {
-    return client.request(getVotesQuery, { repId }).then(resp => resp.representative.ccscorecard.votes);
-}
+// const getVotes = async (repId) => {
+//     return client.request(getVotesQuery, { repId }).then(resp => resp.representative.ccscorecard.votes);
+// }
 
 const updateSidebarForRepresentative = async ({ccidCode, regionsIndex, repIndex}) => {
-    const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
+    // const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
 
     // make the contents of the legislator details component visible
-    document.getElementById('details').style.visibility = "visible"
+    // document.getElementById('details').style.visibility = "visible"
 
-    const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
-    const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
-    const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
-    const html_party = `${repIndex.getIn([incumbentId, 'party'])}`;
+    // const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
+    // const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
+    // const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
+    // const html_party = `${repIndex.getIn([incumbentId, 'party'])}`;
 
     // TODO(mike): Figure out loading state. Don't block on votes query.
-    const votes = await getVotes(incumbentId);
-    const [ html_vote1, html_vote2, html_vote3, html_vote4, html_vote5 ] = votes;
+    // const votes = await getVotes(incumbentId);
+    // const [ html_vote1, html_vote2, html_vote3, html_vote4, html_vote5 ] = votes;
 
     // Update html in the sidebar divs
-    document.getElementById('name').innerHTML = html_legname
-    document.getElementById('rep').innerHTML = html_legrep
-    document.getElementById('score').innerHTML = html_score
-    document.getElementById('party').innerHTML = html_party
+    // document.getElementById('name').innerHTML = html_legname
+    // document.getElementById('rep').innerHTML = html_legrep
+    // document.getElementById('score').innerHTML = html_score
+    // document.getElementById('party').innerHTML = html_party
 
-    const legislatorSlug = repIndex.getIn([incumbentId, 'slug']);
-    const ctaHref = `${LEGISLATOR_PAGE_URL_PREFIX}${legislatorSlug}`;
-    document.getElementById('takeActionCTA').setAttribute('href', ctaHref)
+    // const legislatorSlug = repIndex.getIn([incumbentId, 'slug']);
+    // const ctaHref = `${LEGISLATOR_PAGE_URL_PREFIX}${legislatorSlug}`;
+    // document.getElementById('takeActionCTA').setAttribute('href', ctaHref)
 
     // store the votes in the hidden div
-    if (html_vote1 === undefined) {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote1').style.display = "block"
-        document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote1').style.display = "block"
-        document.getElementById('vote1').innerHTML = html_vote1
-    }
-    if (html_vote2 === undefined) {
-        document.getElementById('vote2').style.display = "none"
-        document.getElementById('vote2').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote2').style.display = "none"
-        document.getElementById('vote2').innerHTML = html_vote2
-    }
-    if (html_vote3 === undefined) {
-        document.getElementById('vote3').style.display = "none"
-        document.getElementById('vote3').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote3').style.display = "none"
-        document.getElementById('vote3').innerHTML = html_vote3
-    }
-    if (html_vote4 === undefined) {
-        document.getElementById('vote4').style.display = "none"
-        document.getElementById('vote4').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote4').style.display = "none"
-        document.getElementById('vote4').innerHTML = html_vote4
-    }
-    if (html_vote5 === undefined) {
-        document.getElementById('vote5').style.display = "none"
-        document.getElementById('vote5').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote5').style.display = "none"
-        document.getElementById('vote5').innerHTML = html_vote5
-    }
+    // if (html_vote1 === undefined) {
+    //     document.getElementById('vote1Tab').style.color = "black"
+    //     document.getElementById('vote1Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1').style.display = "block"
+    //     document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
+    // } else {
+    //     document.getElementById('vote1Tab').style.color = "black"
+    //     document.getElementById('vote1Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1').style.display = "block"
+    //     document.getElementById('vote1').innerHTML = html_vote1
+    // }
+    // if (html_vote2 === undefined) {
+    //     document.getElementById('vote2').style.display = "none"
+    //     document.getElementById('vote2').innerHTML = 'No featured votes available for this legislator.'
+    // } else {
+    //     document.getElementById('vote2').style.display = "none"
+    //     document.getElementById('vote2').innerHTML = html_vote2
+    // }
+    // if (html_vote3 === undefined) {
+    //     document.getElementById('vote3').style.display = "none"
+    //     document.getElementById('vote3').innerHTML = 'No featured votes available for this legislator.'
+    // } else {
+    //     document.getElementById('vote3').style.display = "none"
+    //     document.getElementById('vote3').innerHTML = html_vote3
+    // }
+    // if (html_vote4 === undefined) {
+    //     document.getElementById('vote4').style.display = "none"
+    //     document.getElementById('vote4').innerHTML = 'No featured votes available for this legislator.'
+    // } else {
+    //     document.getElementById('vote4').style.display = "none"
+    //     document.getElementById('vote4').innerHTML = html_vote4
+    // }
+    // if (html_vote5 === undefined) {
+    //     document.getElementById('vote5').style.display = "none"
+    //     document.getElementById('vote5').innerHTML = 'No featured votes available for this legislator.'
+    // } else {
+    //     document.getElementById('vote5').style.display = "none"
+    //     document.getElementById('vote5').innerHTML = html_vote5
+    // }
 
     // when the vote item is clicked, make the vote appear
-    document.getElementById('vote1Tab').addEventListener('click', function () {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
+    // document.getElementById('vote1Tab').addEventListener('click', function () {
+    //     document.getElementById('vote1Tab').style.color = "black"
+    //     document.getElementById('vote1Tab').style.textDecoration = "none"
+    //     document.getElementById('vote2Tab').style.color = "#C36C27"
+    //     document.getElementById('vote2Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote3Tab').style.color = "#C36C27"
+    //     document.getElementById('vote3Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote4Tab').style.color = "#C36C27"
+    //     document.getElementById('vote4Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote5Tab').style.color = "#C36C27"
+    //     document.getElementById('vote5Tab').style.textDecoration = "underline"
 
-        document.getElementById('vote1').style.display = 'block';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
+    //     document.getElementById('vote1').style.display = 'block';
+    //     document.getElementById('vote2').style.display = 'none';
+    //     document.getElementById('vote3').style.display = 'none';
+    //     document.getElementById('vote4').style.display = 'none';
+    //     document.getElementById('vote5').style.display = 'none';
+    // });
 
-    document.getElementById('vote2Tab').addEventListener('click', function () {
-        document.getElementById('vote2Tab').style.color = "black"
-        document.getElementById('vote2Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
+    // document.getElementById('vote2Tab').addEventListener('click', function () {
+    //     document.getElementById('vote2Tab').style.color = "black"
+    //     document.getElementById('vote2Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1Tab').style.color = "#C36C27"
+    //     document.getElementById('vote1Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote3Tab').style.color = "#C36C27"
+    //     document.getElementById('vote3Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote4Tab').style.color = "#C36C27"
+    //     document.getElementById('vote4Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote5Tab').style.color = "#C36C27"
+    //     document.getElementById('vote5Tab').style.textDecoration = "underline"
 
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'block';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
+    //     document.getElementById('vote1').style.display = 'none';
+    //     document.getElementById('vote2').style.display = 'block';
+    //     document.getElementById('vote3').style.display = 'none';
+    //     document.getElementById('vote4').style.display = 'none';
+    //     document.getElementById('vote5').style.display = 'none';
+    // });
 
-    document.getElementById('vote3Tab').addEventListener('click', function () {
-        document.getElementById('vote3Tab').style.color = "black"
-        document.getElementById('vote3Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
+    // document.getElementById('vote3Tab').addEventListener('click', function () {
+    //     document.getElementById('vote3Tab').style.color = "black"
+    //     document.getElementById('vote3Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1Tab').style.color = "#C36C27"
+    //     document.getElementById('vote1Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote2Tab').style.color = "#C36C27"
+    //     document.getElementById('vote2Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote4Tab').style.color = "#C36C27"
+    //     document.getElementById('vote4Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote5Tab').style.color = "#C36C27"
+    //     document.getElementById('vote5Tab').style.textDecoration = "underline"
 
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'block';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
+    //     document.getElementById('vote1').style.display = 'none';
+    //     document.getElementById('vote2').style.display = 'none';
+    //     document.getElementById('vote3').style.display = 'block';
+    //     document.getElementById('vote4').style.display = 'none';
+    //     document.getElementById('vote5').style.display = 'none';
+    // });
 
-    document.getElementById('vote4Tab').addEventListener('click', function () {
-        document.getElementById('vote4Tab').style.color = "black"
-        document.getElementById('vote4Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
+    // document.getElementById('vote4Tab').addEventListener('click', function () {
+    //     document.getElementById('vote4Tab').style.color = "black"
+    //     document.getElementById('vote4Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1Tab').style.color = "#C36C27"
+    //     document.getElementById('vote1Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote2Tab').style.color = "#C36C27"
+    //     document.getElementById('vote2Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote3Tab').style.color = "#C36C27"
+    //     document.getElementById('vote3Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote5Tab').style.color = "#C36C27"
+    //     document.getElementById('vote5Tab').style.textDecoration = "underline"
 
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'block';
-        document.getElementById('vote5').style.display = 'none';
-    });
+    //     document.getElementById('vote1').style.display = 'none';
+    //     document.getElementById('vote2').style.display = 'none';
+    //     document.getElementById('vote3').style.display = 'none';
+    //     document.getElementById('vote4').style.display = 'block';
+    //     document.getElementById('vote5').style.display = 'none';
+    // });
 
-    document.getElementById('vote5Tab').addEventListener('click', function () {
-        document.getElementById('vote5Tab').style.color = "black"
-        document.getElementById('vote5Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
+    // document.getElementById('vote5Tab').addEventListener('click', function () {
+    //     document.getElementById('vote5Tab').style.color = "black"
+    //     document.getElementById('vote5Tab').style.textDecoration = "none"
+    //     document.getElementById('vote1Tab').style.color = "#C36C27"
+    //     document.getElementById('vote1Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote2Tab').style.color = "#C36C27"
+    //     document.getElementById('vote2Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote3Tab').style.color = "#C36C27"
+    //     document.getElementById('vote3Tab').style.textDecoration = "underline"
+    //     document.getElementById('vote4Tab').style.color = "#C36C27"
+    //     document.getElementById('vote4Tab').style.textDecoration = "underline"
 
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'block';
-    });
+    //     document.getElementById('vote1').style.display = 'none';
+    //     document.getElementById('vote2').style.display = 'none';
+    //     document.getElementById('vote3').style.display = 'none';
+    //     document.getElementById('vote4').style.display = 'none';
+    //     document.getElementById('vote5').style.display = 'block';
+    // });
 
 }
 
@@ -371,7 +363,8 @@ const Map = () => {
     const [, repIndex] = useRepData()
 
     const [selectedCcid, setSelectedCcid] = useState(null);
-
+    const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
+    const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
 
     // initialize map when component mounts
     useEffect(() => {
@@ -437,16 +430,16 @@ const Map = () => {
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
                 // reset legislator details
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
+                // document.getElementById('details').style.visibility = "hidden"
+                // document.getElementById('name').innerHTML = ""
+                // document.getElementById('party').innerHTML = ""
+                // document.getElementById('score').innerHTML = ""
+                // document.getElementById('rep').innerHTML = ""
+                // document.getElementById('vote1').innerHTML = ""
+                // document.getElementById('vote2').innerHTML = ""
+                // document.getElementById('vote3').innerHTML = ""
+                // document.getElementById('vote4').innerHTML = ""
+                // document.getElementById('vote5').innerHTML = ""
                 // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
@@ -521,16 +514,16 @@ const Map = () => {
                 document.getElementById('district-select').value = ""
 
                 // reset legislator details
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
+                // document.getElementById('details').style.visibility = "hidden"
+                // document.getElementById('name').innerHTML = ""
+                // document.getElementById('party').innerHTML = ""
+                // document.getElementById('score').innerHTML = ""
+                // document.getElementById('rep').innerHTML = ""
+                // document.getElementById('vote1').innerHTML = ""
+                // document.getElementById('vote2').innerHTML = ""
+                // document.getElementById('vote3').innerHTML = ""
+                // document.getElementById('vote4').innerHTML = ""
+                // document.getElementById('vote5').innerHTML = ""
 
                 // TODO: zoom out to the state view
 
@@ -622,16 +615,16 @@ const Map = () => {
                 document.getElementById('district-select').value = ""
 
                 // hide legislator components
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
+                // document.getElementById('details').style.visibility = "hidden"
+                // document.getElementById('name').innerHTML = ""
+                // document.getElementById('party').innerHTML = ""
+                // document.getElementById('score').innerHTML = ""
+                // document.getElementById('rep').innerHTML = ""
+                // document.getElementById('vote1').innerHTML = ""
+                // document.getElementById('vote2').innerHTML = ""
+                // document.getElementById('vote3').innerHTML = ""
+                // document.getElementById('vote4').innerHTML = ""
+                // document.getElementById('vote5').innerHTML = ""
 
                 // change back to senate layer
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
@@ -702,7 +695,13 @@ const Map = () => {
             </div>
 
             {/* sidebar */}
-            <LegislatorDetails />
+            <div className="aside" id="aside">
+                <div className="candidateText">LEGISLATOR DETAILS</div>
+                <div className="instructions" id="instructions">
+                    Please Select A State
+                </div>
+                <LegislatorDetails representativeId={incumbentId} regionName={regionName}/>
+            </div>
         </div>
     )
 

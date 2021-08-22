@@ -147,16 +147,18 @@ body {
     font-size: 16px;
     color: #C36C27;
     float: left;
-    /* overflow-y: auto;
-    height: 200px; */
 }
 
-/* .voteTabs {
-    float: right; */
-    /* margin-bottom: 30px; */
-/* } */
+.voteTabActive {
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+    float: right;
+    margin-top: 2px;
+    margin-right: 15px;
+}
 
-.vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab {
+.voteTabInActive {
     font-size: 12px;
     color: #C36C27;
     text-decoration: underline;
@@ -165,19 +167,18 @@ body {
     margin-right: 15px;
 }
 
-.vote1Tab:hover, .vote2Tab:hover, .vote3Tab:hover, .vote4Tab:hover, .vote5Tab:hover {
+.voteTab:hover {
     cursor: pointer;
 }
 
-.vote1, .vote2, .vote3, .vote4, .vote5 {
-    display: none;
+.vote {
     font-size: 17px;
     font-weight: 400;
 }
 
-div .details {
+/* div .details {
     visibility: hidden;
-}
+} */
 
 .actionButton {
     width: 250px;
@@ -211,7 +212,7 @@ div .details {
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
+    .voteTab { font-size: 16px; }
 }
 
 /* 859px and below */
@@ -249,7 +250,7 @@ div .details {
     .repText { font-size: 18px; }
     .actionButton { width: 421px; }
     .voteTabs { position: absolute; padding-top: 20px; }
-    .vote1, .vote2, .vote3, .vote4, .vote5 { padding-top: 20px; }
+    .vote { padding-top: 20px; }
 
 }
 
