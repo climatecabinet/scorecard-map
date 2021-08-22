@@ -59,64 +59,15 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
     return <p>loading!</p>;
   }
 
-  // TODO(mike): remove
+  // TODO(mike): remove?
   if (!data) {
-    return <p>no data</p>;
+    return null;
   }
 
-  //   const {
-  //     representative: {
-  //       ccscorecard: { votes },
-  //     },
-  //   } = data;
   const { representative: rep } = data;
 
   if (!representativeId) {
-    // return null;
-    return (
-      <div id="details" className="details">
-        <br />
-        <Name id="name" style={{ marginLeft: '15px' }}>{`${rep.role} ${rep.full_name}`}</Name>
-        <div id="rep" className="repText">{`${
-          initialsToState[rep.state_abbr.toLowerCase()]
-        } ${regionName}`}</div>
-        <Flex>
-          <div className="scoreBox">
-            <div className="scoreTitle">Climate Score</div>
-            <div className="scoreText" id="score">{`${Math.round(rep.cc_score)}`}</div>
-          </div>
-          <div className="scoreBox">
-            <div className="partyTitle">Party</div>
-            <div className="partyText" id="party">{`${rep.party}`}</div>
-          </div>
-        </Flex>
-        <VotesBox>
-          <div className="votesText">Selected Climate Votes</div>
-          <div className="voteTabs">
-            <VoteTab tabNumber="5" />
-            <VoteTab tabNumber="4" />
-            <VoteTab tabNumber="3" />
-            <VoteTab tabNumber="2" />
-            <VoteTab tabNumber="1" />
-          </div>
-          <br />
-          <br />
-          <div id="vote1" className="vote1"></div>
-          <div id="vote2" className="vote2"></div>
-          <div id="vote3" className="vote3"></div>
-          <div id="vote4" className="vote4"></div>
-          <div id="vote5" className="vote5"></div>
-        </VotesBox>
-        <a
-          id="takeActionCTA"
-          href="https://www.climatecabinetaction.org"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <div className="actionButton">Take Action</div>
-        </a>
-      </div>
-    );
+    return null;
   }
 
   return (
