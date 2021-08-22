@@ -417,6 +417,9 @@ const Map = () => {
                         <div className="mapText">Interactive Score Map</div>
                         <div id="reset" className="resetText hidden">RESET</div>
                     </Header>
+                    <div className="instructions" id="instructions">
+                        Please Select A State
+                    </div>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
@@ -442,13 +445,7 @@ const Map = () => {
             </div>
 
             {/* sidebar */}
-            <div className="aside" id="aside">
-                <div className="candidateText">LEGISLATOR DETAILS</div>
-                <div className="instructions" id="instructions">
-                    Please Select A State
-                </div>
-                <LegislatorDetails representativeId={incumbentId} regionName={regionName}/>
-            </div>
+            <LegislatorDetails representativeId={incumbentId} regionName={regionName}/>
         </div>
     )
 

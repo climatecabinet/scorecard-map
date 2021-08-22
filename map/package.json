@@ -29,7 +29,6 @@
     "gatsby-source-graphql": "^3.7.1",
     "gatsby-source-mongodb": "^3.7.1",
     "graphql": "^15.5.1",
-    "graphql-request": "^3.5.0",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^3.0.0",
     "mapbox-gl": "^2.3.1",

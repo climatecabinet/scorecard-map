@@ -37,7 +37,7 @@
     font-size: 24px;
     color: #C36C27;
     text-align: center;
-    padding-top: 20px;
+    margin: 20px;
     font-style: italic;
 }
 
@@ -208,7 +208,8 @@ body {
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .voteTab { font-size: 16px; }
+    .voteTabActive { font-size: 16px; }
+    .voteTabInactive { font-size: 16px; }
 }
 
 /* 859px and below */
