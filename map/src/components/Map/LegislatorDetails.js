@@ -104,7 +104,7 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
           <br />
           <br />
           <div id="vote1" className="vote">
-            {rep.ccscorecard.votes[selectedVoteNumber] || NO_VOTE_FALLBACK_TEXT}
+            {rep.ccscorecard.votes[selectedVoteNumber - 1] || NO_VOTE_FALLBACK_TEXT}
           </div>
         </VotesBox>
         <a
