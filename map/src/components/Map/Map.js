@@ -765,10 +765,20 @@ const Map = ({data}) => {
             // also on click, get the ccid and the regions.incumbent.rep id
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
+            console.log(features[0].properties)
             const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
 
+            // if the selected feature has a cc_score of 999, make the contents invisible
+            if (features[0].properties.cc_score == 999) {
+                // keep details div invisible
+                document.getElementById('details').style.visibility = "hidden"
+            } else {
+                // make details div visible
+                document.getElementById('details').style.visibility = "visible"
+            }
+
             // make the contents of the legislator details component visible
-            document.getElementById('details').style.visibility = "visible"
+            // document.getElementById('details').style.visibility = "visible"
 
             // use the ccidCode to lookup the regions data (stored in the regionsIndex variable) and the representatives data (stored in the repIndex variable)
             // the lookup will find the data associated to the district
