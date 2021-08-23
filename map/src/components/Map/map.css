@@ -7,8 +7,9 @@
 
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
+    /* padding: 5px; */
     width: 100%;
-    flex: 1 100%;
+/*     flex: 1 100%; */
 }
 
 .mapText {

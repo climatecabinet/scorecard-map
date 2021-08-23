@@ -4872,18 +4872,13 @@ export const chambers = {
 }
 
 // dictionary: state abbreviation to state
-// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const initialsToState = {
 	az: 'Arizona',
-	ca: 'California',
 	co: 'Colorado',
 	ct: 'Connecticut',
 	fl: 'Florida',
 	ga: 'Georgia',
-	il: 'Illinois',
 	ia: 'Iowa', 
-	ks: 'Kansas',
-	ky: 'Kentucky',
 	me: 'Maine',
 	md: 'Maryland',
 	mi: 'Michigan',
@@ -4893,13 +4888,10 @@ export const initialsToState = {
 	nv: 'Nevada',
 	nj: 'New Jersey',
 	nm: 'New Mexico',
-	ny: 'New York',
 	nc: 'North Carolina',
-	oh: 'Ohio',
 	or: 'Oregon',
 	pa: 'Pennsylvania',
 	sc: 'South Carolina',
-	tn: 'Tennessee',
 	tx: 'Texas',
 	ut: 'Utah',
 	va: 'Virginia',
