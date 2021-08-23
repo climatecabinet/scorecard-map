@@ -18,7 +18,7 @@ const Header = styled.div`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
 `;
 
 // select elements
