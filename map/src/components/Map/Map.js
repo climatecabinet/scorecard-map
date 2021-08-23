@@ -18,7 +18,7 @@ const Header = styled.div`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 1vh;
+    margin-bottom: 2vh;
 `;
 
 // select elements
@@ -46,7 +46,7 @@ const SelectState = styled.select`
         height: 40px;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
-        width: 469px;
+        width: 100%;
     }
     &:disabled {
         opacity: 0.50
@@ -78,7 +78,7 @@ const SelectChamber = styled.select`
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
-        width: 469px;
+        width: 100%;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
     }
@@ -111,7 +111,7 @@ const SelectDistrict = styled.select`
         height: 40px;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
-        width: 469px;
+        width: 100%;
     }
 `
 
