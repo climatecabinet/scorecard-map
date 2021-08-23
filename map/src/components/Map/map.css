@@ -14,6 +14,8 @@
 
 .mapText {
     font-size: 28px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .hidden {
@@ -70,7 +72,7 @@ body {
 }
 
 .my-legend {
-    width: min(90%, 350px);
+    /* width: min(90%, 350px); */
 	padding: 10px;
     background: white;
     font-size: 16px;
@@ -224,7 +226,7 @@ div .details {
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
-    .aside { padding: 5px; width: 80vw; }
+    .aside { padding: 5px; width: 95vw; }
     .map .mapboxgl-map { width: 100vw; }
 }
 
@@ -241,7 +243,7 @@ div .details {
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
-    .aside { padding: 5px; width: 80vw; }
+    .aside { padding: 5px; width: 95vw; }
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
     .repText { font-size: 18px; }

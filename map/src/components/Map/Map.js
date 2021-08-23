@@ -18,13 +18,12 @@ const Header = styled.div`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 5vh;
+    margin-bottom: 1vh;
 `;
 
 // select elements
 const SelectState = styled.select`
     height: 50px;
-    width: 32%;
     background: white;
     color: #C36C27;
     font-size: 20px;
@@ -33,6 +32,9 @@ const SelectState = styled.select`
     border: 1px solid #C36C27;
     margin-bottom: 20px;
     padding: 10px;
+    @media only screen and (min-width: 1060px) {
+        width: 32.5%;
+    }
     @media only screen and (max-width: 1059px) {
         width: 31.25vw;
     }
@@ -44,9 +46,10 @@ const SelectState = styled.select`
         height: 40px;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
+        width: 469px;
     }
     &:disabled {
-        opacity: 1
+        opacity: 0.50
     }
 `
 
@@ -61,7 +64,7 @@ const SelectChamber = styled.select`
     margin-bottom: 20px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 32%;
+        width: 32.5%;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -75,6 +78,7 @@ const SelectChamber = styled.select`
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
+        width: 469px;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
     }
@@ -91,7 +95,7 @@ const SelectDistrict = styled.select`
     margin-bottom: 20px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 32%;
+        width: 32.5%;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -107,6 +111,7 @@ const SelectDistrict = styled.select`
         height: 40px;
         font-size: 16px;
         padding: 0px 5px 0px 10px;
+        width: 469px;
     }
 `
 
