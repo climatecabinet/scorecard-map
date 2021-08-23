@@ -1,6 +1,6 @@
 .wrapper {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column nowrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
 }
@@ -8,13 +8,12 @@
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
     /* padding: 5px; */
-    flex: 1 100%;
+    width: 100%;
+/*     flex: 1 100%; */
 }
 
 .mapText {
     font-size: 28px;
-    padding-bottom: 5px;
-    float: left;
 }
 
 .hidden {
@@ -24,8 +23,6 @@
 .resetText {
     font-size: 18px;
     color: #333;
-    float: right;
-    padding-top: 10px;
     text-decoration: underline;
 }
 
@@ -48,9 +45,6 @@
     width: 60vw;
 }
 
-.main {
-    padding-right: 15px;
-}
 
 .candidateText {
     margin-left: 15px;
@@ -68,8 +62,6 @@
 
 .aside {
     background: #F4F4F4;
-    /* background: #000000; */
-    /* display: none; */
 }
 
 body {
@@ -78,41 +70,29 @@ body {
 }
 
 .my-legend {
-	position: absolute;
-	bottom: 0!important;
-    width: 350px;
-    right: 30%;
+    width: min(90%, 350px);
 	padding: 10px;
     background: white;
-    z-index: 1!important;
     font-size: 16px;
     font-family: 'Lato', sans-serif;
 }
 
-.my-legend .legend-scale ul {
-	margin: 0;
-	padding: 0;
-	float: left;
-	list-style: none;
+.legend-labels {
+    display: flex;
 }
 
-.my-legend .legend-scale ul li {
-	display: block;
-	float: left;
-	width: 50px;
-	text-align: center;
-	font-size: 80%;
-	list-style: none;
+.legend-labels div {
+    text-align: center;
+    font-size: 80%;
+	width: calc(100% / 7);
 }
 
-.my-legend ul.legend-labels li span {
+.legend-labels div span {
 	display: block;
-	float: left;
 	height: 15px;
-	width: 50px;
 }
 
-.my-legend .legend-source {
+.legend-source {
 	font-size: 70%;
 	color: #999;
 	clear: both;
@@ -229,7 +209,6 @@ div .details {
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .aside { padding: 5px; }
     .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
 }
 
@@ -279,7 +258,6 @@ div .details {
 
 /* 800px and up */
 @media all and (min-width: 800px) {
-    .main    { flex: 1 0px; }
-    .main    { order: 1; }
-    .aside { order: 2; }
+    .main    { flex: 1 0px; margin-right: 10px; }
+    .wrapper { flex-flow: row wrap }
 }

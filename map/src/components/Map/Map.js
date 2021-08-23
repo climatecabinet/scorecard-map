@@ -13,6 +13,14 @@ import { remove } from 'immutable'
 
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
+const Header = styled.div`
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5vh;
+`;
+
 // select elements
 const SelectState = styled.select`
     height: 50px;
@@ -935,33 +943,34 @@ const Map = ({data}) => {
             <div className="main">
                 {/* navigation bar */}
                 <div className="nav">
-                    <div className="mapText">Interactive Score Map</div>
-                    <div id="reset" className="resetText hidden">RESET</div>
-                    <br/><br/><br/>
+                    <Header>
+                        <div className="mapText">Interactive Score Map</div>
+                        <div id="reset" className="resetText hidden">RESET</div>
+                    </Header>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
                 </div>
                 {/* map */}
                 <div className="mapContainer">
-                    <div className="map" ref={mapContainer}>
-                        {/* legend */}
-                        <div className='my-legend'>
-                            <div className='legend-scale'>
-                                <ul className='legend-labels'>
-                                    <li><span style={{background:'#808080'}}></span>NA</li>
-                                    <li><span style={{background:'#8C510A'}}></span>0</li>
-                                    <li><span style={{background:'#D8B365'}}></span>1-25</li>
-                                    <li><span style={{background:'#F6E8C3'}}></span>26-50</li>
-                                    <li><span style={{background:'#C7EAE5'}}></span>51-75</li>
-                                    <li><span style={{background:'#5AB4AC'}}></span>76-99</li>
-                                    <li><span style={{background:'#01665E'}}></span>100</li>
-                                </ul>
-                            </div>
+                    <div className="map" ref={mapContainer} />
+                </div>
+                {/* legend */}
+                <div className='my-legend'>
+                    <div className='legend-scale'>
+                        <div className='legend-labels'>
+                            <div><span style={{background:'#808080'}}></span>NA</div>
+                            <div><span style={{background:'#8C510A'}}></span>0</div>
+                            <div><span style={{background:'#D8B365'}}></span>1-25</div>
+                            <div><span style={{background:'#F6E8C3'}}></span>26-50</div>
+                            <div><span style={{background:'#C7EAE5'}}></span>51-75</div>
+                            <div><span style={{background:'#5AB4AC'}}></span>76-99</div>
+                            <div><span style={{background:'#01665E'}}></span>100</div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/* sidebar */}
             <div className="aside" id="aside">

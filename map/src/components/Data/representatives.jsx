@@ -26,13 +26,7 @@ export const useRepData = () => {
   }
   `)
 
-  const repData = data.allMongodbRegions.representatives.map(representative => {
-    const { _id } = representative
-
-    return {
-      ...representative
-    }
-  })
+  const repData = data.allMongodbRegions.representatives;
 
   const repIndex = repData.reduce((result, item) => {
     result[item._id] = item
