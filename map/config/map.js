@@ -104,18 +104,13 @@ export const layers = [
 ]
 
 // bounds for the state districts
-// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const state_bounds = {
 	az: [-15.21, -6.65, -9.82, -0.37],
-	ca: [-20.67, -4.5, -14.31, 6.38],
 	co: [-9.82, -1.57, -4.06, 2.99],
 	ct: [16.91, 4.26, 18.28, 5.6],
 	fl: [7.61, -13.17, 14.83, -7.02],
 	ga: [8.89, -7.52, 13.2, -3.03],
-	il: [3.86, -1.55, 7.02, 4.08],
 	ia: [-0.0, 1.77, 4.78, 4.92], 
-	ks: [-4.31, -1.72, 1.56, 1.46],
-	ky: [5.58, -2.05, 11.44, 0.96],
 	me: [17.78, 6.81, 20.72, 11.36],
 	md: [12.99, 0.78, 16.59, 2.66],
 	mi: [4.31, 3.41, 10.31, 9.68],
@@ -125,13 +120,10 @@ export const state_bounds = {
 	nv: [-17.81, -2.26, -12.77, 5.54],
 	nj: [15.94, 2.02, 17.0, 4.45],
 	nm: [-10.61, -6.74, -5.07, -1.01],
-	ny: [12.34, 3.68, 18.32, 8.22],
 	nc: [9.92, -3.57, 16.91, -0.48],
-	oh: [8.74, 0.44, 12.06, 4.23],
 	or: [-20.12, 5.03, -13.74, 10.42],
 	pa: [11.84, 1.99, 16.45, 4.97],
 	sc: [10.74, -5.7, 14.78, -2.63],
-	tn: [5.08, -3.6, 11.83, -1.25],
 	tx: [-8.51, -12.79, 2.59, -2.01],
 	ut: [-13.73, -1.01, -9.27, 4.58],
 	va: [10.24, -1.49, 16.53, 2.02],
@@ -141,7 +133,6 @@ export const state_bounds = {
 }
 
 // bounds for the senate districts
-// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const senate_bounds = {
     az: {
 		27: [-13.02, -4.44, -12.67, -4.16],
@@ -1501,7 +1492,6 @@ export const senate_bounds = {
 }
 
 // bounds for the house districts
-// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const house_bounds = {
 	az: {
 		27: [-13.02, -4.44, -12.67, -4.16],
@@ -4872,18 +4862,13 @@ export const chambers = {
 }
 
 // dictionary: state abbreviation to state
-// TODO: UPDATE TO ADD PREVIOUSLY MISSING STATES
 export const initialsToState = {
 	az: 'Arizona',
-	ca: 'California',
 	co: 'Colorado',
 	ct: 'Connecticut',
 	fl: 'Florida',
 	ga: 'Georgia',
-	il: 'Illinois',
 	ia: 'Iowa', 
-	ks: 'Kansas',
-	ky: 'Kentucky',
 	me: 'Maine',
 	md: 'Maryland',
 	mi: 'Michigan',
@@ -4893,13 +4878,10 @@ export const initialsToState = {
 	nv: 'Nevada',
 	nj: 'New Jersey',
 	nm: 'New Mexico',
-	ny: 'New York',
 	nc: 'North Carolina',
-	oh: 'Ohio',
 	or: 'Oregon',
 	pa: 'Pennsylvania',
 	sc: 'South Carolina',
-	tn: 'Tennessee',
 	tx: 'Texas',
 	ut: 'Utah',
 	va: 'Virginia',
