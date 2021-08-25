@@ -27,10 +27,10 @@ const SelectState = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
-    margin-bottom: 20px;
+    margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 32.5%;
+        width: 19vw;
     }
     @media only screen and (max-width: 1059px) {
         width: 31.25vw;
@@ -58,10 +58,10 @@ const SelectChamber = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin-bottom: 20px;
+    margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 32.5%;
+        width: 19vw;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -89,10 +89,10 @@ const SelectDistrict = styled.select`
     font-size: 20px;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin-bottom: 20px;
+    margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 32.5%;
+        width: 19vw;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -145,16 +145,20 @@ const Map = () => {
     // initialize map when component mounts
     useEffect(() => {
         mapboxgl.accessToken = siteMetadata.mapboxToken
+
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [-1.14, -0.98],
-            zoom: 3.5,
-            // TODO: detect window size. change zoom based on window size.
-            // desktop: 4.5
-            // mobile/iPad: 2.5
             minZoom: 2
         })
+
+        // if phone view, set zoom to 3.5
+        if (window.matchMedia( "(min-width: 550px)" ).matches) {
+            map.setZoom(3.5)
+        } else {
+            map.setZoom(2.5)
+        }
 
         // disable scroll zoom
         map.scrollZoom.disable();
@@ -289,6 +293,7 @@ const Map = () => {
         });
 
         map.on('idle', function() {
+            
             let selectedState = document.getElementById('state-select').value
             let selectedChamber = document.getElementById('chamber-select').value
 
