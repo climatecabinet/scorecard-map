@@ -11,7 +11,6 @@ data/geospatial/*
 *map/.cache
 *map/node_modules
 *map/src/components/Map/OldMap.jsx
-*package-lock.json
 map/public/
 
 data/cc_scorecard_06082021_yearstr.csv

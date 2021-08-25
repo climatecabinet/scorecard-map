@@ -7,7 +7,7 @@ export const useData = () => {
   query {
     allMongodbRegions {
       regions(
-        limit: 10000, 
+        limit: 10000,
         query: {OR: [{ _cls: "Region.District.StateLegDistUpper"}, {_cls: "Region.District.StateLegDistLower"}]}
         ) {
         state_abbr
@@ -24,13 +24,7 @@ export const useData = () => {
   }
   `)
 
-  const regionsData = data.allMongodbRegions.regions.map(region => {
-    const { ccid } = region
-
-    return { 
-      ...region
-    }
-  })
+  const regionsData = data.allMongodbRegions.regions;
 
   const regionsIndex = regionsData.reduce((result, item) => {
     result[item.ccid] = item

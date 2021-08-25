@@ -1,17 +1,14 @@
-import React, { useEffect, useRef } from 'react'
-import { Flex, Box } from '@rebass/grid'
+import React, { useEffect, useRef, useState } from 'react'
 import mapboxgl from '!mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
-import { useRepData } from '../Data/representatives'
 import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, initialsToState, statesToCodes, chamberToLetter} from '../../../config/map'
 import styled from '../../../util/style'
 import "typeface-lato";
 import './map.css'
-import { remove } from 'immutable'
+import LegislatorSidebar from './LegislatorSidebar'
 
-const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
 const Header = styled.div`
     display: flex;
@@ -116,195 +113,14 @@ const SelectDistrict = styled.select`
 `
 
 
-// name element
-const Name = styled(Box)`
-  color: #C36C27;
-  font-size: 26px;
-  font-weight: 700;
-  padding-top: 15px;
-  padding-bottom: 10px;
-`
-
-// votes box
-const VotesBox = styled(Box)`
-    margin-left: 15px;
-    margin-top: 50px;
-    margin-right: 15px;
-`
-
 // function to add leading zeros
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
 // store mapbox token
 const mapboxToken = siteMetadata.mapboxToken
 
-const updateSidebarForRepresentative = ({ccidCode, regionsIndex, repIndex}) => {
-    const incumbentId = regionsIndex.getIn([ccidCode, 'incumbents', 0, 'rep'])
-
-    // make the contents of the legislator details component visible
-    document.getElementById('details').style.visibility = "visible"
-
-    const html_legname = `${repIndex.getIn([incumbentId, 'role'])} ${repIndex.getIn([incumbentId, 'full_name'])}`;
-    const html_legrep = `${initialsToState[repIndex.getIn([incumbentId, 'state_abbr']).toLowerCase()]} ${regionsIndex.getIn([ccidCode, 'name'])}`;
-    const html_score = `${Math.round(repIndex.getIn([incumbentId, 'cc_score']))}`;
-    const html_party = `${repIndex.getIn([incumbentId, 'party'])}`;
-    const html_vote1 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 0])}`;
-    const html_vote2 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 1])}`;
-    const html_vote3 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 2])}`;
-    const html_vote4 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 3])}`;
-    const html_vote5 = `${repIndex.getIn([incumbentId, 'ccscorecard', 'votes', 4])}`;
-
-    // Update html in the sidebar divs
-    document.getElementById('name').innerHTML = html_legname
-    document.getElementById('rep').innerHTML = html_legrep
-    document.getElementById('score').innerHTML = html_score
-    document.getElementById('party').innerHTML = html_party
-
-    const legislatorSlug = repIndex.getIn([incumbentId, 'slug']);
-    const ctaHref = `${LEGISLATOR_PAGE_URL_PREFIX}${legislatorSlug}`;
-    document.getElementById('takeActionCTA').setAttribute('href', ctaHref)
-
-    // store the votes in the hidden div
-    if (html_vote1 === 'undefined') {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote1').style.display = "block"
-        document.getElementById('vote1').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote1').style.display = "block"
-        document.getElementById('vote1').innerHTML = html_vote1
-    }
-    if (html_vote2 === 'undefined') {
-        document.getElementById('vote2').style.display = "none"
-        document.getElementById('vote2').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote2').style.display = "none"
-        document.getElementById('vote2').innerHTML = html_vote2
-    }
-    if (html_vote3 === 'undefined') {
-        document.getElementById('vote3').style.display = "none"
-        document.getElementById('vote3').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote3').style.display = "none"
-        document.getElementById('vote3').innerHTML = html_vote3
-    }
-    if (html_vote4 === 'undefined') {
-        document.getElementById('vote4').style.display = "none"
-        document.getElementById('vote4').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote4').style.display = "none"
-        document.getElementById('vote4').innerHTML = html_vote4
-    }
-    if (html_vote5 === 'undefined') {
-        document.getElementById('vote5').style.display = "none"
-        document.getElementById('vote5').innerHTML = 'No featured votes available for this legislator.'
-    } else {
-        document.getElementById('vote5').style.display = "none"
-        document.getElementById('vote5').innerHTML = html_vote5
-    }
-
-    // when the vote item is clicked, make the vote appear
-    document.getElementById('vote1Tab').addEventListener('click', function () {
-        document.getElementById('vote1Tab').style.color = "black"
-        document.getElementById('vote1Tab').style.textDecoration = "none"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
-
-        document.getElementById('vote1').style.display = 'block';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
-
-    document.getElementById('vote2Tab').addEventListener('click', function () {
-        document.getElementById('vote2Tab').style.color = "black"
-        document.getElementById('vote2Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
-
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'block';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
-
-    document.getElementById('vote3Tab').addEventListener('click', function () {
-        document.getElementById('vote3Tab').style.color = "black"
-        document.getElementById('vote3Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
-
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'block';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'none';
-    });
-
-    document.getElementById('vote4Tab').addEventListener('click', function () {
-        document.getElementById('vote4Tab').style.color = "black"
-        document.getElementById('vote4Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote5Tab').style.color = "#C36C27"
-        document.getElementById('vote5Tab').style.textDecoration = "underline"
-
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'block';
-        document.getElementById('vote5').style.display = 'none';
-    });
-
-    document.getElementById('vote5Tab').addEventListener('click', function () {
-        document.getElementById('vote5Tab').style.color = "black"
-        document.getElementById('vote5Tab').style.textDecoration = "none"
-        document.getElementById('vote1Tab').style.color = "#C36C27"
-        document.getElementById('vote1Tab').style.textDecoration = "underline"
-        document.getElementById('vote2Tab').style.color = "#C36C27"
-        document.getElementById('vote2Tab').style.textDecoration = "underline"
-        document.getElementById('vote3Tab').style.color = "#C36C27"
-        document.getElementById('vote3Tab').style.textDecoration = "underline"
-        document.getElementById('vote4Tab').style.color = "#C36C27"
-        document.getElementById('vote4Tab').style.textDecoration = "underline"
-
-        document.getElementById('vote1').style.display = 'none';
-        document.getElementById('vote2').style.display = 'none';
-        document.getElementById('vote3').style.display = 'none';
-        document.getElementById('vote4').style.display = 'none';
-        document.getElementById('vote5').style.display = 'block';
-    });
-
-}
-
 // map component
-const Map = ({data}) => {
+const Map = () => {
 
     // if there's no mapbox token, raise an error in the console
     if (!mapboxToken) {
@@ -323,9 +139,9 @@ const Map = ({data}) => {
     // data from MongoDB/GraphQL query
     // regions Data
     const [, regionsIndex] = useData()
-    // representatives Data
-    const [, repIndex] = useRepData()
 
+    const [selectedCcid, setSelectedCcid] = useState(null);
+    const [instructions, setInstructions] = useState('Please Select A State');
     // initialize map when component mounts
     useEffect(() => {
         mapboxgl.accessToken = siteMetadata.mapboxToken
@@ -389,21 +205,10 @@ const Map = ({data}) => {
                 reset.classList.remove('hidden');
 
                 // change instructions text
-                document.getElementById('instructions').innerHTML = "Please Select A Chamber"
+                setInstructions("Please Select A Chamber");
                 // reset the chamber and district options
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
-                // reset legislator details
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
                 // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
@@ -463,7 +268,7 @@ const Map = ({data}) => {
                 document.getElementById('district-select').style.borderColor = "#333"
 
                 // change instructions text
-                document.getElementById('instructions').innerHTML = "Please Select A District"
+                setInstructions("Please Select A District");
 
                 // change all layers visibility to none
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
@@ -476,18 +281,6 @@ const Map = ({data}) => {
 
                 // reset the district options
                 document.getElementById('district-select').value = ""
-
-                // reset legislator details
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
 
                 // TODO: zoom out to the state view
 
@@ -510,8 +303,7 @@ const Map = ({data}) => {
                 document.getElementById('district-select').addEventListener('change', function () {
                     let selectedDistrict = document.getElementById('district-select').value
                     let bounds = house_bounds[selectedState][selectedDistrict]
-                    // hide instructions text
-                    document.getElementById('instructions').style.display = "none"
+                    setInstructions(null);
 
                     // change 'district' color and border to orange
                     document.getElementById('district-select').style.color = "#C36C27"
@@ -522,7 +314,7 @@ const Map = ({data}) => {
                     // compute ccid for selected district
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
                     // populate the legislator details
-                    updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                    setSelectedCcid(ccidCode);
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
@@ -534,8 +326,7 @@ const Map = ({data}) => {
                         document.getElementById('district-select').style.color = "#C36C27"
                         document.getElementById('district-select').style.borderColor = "#C36C27"
 
-                        // hide instructions
-                        document.getElementById('instructions').style.display = "none"
+                        setInstructions(null);
 
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = senate_bounds[selectedState][selectedDistrict]
@@ -544,7 +335,7 @@ const Map = ({data}) => {
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
-                        updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+                        setSelectedCcid(ccidCode);
                     })
                 }
 
@@ -558,9 +349,7 @@ const Map = ({data}) => {
                 document.getElementById('chamber-select').disabled = true
                 document.getElementById('district-select').disabled = true
 
-                // change instructions text
-                document.getElementById('instructions').style.display = "block"
-                document.getElementById('instructions').innerHTML = "Please Select A State"
+                setInstructions("Please Select A State");
 
                 // reset styles
                 document.getElementById('state-select').style.color = "#C36C27"
@@ -577,17 +366,6 @@ const Map = ({data}) => {
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
 
-                // hide legislator components
-                document.getElementById('details').style.visibility = "hidden"
-                document.getElementById('name').innerHTML = ""
-                document.getElementById('party').innerHTML = ""
-                document.getElementById('score').innerHTML = ""
-                document.getElementById('rep').innerHTML = ""
-                document.getElementById('vote1').innerHTML = ""
-                document.getElementById('vote2').innerHTML = ""
-                document.getElementById('vote3').innerHTML = ""
-                document.getElementById('vote4').innerHTML = ""
-                document.getElementById('vote5').innerHTML = ""
 
                 // change back to senate layer
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
@@ -598,6 +376,9 @@ const Map = ({data}) => {
 
                 // Hide the reset button
                 document.getElementById('reset').classList.add('hidden');
+
+                // Unset selected ccid
+                setSelectedCcid(null);
 
             })
 
@@ -615,11 +396,14 @@ const Map = ({data}) => {
             // for the point that represents the clicked district
             const ccidCode = features[0].properties.ccid
 
-            updateSidebarForRepresentative({ccidCode, regionsIndex, repIndex});
+            setSelectedCcid(ccidCode);
 
         });
 
-    }, [regionsIndex, repIndex])
+    }, [])
+
+    const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
+    const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
 
     return (
         // container for the entire app
@@ -656,49 +440,13 @@ const Map = ({data}) => {
                 </div>
             </div>
 
-
             {/* sidebar */}
-            <div className="aside" id="aside">
-                <div className="candidateText">LEGISLATOR DETAILS</div>
-                <div className="instructions" id="instructions">Please Select A State</div>
-                <div id='details' className='details'>
-                    <br/>
-                    <Name id='name' style={{marginLeft: '15px'}}></Name>
-                    <div id='rep' className='repText'></div>
-                    <Flex>
-                        <div className="scoreBox-climate">
-                            <div className="scoreTitle">Climate Score</div>
-                            <div className="scoreText" id='score'></div>
-                        </div>
-                        <div className="scoreBox-party">
-                            <div className="partyTitle">Party</div>
-                            <div className="partyText" id='party'></div>
-                        </div>
-                    </Flex>
-                    <VotesBox>
-                        <div className="votesText">Selected Climate Votes</div>
-                        <div className="voteTabs">
-                            <div id='vote5Tab' className="vote5Tab">Vote 5</div>
-                            <div id='vote4Tab' className="vote4Tab">Vote 4</div>
-                            <div id='vote3Tab' className="vote3Tab">Vote 3</div>
-                            <div id='vote2Tab' className="vote2Tab">Vote 2</div>
-                            <div id='vote1Tab' className="vote1Tab">Vote 1</div>
-                        </div>
-                        <br/>
-                        <br/>
-                        <div id="vote1" className="vote1"></div>
-                        <div id="vote2" className="vote2"></div>
-                        <div id="vote3" className="vote3"></div>
-                        <div id="vote4" className="vote4"></div>
-                        <div id="vote5" className="vote5"></div>
-                    </VotesBox>
-                        <a id="takeActionCTA" href="https://www.climatecabinetaction.org" target="_blank" rel="noreferrer">
-                            <div className="actionButton">
-                                Take Action
-                            </div>
-                        </a>
-                </div>
-            </div>
+            <LegislatorSidebar
+              key={incumbentId}
+              representativeId={incumbentId}
+              regionName={regionName}
+              instructions={instructions}
+            />
         </div>
     )
 
