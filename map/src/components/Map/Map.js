@@ -8,7 +8,7 @@ import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, in
 import styled from '../../../util/style'
 import "typeface-lato";
 import './map.css'
-import LegislatorDetails from './LegislatorDetails'
+import LegislatorSidebar from './LegislatorSidebar'
 
 
 const Header = styled.div`
@@ -439,7 +439,7 @@ const Map = () => {
             </div>
 
             {/* sidebar */}
-            <LegislatorDetails
+            <LegislatorSidebar
               key={incumbentId}
               representativeId={incumbentId}
               regionName={regionName}

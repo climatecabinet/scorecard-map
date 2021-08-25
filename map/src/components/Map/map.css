@@ -3,8 +3,6 @@
     flex-flow: column nowrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
-    /* This isn't going to work... */
-    /* height: 100vh; */
 }
 
 /* tell all items to be 100% width, via flex-basis */
@@ -64,7 +62,6 @@
 
 .aside {
     background: #F4F4F4;
-    /* height: 100%; */
 }
 
 body {
@@ -158,7 +155,6 @@ body {
 .voteTabs {
     display: flex;
     flex-flow: row nowrap;
-    /* justify-content: space-between; */
 }
 
 .voteTab {
