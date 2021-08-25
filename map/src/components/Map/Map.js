@@ -30,14 +30,14 @@ const SelectState = styled.select`
     margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 19vw;
+        width: 19.35vw;
     }
     @media only screen and (max-width: 1059px) {
         width: 31.25vw;
     }
     @media only screen and (max-width: 895px) {
         display: block;
-        width: 95.75vw;
+        width: 97.75vw;
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
@@ -61,7 +61,7 @@ const SelectChamber = styled.select`
     margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 19vw;
+        width: 19.35vw;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -70,7 +70,7 @@ const SelectChamber = styled.select`
     }
     @media only screen and (max-width: 895px) {
         display: block;
-        width: 95.75vw;
+        width: 97.75vw;
         margin-left: 0px;
     }
     @media only screen and (max-width: 500px) {
@@ -92,7 +92,7 @@ const SelectDistrict = styled.select`
     margin: 0px 0px 20px 0px;
     padding: 10px;
     @media only screen and (min-width: 1060px) {
-        width: 19vw;
+        width: 19.35vw;
         margin-left: 12px;
     }
     @media only screen and (max-width: 1059px) {
@@ -101,7 +101,7 @@ const SelectDistrict = styled.select`
     }
     @media only screen and (max-width: 895px) {
         display: block;
-        width: 95.75vw;
+        width: 97.75vw;
         margin-left: 0px;
     }
     @media only screen and (max-width: 500px) {
