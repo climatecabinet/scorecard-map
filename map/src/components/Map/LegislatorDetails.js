@@ -54,7 +54,6 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
   const [selectedVoteNumber, setSelectedVoteNumber] = useState(1);
   const { loading, error, data } = useQuery(GET_REP_DETAILS, {
     variables: { representativeId },
-    skip: !representativeId,
   });
 
   if (loading) {
@@ -65,10 +64,7 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
     );
   }
 
-  const rep = representativeId && data?.representative;
-  if (!rep) {
-    return null;
-  }
+  const rep = data.representative;
   const { votes } = rep.ccscorecard;
   const hasVotes = votes.length > 0;
 

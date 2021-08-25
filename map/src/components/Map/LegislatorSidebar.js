@@ -11,7 +11,9 @@ const LegislatorSidebar = ({ representativeId, regionName, instructions }) => {
           {instructions}
         </div>
       )}
-      <LegislatorDetails representativeId={representativeId} regionName={regionName} />
+      {representativeId && regionName && (
+        <LegislatorDetails representativeId={representativeId} regionName={regionName} />
+      )}
     </div>
   );
 };

@@ -142,9 +142,6 @@ const Map = () => {
 
     const [selectedCcid, setSelectedCcid] = useState(null);
     const [instructions, setInstructions] = useState('Please Select A State');
-    const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
-    const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
-
     // initialize map when component mounts
     useEffect(() => {
         mapboxgl.accessToken = siteMetadata.mapboxToken
@@ -399,6 +396,9 @@ const Map = () => {
         });
 
     }, [])
+
+    const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
+    const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
 
     return (
         // container for the entire app
