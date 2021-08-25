@@ -8,7 +8,6 @@
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
     width: 100%;
-    /* width: auto; */
     flex: 1 100%;
 }
 
