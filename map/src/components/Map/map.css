@@ -104,7 +104,17 @@ body {
 	color: #777;
 }
 
-.scoreBox {
+.scoreBox-climate {
+    background-color: white;
+    width: 15vw;
+    height: 13vh;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.scoreBox-party {
     background-color: white;
     width: 15vw;
     height: 13vh;
@@ -209,8 +219,9 @@ div .details {
 @media only screen and (max-width: 1059px) {
     .mapText { font-size: 28px; }
     .map { height: 450px; width: 96vw; }
-    .scoreBox { width: 45vw; height: 13vh; }
+    .scoreBox-climate, .scoreBox-party { width: 45vw; height: 5vh; }
     .my-legend { bottom: 0%; left: 30%; }
+    .actionButton { width: 90vw; }
     .vote1Tab, .vote2Tab, .vote3Tab, .vote4Tab, .vote5Tab { font-size: 16px; }
 }
 
@@ -221,7 +232,7 @@ div .details {
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
-    .scoreBox { width: 45vw; height: 13vh; }
+    .scoreBox-climate, .scoreBox-party { width: 45vw; height: 13vh; }
     .scoreTitle { font-size: 12px; }
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
@@ -238,7 +249,8 @@ div .details {
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
-    .scoreBox { width: 45vw; height: 13vh; }
+    .scoreBox-climate { width: 42vw; height: 13vh; margin: 0px 0px 0px 15px; }
+    .scoreBox-party { width: 42vw; height: 13vh; margin: 0px 5px 0px 15px; }
     .scoreTitle { font-size: 12px; }
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
@@ -247,7 +259,7 @@ div .details {
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
     .repText { font-size: 18px; }
-    .actionButton { width: 421px; }
+    .actionButton { width: 83.25vw; }
     .voteTabs { position: absolute; padding-top: 20px; }
     .vote1, .vote2, .vote3, .vote4, .vote5 { padding-top: 20px; }
 
