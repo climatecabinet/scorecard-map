@@ -40,6 +40,10 @@ const VotesBox = styled(Box)`
   margin-right: 15px;
 `;
 
+const Details = styled(Box)`
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
+`;
+
 const VoteTab = ({ tabNumber, isActive, onClick }) => {
   const className = isActive ? 'voteTabActive' : 'voteTabInactive';
   return (
@@ -50,44 +54,35 @@ const VoteTab = ({ tabNumber, isActive, onClick }) => {
 };
 
 const LegislatorDetails = ({ representativeId, regionName }) => {
-    // TODO(mike0: Render *something* while loading instead of just null?
   const [selectedVoteNumber, setSelectedVoteNumber] = useState(1);
   const { loading, error, data } = useQuery(GET_REP_DETAILS, {
     variables: { representativeId },
     skip: !representativeId,
   });
+
   if (loading) {
     return <p>loading!</p>;
   }
 
-  // TODO(mike): remove?
-  if (!data) {
-    return null;
-  }
-
-  const { representative: rep } = data;
-
-  if (!representativeId) {
-    return null;
-  }
+  const rep = representativeId && data?.representative;
 
   return (
     <div className="aside" id="aside">
       <div className="candidateText">LEGISLATOR DETAILS</div>
-      <div id="details" className="details">
+      <Details isVisible={!!rep}>
         <br />
-        <Name id="name" style={{ marginLeft: '15px' }}>{`${rep.role} ${rep.full_name}`}</Name>
+        <Name id="name" style={{ marginLeft: '15px' }}>{`${rep?.role} ${rep?.full_name}`}</Name>
         <div id="rep" className="repText">{`${
-          initialsToState[rep.state_abbr.toLowerCase()]
+          initialsToState[rep?.state_abbr.toLowerCase()]
         } ${regionName}`}</div>
         <Flex>
           <div className="scoreBox">
             <div className="scoreTitle">Climate Score</div>
-            <div className="scoreText" id="score">{`${Math.round(rep.cc_score)}`}</div>
+            <div className="scoreText" id="score">{`${Math.round(rep?.cc_score)}`}</div>
           </div>
           <div className="scoreBox">
             <div className="partyTitle">Party</div>
-            <div className="partyText" id="party">{`${rep.party}`}</div>
+            <div className="partyText" id="party">{`${rep?.party}`}</div>
           </div>
         </Flex>
         <VotesBox>
@@ -97,26 +92,27 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
               <VoteTab
                 key={tabNumber}
                 tabNumber={tabNumber}
-                isActive={tabNumber == selectedVoteNumber}
+                isActive={tabNumber === selectedVoteNumber}
                 onClick={() => setSelectedVoteNumber(tabNumber)}
               />
             ))}
           </div>
           <br />
           <br />
-          <div id="vote1" className="vote">
-            {rep.ccscorecard.votes[selectedVoteNumber - 1] || NO_VOTE_FALLBACK_TEXT}
+          <div className="vote">
+            {(rep?.ccscorecard?.votes && rep.ccscorecard.votes[selectedVoteNumber - 1]) ||
+              NO_VOTE_FALLBACK_TEXT}
           </div>
         </VotesBox>
         <a
           id="takeActionCTA"
-          href={`${LEGISLATOR_PAGE_URL_PREFIX}${rep.slug}`}
+          href={`${LEGISLATOR_PAGE_URL_PREFIX}${rep?.slug}`}
           target="_blank"
           rel="noreferrer"
         >
           <div className="actionButton">Take Action</div>
         </a>
-      </div>
+      </Details>
     </div>
   );
 };
