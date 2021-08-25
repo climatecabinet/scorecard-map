@@ -301,7 +301,7 @@ const Map = () => {
             if (document.getElementById('chamber-select').value) {
                 if (selectedState && selectedChamber === "house") {
                 // when the district is selected, zoom to it
-                document.getElementById('district-select').addEventListener('change', async function () {
+                document.getElementById('district-select').addEventListener('change', function () {
                     let selectedDistrict = document.getElementById('district-select').value
                     let bounds = house_bounds[selectedState][selectedDistrict]
                     setInstructions(null);
@@ -322,7 +322,7 @@ const Map = () => {
                     let selectedChamber = document.getElementById('chamber-select').value
 
                     // when the district is selected, zoom in and populate legislator details
-                    document.getElementById('district-select').addEventListener('change', async function () {
+                    document.getElementById('district-select').addEventListener('change', function () {
                         // change 'district' color and border to orange
                         document.getElementById('district-select').style.color = "#C36C27"
                         document.getElementById('district-select').style.borderColor = "#C36C27"
@@ -386,7 +386,7 @@ const Map = () => {
 
         })
 
-        map.on('click', async function(mapElement) {
+        map.on('click', function(mapElement) {
             // when you click a point on the map, query the features under the point and store
             // in the variable 'features'
             const features = map.queryRenderedFeatures(mapElement.point, {
