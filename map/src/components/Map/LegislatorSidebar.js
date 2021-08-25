@@ -1,5 +1,6 @@
 import React from 'react';
 import LegislatorDetails from './LegislatorDetails';
+import PropTypes from 'prop-types';
 
 const LegislatorSidebar = ({ representativeId, regionName, instructions }) => {
   // TODO(mike): Maybe return an empty div with some height instead of all the optional chaining.
@@ -16,6 +17,12 @@ const LegislatorSidebar = ({ representativeId, regionName, instructions }) => {
       )}
     </div>
   );
+};
+
+LegislatorSidebar.propTypes = {
+  representativeId: PropTypes.string,
+  regionName: PropTypes.string,
+  instructions: PropTypes.string,
 };
 
 export default LegislatorSidebar;

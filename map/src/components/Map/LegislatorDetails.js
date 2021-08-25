@@ -5,6 +5,7 @@ import { gql, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { initialsToState } from '../../../config/map';
 import Loading from './Loading';
+import PropTypes from 'prop-types';
 
 const NO_VOTES_FALLBACK_TEXT = 'No featured votes available for this legislator.';
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
@@ -118,6 +119,11 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
       </a>
     </div>
   );
+};
+
+LegislatorDetails.propTypes = {
+  representativeId: PropTypes.string.isRequired,
+  regionName: PropTypes.string.isRequired,
 };
 
 export default LegislatorDetails;
