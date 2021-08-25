@@ -3,13 +3,13 @@
     flex-flow: column nowrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
+    /* This isn't going to work... */
+    /* height: 100vh; */
 }
 
 /* tell all items to be 100% width, via flex-basis */
 .wrapper > * {
-    /* padding: 5px; */
     width: 100%;
-/*     flex: 1 100%; */
 }
 
 .mapText {
@@ -64,6 +64,7 @@
 
 .aside {
     background: #F4F4F4;
+    /* height: 100%; */
 }
 
 body {
@@ -142,29 +143,34 @@ body {
     text-align: center;
 }
 
+.voteTitleAndTabs {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
 .votesText {
     font-weight: 700;
     font-size: 16px;
     color: #C36C27;
-    float: left;
+    margin-bottom: 10px;
 }
 
-.voteTabActive {
+.voteTabs {
+    display: flex;
+    flex-flow: row nowrap;
+    /* justify-content: space-between; */
+}
+
+.voteTab {
     font-size: 12px;
     color: black;
     text-decoration: none;
-    float: right;
-    margin-top: 2px;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .voteTabInactive {
-    font-size: 12px;
     color: #C36C27;
     text-decoration: underline;
-    float: right;
-    margin-top: 2px;
-    margin-right: 15px;
 }
 
 .voteTabInactive:hover{
@@ -208,8 +214,7 @@ body {
     .map { height: 450px; width: 96vw; }
     .scoreBox { width: 45vw; height: 13vh; }
     .my-legend { bottom: 0%; left: 30%; }
-    .voteTabActive { font-size: 16px; }
-    .voteTabInactive { font-size: 16px; }
+    .voteTab { font-size: 16px; }
 }
 
 /* 859px and below */
@@ -224,7 +229,7 @@ body {
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
-    .aside { padding: 5px; width: 95vw; }
+    .aside { padding: 5px; }
     .map .mapboxgl-map { width: 100vw; }
 }
 
@@ -241,12 +246,11 @@ body {
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
-    .aside { padding: 5px; width: 95vw; }
     .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
     .repText { font-size: 18px; }
     .actionButton { width: 421px; }
-    .voteTabs { position: absolute; padding-top: 20px; }
+    .voteTabs { padding-top: 20px; }
     .vote { padding-top: 20px; }
 
 }
@@ -254,6 +258,8 @@ body {
 /* 600px and up */
 @media all and (min-width: 600px) {
     .aside { flex: 1; }
+    .voteTitleAndTabs { flex-flow: row nowrap; justify-content: space-between; }
+    .voteTabs { margin-left: 10px; }
 }
 
 /* 800px and up */

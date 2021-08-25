@@ -45,15 +45,16 @@ const Details = styled(Box)`
 `;
 
 const VoteTab = ({ tabNumber, isActive, onClick }) => {
-  const className = isActive ? 'voteTabActive' : 'voteTabInactive';
+  const className = isActive ? 'voteTab' : 'voteTab voteTabInactive';
   return (
-    <div id={`vote${tabNumber}Tab`} className={className} onClick={onClick}>
+    <div className={className} onClick={onClick}>
       Vote {tabNumber}
     </div>
   );
 };
 
-const LegislatorDetails = ({ representativeId, regionName }) => {
+// TODO(mike): Pass instructions in as a stage here.
+const LegislatorDetails = ({ representativeId, regionName, instructions }) => {
   const [selectedVoteNumber, setSelectedVoteNumber] = useState(1);
   const { loading, error, data } = useQuery(GET_REP_DETAILS, {
     variables: { representativeId },
@@ -66,53 +67,61 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
 
   const rep = representativeId && data?.representative;
 
+  // TODO(mike): Maybe return an empty div with some height instead of all the optional chaining.
   return (
     <div className="aside" id="aside">
       <div className="candidateText">LEGISLATOR DETAILS</div>
-      <Details isVisible={!!rep}>
-        <br />
-        <Name id="name" style={{ marginLeft: '15px' }}>{`${rep?.role} ${rep?.full_name}`}</Name>
-        <div id="rep" className="repText">{`${
-          initialsToState[rep?.state_abbr.toLowerCase()]
-        } ${regionName}`}</div>
-        <Flex>
-          <div className="scoreBox">
-            <div className="scoreTitle">Climate Score</div>
-            <div className="scoreText" id="score">{`${Math.round(rep?.cc_score)}`}</div>
-          </div>
-          <div className="scoreBox">
-            <div className="partyTitle">Party</div>
-            <div className="partyText" id="party">{`${rep?.party}`}</div>
-          </div>
-        </Flex>
-        <VotesBox>
-          <div className="votesText">Selected Climate Votes</div>
-          <div className="voteTabs">
-            {[5, 4, 3, 2, 1].map((tabNumber) => (
-              <VoteTab
-                key={tabNumber}
-                tabNumber={tabNumber}
-                isActive={tabNumber === selectedVoteNumber}
-                onClick={() => setSelectedVoteNumber(tabNumber)}
-              />
-            ))}
-          </div>
+      {instructions && (
+        <div className="instructions" id="instructions">
+          {instructions}
+        </div>
+      )}
+      {rep && (
+        <div>
           <br />
-          <br />
-          <div className="vote">
-            {(rep?.ccscorecard?.votes && rep.ccscorecard.votes[selectedVoteNumber - 1]) ||
-              NO_VOTE_FALLBACK_TEXT}
-          </div>
-        </VotesBox>
-        <a
-          id="takeActionCTA"
-          href={`${LEGISLATOR_PAGE_URL_PREFIX}${rep?.slug}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <div className="actionButton">Take Action</div>
-        </a>
-      </Details>
+          <Name id="name" style={{ marginLeft: '15px' }}>{`${rep.role} ${rep.full_name}`}</Name>
+          <div id="rep" className="repText">{`${
+            initialsToState[rep.state_abbr.toLowerCase()]
+          } ${regionName}`}</div>
+          <Flex>
+            <div className="scoreBox">
+              <div className="scoreTitle">Climate Score</div>
+              <div className="scoreText" id="score">{`${Math.round(rep.cc_score)}`}</div>
+            </div>
+            <div className="scoreBox">
+              <div className="partyTitle">Party</div>
+              <div className="partyText" id="party">{`${rep.party}`}</div>
+            </div>
+          </Flex>
+          <VotesBox>
+            <div className="voteTitleAndTabs">
+              <div className="votesText">Selected Climate Votes</div>
+              <div className="voteTabs">
+                {[1, 2, 3, 4, 5].map((tabNumber) => (
+                  <VoteTab
+                    key={tabNumber}
+                    tabNumber={tabNumber}
+                    isActive={tabNumber === selectedVoteNumber}
+                    onClick={() => setSelectedVoteNumber(tabNumber)}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="vote">
+              {(rep.ccscorecard.votes && rep.ccscorecard.votes[selectedVoteNumber - 1]) ||
+                NO_VOTE_FALLBACK_TEXT}
+            </div>
+          </VotesBox>
+          <a
+            id="takeActionCTA"
+            href={`${LEGISLATOR_PAGE_URL_PREFIX}${rep.slug}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="actionButton">Take Action</div>
+          </a>
+        </div>
+      )}
     </div>
   );
 };

@@ -144,6 +144,7 @@ const Map = () => {
     const [, repIndex] = useRepData()
 
     const [selectedCcid, setSelectedCcid] = useState(null);
+    const [instructions, setInstructions] = useState('Please Select A State');
     const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
     const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
 
@@ -206,7 +207,7 @@ const Map = () => {
                 reset.classList.remove('hidden');
 
                 // change instructions text
-                document.getElementById('instructions').innerHTML = "Please Select A Chamber"
+                setInstructions("Please Select A Chamber");
                 // reset the chamber and district options
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
@@ -269,7 +270,7 @@ const Map = () => {
                 document.getElementById('district-select').style.borderColor = "#333"
 
                 // change instructions text
-                document.getElementById('instructions').innerHTML = "Please Select A District"
+                setInstructions("Please Select A District");
 
                 // change all layers visibility to none
                 map.setLayoutProperty('state-fill', 'visibility', 'none')
@@ -303,8 +304,7 @@ const Map = () => {
                 document.getElementById('district-select').addEventListener('change', async function () {
                     let selectedDistrict = document.getElementById('district-select').value
                     let bounds = house_bounds[selectedState][selectedDistrict]
-                    // hide instructions text
-                    document.getElementById('instructions').style.display = "none"
+                    setInstructions(null);
 
                     // change 'district' color and border to orange
                     document.getElementById('district-select').style.color = "#C36C27"
@@ -327,8 +327,7 @@ const Map = () => {
                         document.getElementById('district-select').style.color = "#C36C27"
                         document.getElementById('district-select').style.borderColor = "#C36C27"
 
-                        // hide instructions
-                        document.getElementById('instructions').style.display = "none"
+                        setInstructions(null);
 
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = senate_bounds[selectedState][selectedDistrict]
@@ -351,9 +350,7 @@ const Map = () => {
                 document.getElementById('chamber-select').disabled = true
                 document.getElementById('district-select').disabled = true
 
-                // change instructions text
-                document.getElementById('instructions').style.display = "block"
-                document.getElementById('instructions').innerHTML = "Please Select A State"
+                setInstructions("Please Select A State");
 
                 // reset styles
                 document.getElementById('state-select').style.color = "#C36C27"
@@ -417,9 +414,6 @@ const Map = () => {
                         <div className="mapText">Interactive Score Map</div>
                         <div id="reset" className="resetText hidden">RESET</div>
                     </Header>
-                    <div className="instructions" id="instructions">
-                        Please Select A State
-                    </div>
                     <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
                     <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
                     <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
@@ -445,7 +439,12 @@ const Map = () => {
             </div>
 
             {/* sidebar */}
-            <LegislatorDetails key={incumbentId} representativeId={incumbentId} regionName={regionName}/>
+            <LegislatorDetails
+              key={incumbentId}
+              representativeId={incumbentId}
+              regionName={regionName}
+              instructions={instructions}
+            />
         </div>
     )
 
