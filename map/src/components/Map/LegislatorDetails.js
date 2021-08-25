@@ -77,11 +77,11 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
         initialsToState[rep.state_abbr.toLowerCase()]
       } ${regionName}`}</div>
       <Flex>
-        <div className="scoreBox">
+        <div className="scoreBox-climate">
           <div className="scoreTitle">Climate Score</div>
           <div className="scoreText" id="score">{`${Math.round(rep.cc_score)}`}</div>
         </div>
-        <div className="scoreBox">
+        <div className="scoreBox-party">
           <div className="partyTitle">Party</div>
           <div className="partyText" id="party">{`${rep.party}`}</div>
         </div>
