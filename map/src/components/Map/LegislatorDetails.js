@@ -4,6 +4,7 @@ import styled from '../../../util/style';
 import { gql, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { initialsToState } from '../../../config/map';
+import Loading from './Loading';
 
 const NO_VOTE_FALLBACK_TEXT = 'No featured votes available for this legislator.';
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
@@ -57,7 +58,11 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
   });
 
   if (loading) {
-    return <p>loading!</p>;
+    return (
+      <Flex flexDirection="column" alignItems="center" mt="15px">
+        <Loading width="60%"/>
+      </Flex>
+    );
   }
 
   const rep = representativeId && data?.representative;
