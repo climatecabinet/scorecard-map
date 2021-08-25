@@ -3,7 +3,6 @@ import mapboxgl from '!mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
-import { useRepData } from '../Data/representatives'
 import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, initialsToState, statesToCodes, chamberToLetter} from '../../../config/map'
 import styled from '../../../util/style'
 import "typeface-lato";
@@ -140,8 +139,6 @@ const Map = () => {
     // data from MongoDB/GraphQL query
     // regions Data
     const [, regionsIndex] = useData()
-    // representatives Data
-    const [, repIndex] = useRepData()
 
     const [selectedCcid, setSelectedCcid] = useState(null);
     const [instructions, setInstructions] = useState('Please Select A State');

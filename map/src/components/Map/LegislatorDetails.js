@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { initialsToState } from '../../../config/map';
 import Loading from './Loading';
 
-const NO_VOTE_FALLBACK_TEXT = 'No featured votes available for this legislator.';
+const NO_VOTES_FALLBACK_TEXT = 'No featured votes available for this legislator.';
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
 const GET_REP_DETAILS = gql`
@@ -60,7 +60,7 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
   if (loading) {
     return (
       <Flex flexDirection="column" alignItems="center" mt="15px">
-        <Loading width="60%"/>
+        <Loading width="60%" />
       </Flex>
     );
   }
@@ -69,6 +69,8 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
   if (!rep) {
     return null;
   }
+  const { votes } = rep.ccscorecard;
+  const hasVotes = votes.length > 0;
 
   return (
     <div>
@@ -88,22 +90,26 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
         </div>
       </Flex>
       <VotesBox>
-        <div className="voteTitleAndTabs">
-          <div className="votesText">Selected Climate Votes</div>
-          <div className="voteTabs">
-            {[1, 2, 3, 4, 5].map((tabNumber) => (
-              <VoteTab
-                key={tabNumber}
-                tabNumber={tabNumber}
-                isActive={tabNumber === selectedVoteNumber}
-                onClick={() => setSelectedVoteNumber(tabNumber)}
-              />
-            ))}
+        {hasVotes && (
+          <div className="voteTitleAndTabs">
+            <div className="votesText">Selected Climate Votes</div>
+            <div className="voteTabs">
+              {votes.map((_vote, index) => {
+                const tabNumber = index + 1;
+                return (
+                  <VoteTab
+                    key={tabNumber}
+                    tabNumber={tabNumber}
+                    isActive={tabNumber === selectedVoteNumber}
+                    onClick={() => setSelectedVoteNumber(tabNumber)}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
         <div className="vote">
-          {(rep.ccscorecard.votes && rep.ccscorecard.votes[selectedVoteNumber - 1]) ||
-            NO_VOTE_FALLBACK_TEXT}
+          {hasVotes ? rep.ccscorecard.votes[selectedVoteNumber - 1] : NO_VOTES_FALLBACK_TEXT}
         </div>
       </VotesBox>
       <a
