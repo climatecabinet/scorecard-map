@@ -404,7 +404,7 @@ const Map = () => {
 
         });
 
-    }, [regionsIndex, repIndex])
+    }, [])
 
     return (
         // container for the entire app
