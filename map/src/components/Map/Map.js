@@ -379,9 +379,9 @@ const Map = () => {
 
             // also on click, get the ccid and the regions.incumbent.rep id
             // for the point that represents the clicked district
-            // document.getElementById('state-select').value = state_abbr.toLowerCase();
-            // document.getElementById('chamber-select').value = chamber.toLowerCase();
-            // document.getElementById('district-select').value = district;
+            document.getElementById('state-select').value = state_abbr.toLowerCase();
+            document.getElementById('chamber-select').value = chamber.toLowerCase();
+            document.getElementById('district-select').value = district;
 
             setSelectedCcid(ccidCode);
 
