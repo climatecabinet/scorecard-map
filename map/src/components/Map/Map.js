@@ -265,7 +265,8 @@ const Map = () => {
                 // reset the district options
                 document.getElementById('district-select').value = ""
 
-                // TODO: zoom out to the state view
+                let bounds = state_bounds[selectedState]
+                map.fitBounds(bounds)
 
                 document.getElementById('state-select').style.color = "#FFFFFF"
                 document.getElementById('state-select').style.backgroundColor = "#C36C27"
@@ -322,8 +323,6 @@ const Map = () => {
                     })
                 }
 
-            } else {
-                console.log('no chamber selected yet')
             }
 
             // reset the navigation options, and hide components, when the reset button is clicked
