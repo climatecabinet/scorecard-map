@@ -125,11 +125,10 @@ const Map = () => {
             map.setZoom(3.5)
             map.dragPan.disable();
             map.scrollZoom.disable();
-            map.touchPitch.disable()
             map.on('touchstart', function(e) {
                 var oe = e.originalEvent;
                 if (oe && 'touches' in oe) {
-                    if (oe.touches.length > 1) {
+                    if (oe.touches.length >= 2) {
                         oe.stopImmediatePropagation();
                         map.dragPan.enable();
                     } else {
@@ -332,11 +331,10 @@ const Map = () => {
                     map.setZoom(3.5)
                     map.dragPan.disable();
                     map.scrollZoom.disable();
-                    map.touchPitch.disable()
                     map.on('touchstart', function(e) {
                         var oe = e.originalEvent;
                         if (oe && 'touches' in oe) {
-                            if (oe.touches.length > 1) {
+                            if (oe.touches.length >= 2) {
                                 oe.stopImmediatePropagation();
                                 map.dragPan.enable();
                             } else {
