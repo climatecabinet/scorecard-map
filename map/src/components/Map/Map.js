@@ -29,21 +29,12 @@ const SelectState = styled.select`
     border: 1px solid #C36C27;
     margin: 0px 0px 20px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
-        width: 100%;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
     &:disabled {
         opacity: 0.50
@@ -60,24 +51,12 @@ const SelectChamber = styled.select`
     border: 1px solid #333;
     margin: 0px 0px 20px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-        margin-left: 12px;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-        margin-left: 10px;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-        margin-left: 0px;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
-        width: 100%;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
 `
 
@@ -91,24 +70,12 @@ const SelectDistrict = styled.select`
     border: 1px solid #333;
     margin: 0px 0px 20px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-        margin-left: 12px;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-        margin-left: 10px;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-        margin-left: 0px;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
-        width: 100%;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
 `
 
@@ -293,7 +260,7 @@ const Map = () => {
         });
 
         map.on('idle', function() {
-            
+
             let selectedState = document.getElementById('state-select').value
             let selectedChamber = document.getElementById('chamber-select').value
 
@@ -416,9 +383,11 @@ const Map = () => {
                         <div className="mapText">Interactive Score Map</div>
                         <div id="reset" className="resetText hidden">RESET</div>
                     </Header>
-                    <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
-                    <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
-                    <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
+                    <div className="selects-container">
+                        <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
+                        <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
+                        <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
+                    </div>
                 </div>
                 {/* map */}
                 <div className="mapContainer">
