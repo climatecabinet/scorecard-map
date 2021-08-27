@@ -1,6 +1,6 @@
 .wrapper {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
 }
@@ -13,7 +13,6 @@
 .selects-container {
     display: flex;
     flex-flow: column nowrap;
-    margin-top: 20px;
     margin-bottom: 20px;
     justify-content: space-evenly;
 }
@@ -226,8 +225,9 @@ body {
 /* tablet view */
 @media only screen and (max-width: 1059px) {
     .mapText { font-size: 28px; }
-    .map { height: 450px; width: 96vw; }
-    .scoreBox-climate, .scoreBox-party { width: 45vw; height: 5vh; }
+    .map { height: 450px; width: 95vw; }
+    .wrapper { flex-flow: column nowrap }
+    .scoreBox-climate, .scoreBox-party { height: 5vh; }
     .my-legend { bottom: 0%; left: 30%; }
     .voteTab { font-size: 16px; }
 }
@@ -235,18 +235,17 @@ body {
 /* 859px and below */
 /* transition view */
 @media only screen and (max-width: 859px) {
-    .map { height: 450px; width: 95vw; }
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
-    .scoreBox-climate, .scoreBox-party { width: 45vw; height: 8vh; }
+    .scoreBox-climate, .scoreBox-party { height: 8vh; }
     .scoreTitle { font-size: 12px; }
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
     .actionButton { width: 91vw; }
     .aside { padding: 0px; }
-    .map .mapboxgl-map { width: 100vw; }
+    .mapboxgl-map { width: 100vw; }
 }
 
 /* 500px and below */
@@ -257,13 +256,12 @@ body {
     .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
-    .scoreBox-climate { width: 42vw; height: 13vh; margin: 0px 0px 0px 15px; }
-    .scoreBox-party { width: 42vw; height: 13vh; margin: 0px 5px 0px 15px; }
+    .scoreBox-climate { height: 13vh; margin: 0px 0px 0px 15px; }
+    .scoreBox-party { height: 13vh; margin: 0px 5px 0px 15px; }
     .scoreTitle { font-size: 12px; }
     .partyTitle { font-size: 12px; }
     .scoreText { font-size: 24px; }
     .partyText { font-size: 24px; }
-    .map .mapboxgl-map { width: 100vw; }
     .my-legend { left: 20%; }
     .repText { font-size: 18px; }
     .actionButton { width: 83vw; }
@@ -283,5 +281,4 @@ body {
 /* 800px and up */
 @media all and (min-width: 800px) {
     .main    { flex: 1 0px; margin-right: 10px; }
-    .wrapper { flex-flow: row nowrap }
 }
