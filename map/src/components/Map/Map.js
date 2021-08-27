@@ -117,24 +117,16 @@ const Map = () => {
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [-1.14, -0.98],
-            minZoom: 2
+            minZoom: 2,
+            interactive: false
         })
 
-        // if phone view, set zoom to 3.5 and disable scroll
-        if (window.matchMedia( "(min-width: 550px)" ).matches) {
-            map.setZoom(3.5)
-            map.doubleClickZoom.disable(),
-            map.scrollZoom.disable(),
-            map.touchZoomRotate.disable(),
-            map.touchPitch.disable(),
-            map.dragPan.disable(),
-            map.dragRotate.disable()
+        // if phone view, set zoom to 3.5
+        if (window.matchMedia( "(min-width: 500px)" ).matches) {
+            map.setZoom(3.5);
         } else {
-            map.setZoom(2.5)
+            map.setZoom(2.5);
         }
-
-        // disable scroll zoom
-        map.scrollZoom.disable();
 
         mapRef.current = map
         window.map = map
@@ -265,20 +257,6 @@ const Map = () => {
 
         });
 
-        map.on('touchstart', function(e) {
-            if (window.matchMedia( "(min-width: 550px)" ).matches) {
-                var oe = e.originalEvent;
-                if (oe && 'touches' in oe) {
-                    if (oe.touches.length >= 2) {
-                        oe.stopImmediatePropagation();
-                        map.dragPan.enable();
-                    } else {
-                        map.dragPan.disable();
-                    }
-                }
-            }
-        });
-
         map.on('idle', function() {
 
             let selectedState = document.getElementById('state-select').value
@@ -333,17 +311,11 @@ const Map = () => {
             // reset the navigation options, and hide components, when the reset button is clicked
             document.getElementById('reset').addEventListener('click', function () {
 
-                // if mobile view, set zoom and disable scroll
-                if (window.matchMedia( "(min-width: 550px)" ).matches) {
-                    map.setZoom(3.5)
-                    map.doubleClickZoom.disable(),
-                    map.scrollZoom.disable(),
-                    map.touchZoomRotate.disable(),
-                    map.touchPitch.disable(),
-                    map.dragPan.disable(),
-                    map.dragRotate.disable()
+                // if mobile view, set zoom
+                if (window.matchMedia( "(min-width: 500px)" ).matches) {
+                    map.setZoom(3.5);
                 } else {
-                    map.setZoom(2.5)
+                    map.setZoom(2.5);
                 }
                 
                 document.getElementById('state-select').disabled = false
