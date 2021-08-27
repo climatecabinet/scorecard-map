@@ -10,6 +10,14 @@
     width: 100%;
 }
 
+.selects-container {
+    display: flex;
+    flex-flow: column nowrap;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: space-evenly;
+}
+
 .mapText {
     font-size: 28px;
     padding-bottom: 0px;
@@ -104,7 +112,7 @@ body {
 
 .scoreBox-climate {
     background-color: white;
-    width: 17vw;
+    width: 45%;
     height: 13vh;
     margin-left: 15px;
     margin-right: 15px;
@@ -114,7 +122,7 @@ body {
 
 .scoreBox-party {
     background-color: white;
-    width: 17vw;
+    width: 45%;
     height: 13vh;
     margin-left: 15px;
     margin-right: 15px;
@@ -153,6 +161,7 @@ body {
 .voteTitleAndTabs {
     display: flex;
     flex-flow: column nowrap;
+    align-items: baseline;
 }
 
 .votesText {
@@ -268,10 +277,11 @@ body {
     .aside { flex: 1; }
     .voteTitleAndTabs { flex-flow: row nowrap; justify-content: space-between; }
     .voteTabs { margin-left: 10px; }
+    .selects-container { flex-flow: row nowrap; }
 }
 
 /* 800px and up */
 @media all and (min-width: 800px) {
     .main    { flex: 1 0px; margin-right: 10px; }
-    .wrapper { flex-flow: row wrap }
+    .wrapper { flex-flow: row nowrap }
 }
