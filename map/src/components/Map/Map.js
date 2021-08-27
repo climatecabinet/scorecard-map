@@ -120,22 +120,9 @@ const Map = () => {
             minZoom: 2
         })
 
-        // if phone view, set zoom to 3.5 and disable scroll
+        // if phone view, set zoom to 3.5
         if (window.matchMedia( "(min-width: 550px)" ).matches) {
             map.setZoom(3.5)
-            map.dragPan.disable();
-            map.scrollZoom.disable();
-            map.on('touchstart', function(e) {
-                var oe = e.originalEvent;
-                if (oe && 'touches' in oe) {
-                    if (oe.touches.length >= 2) {
-                        oe.stopImmediatePropagation();
-                        map.dragPan.enable();
-                    } else {
-                        map.dragPan.disable();
-                    }
-                }
-            });
         } else {
             map.setZoom(2.5)
         }
@@ -270,6 +257,20 @@ const Map = () => {
 
             })
 
+        });
+
+        map.on('touchstart', function(e) {
+            if (window.matchMedia( "(min-width: 550px)" ).matches) {
+                var oe = e.originalEvent;
+                if (oe && 'touches' in oe) {
+                    if (oe.touches.length >= 2) {
+                        oe.stopImmediatePropagation();
+                        map.dragPan.enable();
+                    } else {
+                        map.dragPan.disable();
+                    }
+                }
+            }
         });
 
         map.on('idle', function() {
