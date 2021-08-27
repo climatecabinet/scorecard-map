@@ -120,9 +120,23 @@ const Map = () => {
             minZoom: 2
         })
 
-        // if phone view, set zoom to 3.5
+        // if phone view, set zoom to 3.5 and disable scroll
         if (window.matchMedia( "(min-width: 550px)" ).matches) {
             map.setZoom(3.5)
+            map.dragPan.disable();
+            map.scrollZoom.disable();
+            map.touchPitch.disable()
+            map.on('touchstart', function(e) {
+                var oe = e.originalEvent;
+                if (oe && 'touches' in oe) {
+                    if (oe.touches.length > 1) {
+                        oe.stopImmediatePropagation();
+                        map.dragPan.enable();
+                    } else {
+                        map.dragPan.disable();
+                    }
+                }
+            });
         } else {
             map.setZoom(2.5)
         }
@@ -312,6 +326,28 @@ const Map = () => {
 
             // reset the navigation options, and hide components, when the reset button is clicked
             document.getElementById('reset').addEventListener('click', function () {
+
+                // if mobile view, set zoom and disable scroll
+                if (window.matchMedia( "(min-width: 550px)" ).matches) {
+                    map.setZoom(3.5)
+                    map.dragPan.disable();
+                    map.scrollZoom.disable();
+                    map.touchPitch.disable()
+                    map.on('touchstart', function(e) {
+                        var oe = e.originalEvent;
+                        if (oe && 'touches' in oe) {
+                            if (oe.touches.length > 1) {
+                                oe.stopImmediatePropagation();
+                                map.dragPan.enable();
+                            } else {
+                                map.dragPan.disable();
+                            }
+                        }
+                    });
+                } else {
+                    map.setZoom(2.5)
+                }
+                
                 document.getElementById('state-select').disabled = false
                 document.getElementById('chamber-select').disabled = true
                 document.getElementById('district-select').disabled = true
