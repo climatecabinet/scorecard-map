@@ -272,6 +272,20 @@ const Map = () => {
 
         });
 
+        map.on('touchstart', function(e) {
+            if (window.matchMedia( "(min-width: 550px)" ).matches) {
+                var oe = e.originalEvent;
+                if (oe && 'touches' in oe) {
+                    if (oe.touches.length >= 2) {
+                        oe.stopImmediatePropagation();
+                        map.dragPan.enable();
+                    } else {
+                        map.dragPan.disable();
+                    }
+                }
+            }
+        });
+
         map.on('idle', function() {
 
             let selectedState = document.getElementById('state-select').value
