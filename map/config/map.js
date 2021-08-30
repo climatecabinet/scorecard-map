@@ -11,39 +11,39 @@ export const config = {
 
 // sources for the map layers
 export const sources = {
-    house: {  
-        type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/allhouse1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+    house: {
+        type: 'vector', // last refreshed 8/30/2021
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/houseccscore1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     senate: {
-        type: 'vector',
-        tiles: ['https://vectortileservices3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/allsenate1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'vector', // last refreshed 8/30/2021
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/senateccscore1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
-    state: {
-        type: 'geojson',
-        data: 'https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/all_states_reprojected/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*',
-    },
+    // state: {
+    //     type: 'geojson',
+    //     data: 'https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/all_states_reprojected/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*',
+    // },
 }
 
 export const layers = [
-	{
-        id: "state-fill",
-        source: 'state',
-		// 'source-layer': 'reprojected_us_0', 
-        type: 'fill',
-        paint: {
-			'fill-color': '#bb6c2f',
-			'fill-outline-color': 'white'
-        },
-        layout: {
-          visibility: 'none',
-        },
-	},
+	// {
+    //     id: "state-fill",
+    //     source: 'state',
+	// 	// 'source-layer': 'reprojected_us_0', 
+    //     type: 'fill',
+    //     paint: {
+	// 		'fill-color': '#bb6c2f',
+	// 		'fill-outline-color': 'white'
+    //     },
+    //     layout: {
+    //       visibility: 'none',
+    //     },
+	// },
 
     {
       id: "house-fill",
       source: 'house',
-	  'source-layer': 'allhouse_0', 
+	  'source-layer': 'houseccscore_0',
       type: 'fill',
       paint: {
         'fill-color': [
@@ -59,11 +59,9 @@ export const layers = [
 			76,
 			'#5AB4AC', // 76 to 99
 			100,
-			'#01665E', // 100 to 998
-			999,
-			'#808080' // 999 and greater
-			// equal to 100
-			// equal to 999
+			'#01665E', // 100 to 443
+			444,
+			'#808080' // 444 (vacant seat) and 999 (score unavailable)
         ],
         'fill-outline-color': 'white',
       },
@@ -74,7 +72,7 @@ export const layers = [
     {
         id: "senate-fill",
         source: 'senate',
-		'source-layer': 'allsenate_0', 
+		'source-layer': 'senateccscore_0',
         type: 'fill',
         paint: { 
             'fill-color': [
