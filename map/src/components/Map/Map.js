@@ -112,7 +112,12 @@ const Map = () => {
 
     // set the initial instructions for state view
     const [instructions, setInstructions] = useState('Please Select A State');
-    
+
+    const [canSelectState, setCanSelectState] = useState(true);
+    const [canSelectChamber, setCanSelectChamber] = useState(false);
+    const [canSelectDistrict, setCanSelectDistrict] = useState(false);
+
+
     // initialize map when component mounts
     useEffect(() => {
         mapboxgl.accessToken = siteMetadata.mapboxToken
@@ -151,19 +156,6 @@ const Map = () => {
                 map.addLayer(layer)
             })
 
-            // create a list of states using their abbreviations
-            // and sort in alphabetical order
-            let states = Object.keys(state_bounds)
-            states.sort();
-
-            // update the state element with state options
-            const selectElement = document.getElementById('state-select')
-            for (let i = 0; i < states.length; i++) {
-                let currentState = states[i];
-                let newOption = new Option(initialsToState[currentState], currentState);
-                selectElement.add(newOption, undefined);
-            }
-
             // when a state is selected, zoom to it via bounds
             document.getElementById('state-select').addEventListener('change', function () {
                 let selectedState = document.getElementById('state-select').value
@@ -182,20 +174,10 @@ const Map = () => {
                 // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
-                // make chamber and district available
-                document.getElementById('chamber-select').disabled = false
-                document.getElementById('district-select').disabled = false
+
+                setCanSelectChamber(true);
+                setCanSelectDistrict(true);
             })
-
-            // update the chamber element with the chamber options
-            let chamberOptions = Object.keys(chambers)
-
-            const selectChamber = document.getElementById('chamber-select')
-            for (let i = 0; i < chamberOptions.length; i++) {
-                let currentChamber = chamberOptions[i]
-                let newOption = new Option(chambers[currentChamber], currentChamber)
-                selectChamber.add(newOption, undefined)
-            }
 
             // when a chamber is selected, make it visible
             document.getElementById('chamber-select').addEventListener('change', function () {
@@ -252,21 +234,21 @@ const Map = () => {
                 document.getElementById('district-select').value = ""
 
                 // zoom out to the state view
-                map.fitBounds(state_bounds[selectedState])
+                let bounds = state_bounds[selectedState]
+                map.fitBounds(bounds)
 
                 // reset ccid 
                 setSelectedCcid(null)
 
                 document.getElementById('state-select').style.color = "#FFFFFF"
                 document.getElementById('state-select').style.backgroundColor = "#C36C27"
-                document.getElementById('state-select').disabled = true
+                setCanSelectState(false);
 
             })
 
         });
 
         map.on('idle', function() {
-            // this is a little buggy
 
             let selectedState = document.getElementById('state-select').value
             let selectedChamber = document.getElementById('chamber-select').value
@@ -316,12 +298,13 @@ const Map = () => {
                     })
                 }
 
-            } else {
-                console.log('no chamber selected yet')
             }
 
             // reset the navigation options, and hide components, when the reset button is clicked
             document.getElementById('reset').addEventListener('click', function () {
+                setCanSelectState(true);
+                setCanSelectDistrict(false);
+                setCanSelectChamber(false);
 
                 // if mobile view, set zoom
                 if (window.matchMedia( "(min-width: 500px)" ).matches) {
@@ -330,9 +313,6 @@ const Map = () => {
                     map.setZoom(2.5);
                 }
                 
-                document.getElementById('state-select').disabled = false
-                document.getElementById('chamber-select').disabled = true
-                document.getElementById('district-select').disabled = true
 
                 setInstructions("Please Select A State");
 
@@ -377,8 +357,8 @@ const Map = () => {
                 layers: ['house-fill', 'senate-fill']
             })
 
-            // also on click, get the ccid for the clicked district
-            const ccidCode = features[0].properties.ccid
+            const { properties } = features[0]
+            const { ccid: ccidCode } = properties;
             
             // clear instructions
             setInstructions(null);
@@ -411,11 +391,25 @@ const Map = () => {
                         <div className="mapText">Interactive Score Map</div>
                         <div id="reset" className="resetText hidden">RESET</div>
                     </Header>
-                    <div className="selects-container">
-                        <SelectState id="state-select"><option value="" hidden>State</option></SelectState>
-                        <SelectChamber id="chamber-select"><option value="" hidden>Chamber</option></SelectChamber>
-                        <SelectDistrict id="district-select"><option value="" hidden>District</option></SelectDistrict>
-                    </div>
+                    <SelectState id="state-select" disabled={!canSelectState}>
+                        <option value="" hidden>State</option>
+                        {
+                            Object.keys(state_bounds).sort().map(stateAbbrLowercase => (
+                                <option key={stateAbbrLowercase} value={stateAbbrLowercase}>
+                                    {initialsToState[stateAbbrLowercase]}
+                                </option>
+                            ))
+                        }
+                    </SelectState>
+                    <SelectChamber id="chamber-select" disabled={!canSelectChamber}>
+                        <option value="" hidden>Chamber</option>
+                        {
+                            Object.keys(chambers).map(chamber => (
+                                <option key={chamber} value={chamber}>{chambers[chamber]}</option>
+                            ))
+                        }
+                    </SelectChamber>
+                    <SelectDistrict id="district-select" disabled={!canSelectDistrict}><option value="" hidden>District</option></SelectDistrict>
                 </div>
                 {/* map */}
                 <div className="mapContainer">
