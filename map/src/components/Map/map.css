@@ -69,6 +69,8 @@
 
 .aside {
     background: #F4F4F4;
+    height: 95vh;
+    overflow-y: scroll;
 }
 
 body {
