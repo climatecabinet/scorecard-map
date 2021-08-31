@@ -20,30 +20,21 @@ const Header = styled.div`
 
 // select elements
 const SelectState = styled.select`
-    height: 50px;
+    height: 40px;
     background: white;
     color: #C36C27;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 5px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
-        width: 100%;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
     &:disabled {
         opacity: 0.50
@@ -51,64 +42,40 @@ const SelectState = styled.select`
 `
 
 const SelectChamber = styled.select`
-    height: 50px;
+    height: 40px;
     background: white;
     color: #333;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 5px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-        margin-left: 12px;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-        margin-left: 10px;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-        margin-left: 0px;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
-        width: 100%;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
 `
 
 const SelectDistrict = styled.select`
-    height: 50px;
+    height: 40px;
     background: white;
     color: #333;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 5px 0px;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 19.35vw;
-        margin-left: 12px;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 31.25vw;
-        margin-left: 10px;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 97.75vw;
-        margin-left: 0px;
-    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-        padding: 0px 5px 0px 10px;
-        width: 100%;
+    }
+    @media only screen and (min-width: 600px) {
+        width: 32%;
     }
 `
 
@@ -140,7 +107,10 @@ const Map = () => {
     // regions Data
     const [, regionsIndex] = useData()
 
+    // set the initial ccid as null
     const [selectedCcid, setSelectedCcid] = useState(null);
+
+    // set the initial instructions for state view
     const [instructions, setInstructions] = useState('Please Select A State');
 
     const [canSelectState, setCanSelectState] = useState(true);
@@ -156,25 +126,24 @@ const Map = () => {
             container: mapContainer.current,
             style: `mapbox://styles/shelby-green/ckpe45kll0we417n7cgs8cxne`,
             center: [-1.14, -0.98],
-            minZoom: 2
+            minZoom: 2,
+            interactive: false
         })
 
         // if phone view, set zoom to 3.5
-        if (window.matchMedia( "(min-width: 550px)" ).matches) {
-            map.setZoom(3.5)
+        if (window.matchMedia( "(min-width: 500px)" ).matches) {
+            map.setZoom(3.5);
         } else {
-            map.setZoom(2.5)
+            map.setZoom(2.5);
         }
-
-        // disable scroll zoom
-        map.scrollZoom.disable();
 
         mapRef.current = map
         window.map = map
 
+        // when the map loads
         map.on('load', () => {
 
-            // make a pointer cursor
+            // make the cursor a pointer
             map.getCanvas().style.cursor = 'default';
 
             // add every source to the map
@@ -254,7 +223,6 @@ const Map = () => {
                 setInstructions("Please Select A District");
 
                 // change all layers visibility to none
-                map.setLayoutProperty('state-fill', 'visibility', 'none')
                 map.setLayoutProperty('senate-fill', 'visibility', 'none')
                 map.setLayoutProperty('house-fill', 'visibility', 'none')
 
@@ -265,8 +233,12 @@ const Map = () => {
                 // reset the district options
                 document.getElementById('district-select').value = ""
 
+                // zoom out to the state view
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
+
+                // reset ccid 
+                setSelectedCcid(null)
 
                 document.getElementById('state-select').style.color = "#FFFFFF"
                 document.getElementById('state-select').style.backgroundColor = "#C36C27"
@@ -296,8 +268,10 @@ const Map = () => {
                     // zoom to the district
                     map.fitBounds(bounds)
                     // compute ccid for selected district
+                    // this won't work for every use case -- mainly the multimember districts
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
-                    // populate the legislator details
+                    console.log(ccidCode)
+                    // set the ccid
                     setSelectedCcid(ccidCode);
                     })
                 } else if (selectedState && selectedChamber === "senate") {
@@ -319,6 +293,7 @@ const Map = () => {
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
+                        // set the ccid
                         setSelectedCcid(ccidCode);
                     })
                 }
@@ -330,6 +305,14 @@ const Map = () => {
                 setCanSelectState(true);
                 setCanSelectDistrict(false);
                 setCanSelectChamber(false);
+
+                // if mobile view, set zoom
+                if (window.matchMedia( "(min-width: 500px)" ).matches) {
+                    map.setZoom(3.5);
+                } else {
+                    map.setZoom(2.5);
+                }
+                
 
                 setInstructions("Please Select A State");
 
@@ -350,11 +333,11 @@ const Map = () => {
 
 
                 // change back to senate layer
-                map.setLayoutProperty('state-fill', 'visibility', 'none')
                 map.setLayoutProperty('senate-fill', 'visibility', 'visible')
                 map.setLayoutProperty('house-fill', 'visibility', 'none')
+
                 // zoom out to center
-                map.flyTo({center: [-1.14, -0.98], zoom: 3.5})
+                map.flyTo({center: [-1.14, -0.98]})
 
                 // Hide the reset button
                 document.getElementById('reset').classList.add('hidden');
@@ -376,10 +359,11 @@ const Map = () => {
 
             const { properties } = features[0]
             const { ccid: ccidCode } = properties;
+            
+            // clear instructions
+            setInstructions(null);
 
-            // also on click, get the ccid and the regions.incumbent.rep id
-            // for the point that represents the clicked district
-
+            // set the ccid
             setSelectedCcid(ccidCode);
 
         });
@@ -388,6 +372,13 @@ const Map = () => {
 
     const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
     const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
+    const incumbentsList = [];
+    if (selectedCcid) {
+        for (let i = 0; i < regionsIndex.getIn([selectedCcid, 'incumbents']).size; i++) {
+            incumbentsList.push(regionsIndex.getIn([selectedCcid, 'incumbents', i, 'rep']))
+        }
+    }
+    const isMMD = incumbentsList.length > 1;
 
     return (
         // container for the entire app
@@ -443,6 +434,8 @@ const Map = () => {
             {/* sidebar */}
             <LegislatorSidebar
               key={incumbentId}
+              representativeList={incumbentsList}
+              isMMD={isMMD}
               representativeId={incumbentId}
               regionName={regionName}
               instructions={instructions}
