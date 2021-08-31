@@ -7,9 +7,13 @@ import { initialsToState } from '../../../config/map';
 import Loading from './Loading';
 import PropTypes from 'prop-types';
 
+// if there are no votes, use this text
 const NO_VOTES_FALLBACK_TEXT = 'No featured votes available for this legislator.';
+
+// slug prefix
 const LEGISLATOR_PAGE_URL_PREFIX = 'https://www.climatecabinetaction.org/legislator-pages/';
 
+// graphql query for legislator details
 const GET_REP_DETAILS = gql`
   query representativeById($representativeId: ObjectId!) {
     representative(query: { _id: $representativeId }) {
@@ -42,6 +46,7 @@ const VotesBox = styled(Box)`
   margin-right: 15px;
 `;
 
+// vote tab component
 const VoteTab = ({ tabNumber, isActive, onClick }) => {
   const className = isActive ? 'voteTab' : 'voteTab voteTabInactive';
   return (
@@ -51,12 +56,15 @@ const VoteTab = ({ tabNumber, isActive, onClick }) => {
   );
 };
 
+// legislator details component
 const LegislatorDetails = ({ representativeId, regionName }) => {
+
   const [selectedVoteNumber, setSelectedVoteNumber] = useState(1);
   const { loading, error, data } = useQuery(GET_REP_DETAILS, {
     variables: { representativeId },
   });
 
+  // if the component is loading, return a loading indicator
   if (loading) {
     return (
       <Flex flexDirection="column" alignItems="center" mt="15px">
@@ -73,9 +81,9 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
     <div>
       <br />
       <Name id="name" style={{ marginLeft: '15px' }}>{`${rep.role} ${rep.full_name}`}</Name>
-      <div id="rep" className="repText">{`${
-        initialsToState[rep.state_abbr.toLowerCase()]
-      } ${regionName}`}</div>
+          <div id="rep" className="repText">{`${
+            initialsToState[rep.state_abbr.toLowerCase()]
+          } ${regionName}`}</div>
       <Flex>
         <div className="scoreBox-climate">
           <div className="scoreTitle">Climate Score</div>

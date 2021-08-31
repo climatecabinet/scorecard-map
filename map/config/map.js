@@ -18,28 +18,10 @@ export const sources = {
     senate: {
         type: 'vector', // last refreshed 8/30/2021
         tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/senateccscore1/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
-    },
-    // state: {
-    //     type: 'geojson',
-    //     data: 'https://services3.arcgis.com/gwUaR5GIEABgI5M7/arcgis/rest/services/all_states_reprojected/FeatureServer/0/query?f=pgeojson&where=1=1&outFields=*',
-    // },
+    }
 }
 
 export const layers = [
-	// {
-    //     id: "state-fill",
-    //     source: 'state',
-	// 	// 'source-layer': 'reprojected_us_0', 
-    //     type: 'fill',
-    //     paint: {
-	// 		'fill-color': '#bb6c2f',
-	// 		'fill-outline-color': 'white'
-    //     },
-    //     layout: {
-    //       visibility: 'none',
-    //     },
-	// },
-
     {
       id: "house-fill",
       source: 'house',
