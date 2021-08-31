@@ -236,6 +236,8 @@ const Map = () => {
                 // zoom out to the state view
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
+                map.setFilter('senate-highlight', ['==', 'ccid', '']);
+                map.setFilter('house-highlight', ['==', 'ccid', '']);
 
                 // reset ccid 
                 setSelectedCcid(null)
@@ -265,14 +267,17 @@ const Map = () => {
                     document.getElementById('district-select').style.color = "#C36C27"
                     document.getElementById('district-select').style.borderColor = "#C36C27"
 
-                    // zoom to the district
-                    map.fitBounds(bounds)
                     // compute ccid for selected district
-                    // this won't work for every use case -- mainly the multimember districts
                     const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
-                    console.log(ccidCode)
+
+                    // highlight the layer
+                    map.setFilter('house-highlight', ['==', 'ccid', ccidCode]);
+
                     // set the ccid
                     setSelectedCcid(ccidCode);
+
+                    // zoom to the district
+                    map.fitBounds(bounds)
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
@@ -288,13 +293,20 @@ const Map = () => {
 
                         let selectedDistrict = document.getElementById('district-select').value
                         let bounds = senate_bounds[selectedState][selectedDistrict]
-                        // zoom to the district
-                        map.fitBounds(bounds)
+
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
+                        // highlight the layer
+                        map.setFilter('senate-highlight', ['==', 'ccid', ccidCode]);
+
                         // set the ccid
                         setSelectedCcid(ccidCode);
+
+                        // zoom to the district
+                        map.fitBounds(bounds)
+                        
+
                     })
                 }
 
@@ -339,6 +351,10 @@ const Map = () => {
                 // zoom out to center
                 map.flyTo({center: [-1.14, -0.98]})
 
+                // remove highlight
+                map.setFilter('senate-highlight', ['==', 'ccid', ''])
+                map.setFilter('senate-highlight', ['==', 'ccid', ''])
+
                 // Hide the reset button
                 document.getElementById('reset').classList.add('hidden');
 
@@ -362,6 +378,10 @@ const Map = () => {
             
             // clear instructions
             setInstructions(null);
+
+            // highlight the layer
+            map.setFilter('house-highlight', ['==', 'ccid', ccidCode])
+            map.setFilter('senate-highlight', ['==', 'ccid', ccidCode])
 
             // set the ccid
             setSelectedCcid(ccidCode);

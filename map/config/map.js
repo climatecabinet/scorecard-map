@@ -80,6 +80,28 @@ export const layers = [
         layout: {
           visibility: 'visible',
         },
+	},
+	{
+		id: "house-highlight",
+		source: "house",
+		'source-layer': 'houseccscore_0',
+		type: "line",
+		filter: ['in', 'ccid', ''],
+		paint: {
+			'line-color': '#FFF',
+			'line-width': 3
+		}
+	},
+	{
+		id: "senate-highlight",
+		source: "senate",
+		'source-layer': 'senateccscore_0',
+		type: "line",
+		filter: ['in', 'ccid', ''],
+		paint: {
+			'line-color': '#FFF',
+			'line-width': 3
+		}
 	}
 ]
 
