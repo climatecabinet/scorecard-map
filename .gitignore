@@ -18,9 +18,7 @@ data/cc_scorecard_06082021_yearstring.csv
 data/cc_scorecard_06082021_yearstring.csv
 
 
-*.DS_Store
-*data/.DS_Store
-*data/geospatial/.DS_Store
+**/.DS_Store
 
 map/src/components/Map/screenshots.css
 map/src/components/Map/Screenshots.js
