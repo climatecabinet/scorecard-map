@@ -87,7 +87,9 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
       <Flex>
         <div className="scoreBox-climate">
           <div className="scoreTitle">Climate Score</div>
-          <div className="scoreText" id="score">{`${Math.round(rep.cc_score)}`}</div>
+          <div className="scoreText" id="score">{`${
+            rep.cc_score === null ? '-' : Math.round(rep.cc_score)}`
+          }</div>
         </div>
         <div className="scoreBox-party">
           <div className="partyTitle">Party</div>
