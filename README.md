@@ -17,7 +17,7 @@ To start the local development server, run
 npm run develop
 ```
 
-## How to refresh map files?
+## How to refresh the map files?
 1. Run scripts in the `script` folder in this order: (1) fetch, (2) process, (3) clean, (4) fetch
 2. Create a new folder in data/geospatial. Name it `arcgis`
 3. In the `arcgis` folder, create two additional folders: `house` and `senate`
