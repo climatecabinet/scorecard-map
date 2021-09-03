@@ -27,14 +27,21 @@ const SelectState = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
-    margin: 0px 0px 5px 0px;
+    margin: 0px 10px 5px 0px;
     padding: 10px;
+    @media only screen and (min-width: 1060px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 1059px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 895px) {
+        display: block;
+        width: 100%;
+    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-    }
-    @media only screen and (min-width: 600px) {
-        width: 32%;
     }
     &:disabled {
         opacity: 0.50
@@ -49,14 +56,21 @@ const SelectChamber = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin: 0px 0px 5px 0px;
+    margin: 0px 10px 5px 0px;
     padding: 10px;
+    @media only screen and (min-width: 1060px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 1059px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 895px) {
+        display: block;
+        width: 100%;
+    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-    }
-    @media only screen and (min-width: 600px) {
-        width: 32%;
     }
 `
 
@@ -70,12 +84,19 @@ const SelectDistrict = styled.select`
     border: 1px solid #333;
     margin: 0px 0px 5px 0px;
     padding: 10px;
+    @media only screen and (min-width: 1060px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 1059px) {
+        width: 32%;
+    }
+    @media only screen and (max-width: 895px) {
+        display: block;
+        width: 100%;
+    }
     @media only screen and (max-width: 500px) {
         height: 40px;
         font-size: 16px;
-    }
-    @media only screen and (min-width: 600px) {
-        width: 32%;
     }
 `
 
@@ -110,9 +131,14 @@ const Map = () => {
     // set the initial ccid as null
     const [selectedCcid, setSelectedCcid] = useState(null);
 
+    // set the initial state as null
+    const [selectedState, setSelectedState] = useState(null);
+
     // set the initial instructions for state view
     const [instructions, setInstructions] = useState('Please Select A State');
 
+    // set accessibility of navigation options
+    // on map load, only state is available
     const [canSelectState, setCanSelectState] = useState(true);
     const [canSelectChamber, setCanSelectChamber] = useState(false);
     const [canSelectDistrict, setCanSelectDistrict] = useState(false);
@@ -161,20 +187,23 @@ const Map = () => {
                 let selectedState = document.getElementById('state-select').value
 
                 // Update the reset button
-                // change reset color to black
+                // change reset color to black and make it visible
                 const reset = document.getElementById('reset');
                 reset.style.color = "#000000"
                 reset.classList.remove('hidden');
 
                 // change instructions text
                 setInstructions("Please Select A Chamber");
+
                 // reset the chamber and district options
                 document.getElementById('chamber-select').value = ""
                 document.getElementById('district-select').value = ""
+
                 // zoom to the bounds
                 let bounds = state_bounds[selectedState]
                 map.fitBounds(bounds)
 
+                // make chamber and district available for selection
                 setCanSelectChamber(true);
                 setCanSelectDistrict(true);
             })
@@ -268,16 +297,26 @@ const Map = () => {
                     document.getElementById('district-select').style.borderColor = "#C36C27"
 
                     // compute ccid for selected district
-                    const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
+                    // ccids for MD and MN are abnormal
+                    function getCcid(state, district, chamber) {
+                        if (district[district.length-1] == 'A' || 'B' || 'C') {
+                            return statesToCodes[state.toUpperCase()] + zeroPad(district, 3) + chamberToLetter[chamber]
+                        } else {
+                            return statesToCodes[state.toUpperCase()] + zeroPad(district, 3) + chamberToLetter[chamber]
+                        }
+                    }
+
+                    const ccidCode = getCcid(selectedState, selectedDistrict, selectedChamber)
+                    console.log(ccidCode)
+
+                    // zoom to the district
+                    map.fitBounds(bounds);
 
                     // highlight the layer
                     map.setFilter('house-highlight', ['==', 'ccid', ccidCode]);
 
                     // set the ccid
                     setSelectedCcid(ccidCode);
-
-                    // zoom to the district
-                    map.fitBounds(bounds)
                     })
                 } else if (selectedState && selectedChamber === "senate") {
                     let selectedState = document.getElementById('state-select').value
@@ -297,15 +336,14 @@ const Map = () => {
                         // compute ccid for selected district
                         const ccidCode = statesToCodes[selectedState.toUpperCase()] + zeroPad(selectedDistrict, 3) + chamberToLetter[selectedChamber]
 
+                        // zoom to the district
+                        map.fitBounds(bounds)
+                        
                         // highlight the layer
                         map.setFilter('senate-highlight', ['==', 'ccid', ccidCode]);
 
                         // set the ccid
                         setSelectedCcid(ccidCode);
-
-                        // zoom to the district
-                        map.fitBounds(bounds)
-                        
 
                     })
                 }
@@ -353,7 +391,7 @@ const Map = () => {
 
                 // remove highlight
                 map.setFilter('senate-highlight', ['==', 'ccid', ''])
-                map.setFilter('senate-highlight', ['==', 'ccid', ''])
+                map.setFilter('house-highlight', ['==', 'ccid', ''])
 
                 // Hide the reset button
                 document.getElementById('reset').classList.add('hidden');
@@ -456,7 +494,6 @@ const Map = () => {
               key={incumbentId}
               representativeList={incumbentsList}
               isMMD={isMMD}
-              representativeId={incumbentId}
               regionName={regionName}
               instructions={instructions}
             />

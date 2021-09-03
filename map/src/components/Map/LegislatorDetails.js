@@ -73,6 +73,15 @@ const LegislatorDetails = ({ representativeId, regionName }) => {
     );
   }
 
+  // error message
+  if (error) {
+    return (
+      <div>There was an error loading the data. Please refresh. If the problem still persists,
+        please submit a comment in the form below. 
+      </div>
+    )
+  }
+
   const rep = data.representative;
   const { votes } = rep.ccscorecard;
   const hasVotes = votes.length > 0;

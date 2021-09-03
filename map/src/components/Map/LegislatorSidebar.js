@@ -14,7 +14,7 @@ const LegislatorSidebar = ({ representativeList, isMMD, regionName, instructions
         </div>
       )}
       {/* representatives - rep 1 */}
-      {representativeList && regionName && (
+      {representativeList[0] && regionName && (
         <LegislatorDetails representativeId={representativeList[0]} regionName={regionName} />
       )}
       {/* representatives - rep 2 */}
@@ -39,7 +39,6 @@ const LegislatorSidebar = ({ representativeList, isMMD, regionName, instructions
 
 LegislatorSidebar.propTypes = {
   representativeList: PropTypes.array,
-  representativeId: PropTypes.string,
   regionName: PropTypes.string,
   instructions: PropTypes.string,
 };
