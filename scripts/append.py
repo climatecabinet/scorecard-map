@@ -13,8 +13,6 @@ process:
 script 4/4
 """
 
-# TODO: WA representatives.district_ccid not matching with regions.ccid
-
 # import libraries
 import pymongo
 import urllib
@@ -63,47 +61,6 @@ if __name__ == "__main__":
     # filtered representative dataframe
     rep_df = pd.concat([df1.drop(['office'], axis=1), df1['office'].apply(pd.Series)], axis=1)[['full_name', 'cc_score', 'district_ccid', 'district', 'seat_number', 'party', 'is_current']]
 
-    # manual data edits from 8/27/21 QA/QC -- change 'is_current' from false to true
-
-    # change 'is_current' from false to true for MN House District 50B
-    rep_df.loc[3917, 'is_current'] = True
-
-    # change 'is_current' from false to true for MN House District 32A
-    rep_df.loc[4598, 'is_current'] = True
-
-    # change 'is_current' from false to true for MO House District 34
-    rep_df.loc[4145, 'is_current'] = True
-
-    # change 'is_current' from false to true for MO House District 34
-    rep_df.loc[4536, 'is_current'] = True
-
-    # set NC House District 44 is_current from false to true
-    rep_df.loc[6270, 'is_current'] = True
-
-    # set WV House District 30 is_current from false to true
-    rep_df.loc[9834, 'is_current'] = True
-
-    # set WV House District 26 is_current from false to true
-    rep_df.loc[9838, 'is_current'] = True
-
-    # set WV House District 39 is_current from false to true
-    rep_df.loc[9835, 'is_current'] = True
-
-    # set WV House District 45 is_current from false to true
-    rep_df.loc[9843, 'is_current'] = True
-
-    # set WV House District 65 is_current from false to true
-    rep_df.loc[9841, 'is_current'] = True
-
-    # set WI House District 60 is_current from false to true
-    rep_df.loc[10169, 'is_current'] = True
-
-    # set MI House District 8 is_current from false to true
-    rep_df.loc[3642, 'is_current'] = True
-
-    # set MI House District 28 is_current from false to true
-    rep_df.loc[3634, 'is_current'] = True
-
     # get average score (for current legislators)
     representative = rep_df.query("is_current == True").groupby('district_ccid').mean().reset_index(drop=False)[['district_ccid', 'cc_score']]
 
@@ -121,11 +78,6 @@ if __name__ == "__main__":
     # set PA House District 113 cc score as SEAT VACANT (444)
     # special election is nov 2021 
     ccscorecard_legislator.loc[len(ccscorecard_legislator.index)] = ['PA', '42113', '42113L', 'State House District 113', 444] 
-
-    # set WI House District 37 legislator cc score as SEAT VACANT (444)
-    # seat is not actually vacant. the incumbent is william penterman. in office july 26, 2021
-    # setting as vacant for now, until changes are reflected in MongoDB
-    ccscorecard_legislator.loc[len(ccscorecard_legislator.index)] = ['WI', '55037', '55037L', 'Assembly District 37', 444] 
 
     # tidy dataframe
     ccscorecard_legislator = ccscorecard_legislator.sort_values(by=['geoid', 'cc_score'], ascending=True)
