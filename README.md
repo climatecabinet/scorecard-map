@@ -18,7 +18,7 @@ npm run develop
 ```
 
 ## How to refresh the map files?
-1. Run scripts in the `script` folder in this order: (1) fetch, (2) process, (3) clean, (4) fetch
+1. Run scripts in the `script` folder in this order: (1) fetch, (2) process, (3) clean, (4) append
 2. Create a new folder in data/geospatial. Name it `arcgis`
 3. In the `arcgis` folder, create two additional folders: `house` and `senate`
 4. In the `house` folder, paste the recently created priority house district files (in `appended-state-leg/house` folder; states like MN, MD, NJ, etc.) and nonpriority state files (in `state` folder; states like AL, PR, HI, etc.)
