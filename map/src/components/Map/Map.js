@@ -10,13 +10,6 @@ import './map.css'
 import LegislatorSidebar from './LegislatorSidebar'
 
 
-const Header = styled.div`
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-end;
-    align-items: baseline;
-    margin-bottom: 1vh;
-`;
 
 // select elements
 const SelectState = styled.select`
@@ -54,7 +47,6 @@ const SelectChamber = styled.select`
     margin: 5px 0px 5px 0px;
     width: 100%;
     padding: 10px;
-    flex: 1 0 100%;
     @media only screen and (min-width: 600px) {
         flex: 1 1 32%;
         margin: 5px;
@@ -76,7 +68,6 @@ const SelectDistrict = styled.select`
     margin: 5px 0px 5px 0px;
     width: 100%;
     padding: 10px;
-    flex: 1 0 100%;
     @media only screen and (min-width: 600px) {
         flex: 1 1 32%;
         margin: 5px;
