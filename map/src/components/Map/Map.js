@@ -285,7 +285,6 @@ const Map = () => {
                     }
 
                     const ccidCode = getCcid(selectedState, selectedDistrict, selectedChamber)
-                    console.log(ccidCode)
 
                     // zoom to the district
                     map.fitBounds(bounds);
@@ -423,28 +422,26 @@ const Map = () => {
             <div className="main">
                 {/* navigation bar */}
                 <div className="nav">
-                    <div className="selects-container">
-                        <SelectState id="state-select" disabled={!canSelectState}>
-                            <option value="" hidden>State</option>
-                            {
-                                Object.keys(state_bounds).sort().map(stateAbbrLowercase => (
-                                    <option key={stateAbbrLowercase} value={stateAbbrLowercase}>
-                                        {initialsToState[stateAbbrLowercase]}
-                                    </option>
-                                ))
-                            }
-                        </SelectState>
-                        <SelectChamber id="chamber-select" disabled={!canSelectChamber}>
-                            <option value="" hidden>Chamber</option>
-                            {
-                                Object.keys(chambers).map(chamber => (
-                                    <option key={chamber} value={chamber}>{chambers[chamber]}</option>
-                                ))
-                            }
-                        </SelectChamber>
-                        <SelectDistrict id="district-select" disabled={!canSelectDistrict}><option value="" hidden>District</option></SelectDistrict>
-                        <div id="reset" className="resetText hidden">RESET</div>
-                    </div>
+                    <SelectState id="state-select" disabled={!canSelectState}>
+                        <option value="" hidden>State</option>
+                        {
+                            Object.keys(state_bounds).sort().map(stateAbbrLowercase => (
+                                <option key={stateAbbrLowercase} value={stateAbbrLowercase}>
+                                    {initialsToState[stateAbbrLowercase]}
+                                </option>
+                            ))
+                        }
+                    </SelectState>
+                    <SelectChamber id="chamber-select" disabled={!canSelectChamber}>
+                        <option value="" hidden>Chamber</option>
+                        {
+                            Object.keys(chambers).map(chamber => (
+                                <option key={chamber} value={chamber}>{chambers[chamber]}</option>
+                            ))
+                        }
+                    </SelectChamber>
+                    <SelectDistrict id="district-select" disabled={!canSelectDistrict}><option value="" hidden>District</option></SelectDistrict>
+                    <div id="reset" className="resetText hidden">RESET</div>
                 </div>
                 {/* map */}
                 <div className="mapContainer">

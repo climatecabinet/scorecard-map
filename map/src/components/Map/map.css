@@ -11,7 +11,7 @@
     width: 100%;
 }
 
-.selects-container {
+.nav {
     display: flex;
     flex-flow: column nowrap;
     margin-bottom: 20px;
@@ -271,7 +271,7 @@ body {
     .aside { flex: 1; }
     .voteTitleAndTabs { flex-flow: row nowrap; justify-content: space-between; }
     .voteTabs { margin-left: 10px; }
-    .selects-container { flex-flow: row nowrap; align-items: baseline; }
+    .nav { flex-flow: row nowrap; align-items: baseline; }
 }
 
 /* 800px and up */
