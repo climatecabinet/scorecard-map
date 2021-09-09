@@ -16,12 +16,7 @@
     flex-flow: column nowrap;
     margin-bottom: 20px;
     justify-content: space-evenly;
-}
-
-.mapText {
-    font-size: 28px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+    align-items: flex-end;
 }
 
 .hidden {
@@ -32,6 +27,7 @@
     font-size: 18px;
     color: #333;
     text-decoration: underline;
+    margin: 5px;
 }
 
 .resetText:hover {
@@ -227,7 +223,6 @@ body {
 /* 1059px and below */
 /* tablet view */
 @media only screen and (max-width: 1059px) {
-    .mapText { font-size: 28px; }
     .map { height: 450px; width: 95vw; }
     .wrapper { flex-flow: column nowrap }
     .scoreBox-climate, .scoreBox-party { height: 5vh; }
@@ -238,7 +233,6 @@ body {
 /* 859px and below */
 /* transition view */
 @media only screen and (max-width: 859px) {
-    .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox-climate, .scoreBox-party { height: 8vh; }
@@ -256,7 +250,6 @@ body {
 @media only screen and (max-width: 500px) {
     .wrapper { overflow-x: hidden }
     .map { height: 350px; width: 95vw; }
-    .mapText { font-size: 18px; }
     .resetText { padding-top: 0px; }
     .my-legend { bottom: 0%; left: 30%; }
     .scoreBox-climate { height: 13vh; margin: 0px 0px 0px 15px; }
@@ -278,7 +271,7 @@ body {
     .aside { flex: 1; }
     .voteTitleAndTabs { flex-flow: row nowrap; justify-content: space-between; }
     .voteTabs { margin-left: 10px; }
-    .selects-container { flex-flow: row nowrap; }
+    .selects-container { flex-flow: row nowrap; align-items: baseline; }
 }
 
 /* 800px and up */

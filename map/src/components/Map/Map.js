@@ -13,7 +13,7 @@ import LegislatorSidebar from './LegislatorSidebar'
 const Header = styled.div`
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: baseline;
     margin-bottom: 1vh;
 `;
@@ -27,17 +27,12 @@ const SelectState = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #C36C27;
-    margin: 0px 10px 5px 0px;
+    margin: 5px 0px 5px 0px;
+    width: 100%;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 100%;
+    @media only screen and (min-width: 600px) {
+        flex: 1 1 32%;
+        margin: 5px;
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
@@ -56,17 +51,13 @@ const SelectChamber = styled.select`
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin: 0px 10px 5px 0px;
+    margin: 5px 0px 5px 0px;
+    width: 100%;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 100%;
+    flex: 1 0 100%;
+    @media only screen and (min-width: 600px) {
+        flex: 1 1 32%;
+        margin: 5px;
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
@@ -82,17 +73,13 @@ const SelectDistrict = styled.select`
     font-size: 16px;
     font-family: 'Lato', sans-serif;
     border: 1px solid #333;
-    margin: 0px 0px 5px 0px;
+    margin: 5px 0px 5px 0px;
+    width: 100%;
     padding: 10px;
-    @media only screen and (min-width: 1060px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 1059px) {
-        width: 32%;
-    }
-    @media only screen and (max-width: 895px) {
-        display: block;
-        width: 100%;
+    flex: 1 0 100%;
+    @media only screen and (min-width: 600px) {
+        flex: 1 1 32%;
+        margin: 5px;
     }
     @media only screen and (max-width: 500px) {
         height: 40px;
@@ -268,7 +255,7 @@ const Map = () => {
                 map.setFilter('senate-highlight', ['==', 'ccid', '']);
                 map.setFilter('house-highlight', ['==', 'ccid', '']);
 
-                // reset ccid 
+                // reset ccid
                 setSelectedCcid(null)
 
                 document.getElementById('state-select').style.color = "#FFFFFF"
@@ -338,7 +325,7 @@ const Map = () => {
 
                         // zoom to the district
                         map.fitBounds(bounds)
-                        
+
                         // highlight the layer
                         map.setFilter('senate-highlight', ['==', 'ccid', ccidCode]);
 
@@ -362,7 +349,7 @@ const Map = () => {
                 } else {
                     map.setZoom(2.5);
                 }
-                
+
 
                 setInstructions("Please Select A State");
 
@@ -413,7 +400,7 @@ const Map = () => {
 
             const { properties } = features[0]
             const { ccid: ccidCode } = properties;
-            
+
             // clear instructions
             setInstructions(null);
 
@@ -445,29 +432,28 @@ const Map = () => {
             <div className="main">
                 {/* navigation bar */}
                 <div className="nav">
-                    <Header>
-                        <div className="mapText">Interactive Score Map</div>
+                    <div className="selects-container">
+                        <SelectState id="state-select" disabled={!canSelectState}>
+                            <option value="" hidden>State</option>
+                            {
+                                Object.keys(state_bounds).sort().map(stateAbbrLowercase => (
+                                    <option key={stateAbbrLowercase} value={stateAbbrLowercase}>
+                                        {initialsToState[stateAbbrLowercase]}
+                                    </option>
+                                ))
+                            }
+                        </SelectState>
+                        <SelectChamber id="chamber-select" disabled={!canSelectChamber}>
+                            <option value="" hidden>Chamber</option>
+                            {
+                                Object.keys(chambers).map(chamber => (
+                                    <option key={chamber} value={chamber}>{chambers[chamber]}</option>
+                                ))
+                            }
+                        </SelectChamber>
+                        <SelectDistrict id="district-select" disabled={!canSelectDistrict}><option value="" hidden>District</option></SelectDistrict>
                         <div id="reset" className="resetText hidden">RESET</div>
-                    </Header>
-                    <SelectState id="state-select" disabled={!canSelectState}>
-                        <option value="" hidden>State</option>
-                        {
-                            Object.keys(state_bounds).sort().map(stateAbbrLowercase => (
-                                <option key={stateAbbrLowercase} value={stateAbbrLowercase}>
-                                    {initialsToState[stateAbbrLowercase]}
-                                </option>
-                            ))
-                        }
-                    </SelectState>
-                    <SelectChamber id="chamber-select" disabled={!canSelectChamber}>
-                        <option value="" hidden>Chamber</option>
-                        {
-                            Object.keys(chambers).map(chamber => (
-                                <option key={chamber} value={chamber}>{chambers[chamber]}</option>
-                            ))
-                        }
-                    </SelectChamber>
-                    <SelectDistrict id="district-select" disabled={!canSelectDistrict}><option value="" hidden>District</option></SelectDistrict>
+                    </div>
                 </div>
                 {/* map */}
                 <div className="mapContainer">
