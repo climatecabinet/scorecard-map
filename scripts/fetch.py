@@ -24,25 +24,34 @@ script 1/4
 """
 
 # import libraries
-import os
 import zipfile
 import requests
 import us
+from pathlib import Path
 
 # download shp files from the Census
 # note: The Census download URLs are case-sensitive
 YEAR = "2020"
 URL = "https://www2.census.gov/geo/tiger/TIGER{year}/SLD{chamber_uppercase}/tl_{year}_{fips}_sld{chamber}.zip"
+OUT = Path("data/geospatial/fetch/")
 
 # make folder if it doesnt exist
-try:
-    os.makedirs("data/geospatial/source/")
-except FileExistsError:
-    pass
+OUT.mkdir(parents=True, exist_ok=True)
 
 # for every state, including PR and Alaska
-for state in us.STATES + [us.states.PR]:
+for state in us.STATES:
     print("Fetching shapefiles for {}".format(state.name))
+
+    # get and save the shapefile for the whole state
+    response = requests.get(state.shapefile_urls('state'))
+    response.raise_for_status()
+
+    state_shp = OUT / Path(response.url).name
+
+    with open(state_shp, "wb") as f:
+        f.write(response.content)
+    with zipfile.ZipFile(state_shp, "r") as f:
+        f.extractall(OUT)
 
     # creating variables for the URL
     for chamber in ["l", "u"]:
@@ -53,7 +62,7 @@ for state in us.STATES + [us.states.PR]:
             continue
 
         # skip if we already have this file
-        if os.path.exists(f"data/geospatial/source/tl_{YEAR}_{fips}_sld{chamber}.shp"):
+        if (OUT / f"tl_{YEAR}_{fips}_sld{chamber}.shp").exists():
             print(f"skipping {state} {fips} sld{chamber}")
             continue
 
@@ -67,7 +76,7 @@ for state in us.STATES + [us.states.PR]:
 
         # store file
         if response.status_code == 200:
-            filename = f"data/geospatial/source/tl_{YEAR}_{fips}_sld{chamber}.zip"
+            filename = OUT / f"tl_{YEAR}_{fips}_sld{chamber}.zip"
 
             # This _could_ all be done with a single file operation,
             # by using a `BytesIO` file-like object to temporarily hold the
@@ -77,6 +86,6 @@ for state in us.STATES + [us.states.PR]:
             with open(filename, "wb") as f:
                 f.write(response.content)
             with zipfile.ZipFile(filename, "r") as f:
-                f.extractall("data/geospatial/source")
+                f.extractall(OUT)
         else:
             response.raise_for_status()
