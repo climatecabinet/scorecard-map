@@ -12,14 +12,12 @@ export const config = {
 // sources for the map layers
 export const sources = {
     house: {
-        type: 'vector', // last refreshed 9/03/2021
-        // tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allhousereduced09031/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
-        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allhousefinal09271/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'vector', // last refreshed 9/29/2021
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allhousefinal09291/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     senate: {
-        type: 'vector', // last refreshed 9/03/2021
-        // tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allsenatereduced09031/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
-        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allsenatefinal09271/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'vector', // last refreshed 9/29/2021
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allsenatefinal09291/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     }
 }
 
@@ -27,7 +25,7 @@ export const layers = [
     {
       id: "house-fill",
       source: 'house',
-	  'source-layer': 'allhousefinal0927_0',
+	  'source-layer': 'allhousefinal0929_0',
       type: 'fill',
       paint: {
         'fill-color': [
@@ -56,7 +54,7 @@ export const layers = [
     {
         id: "senate-fill",
         source: 'senate',
-		'source-layer': 'allsenatefinal0927_0',
+		'source-layer': 'allsenatefinal0929_0',
         type: 'fill',
         paint: { 
             'fill-color': [
@@ -86,7 +84,7 @@ export const layers = [
 	{
 		id: "house-highlight",
 		source: "house",
-		'source-layer': 'allhousefinal0927_0',
+		'source-layer': 'allhousefinal0929_0',
 		type: "line",
 		filter: ['in', 'ccid', ''],
 		paint: {
@@ -97,7 +95,7 @@ export const layers = [
 	{
 		id: "senate-highlight",
 		source: "senate",
-		'source-layer': 'allsenatefinal0927_0',
+		'source-layer': 'allsenatefinal0929_0',
 		type: "line",
 		filter: ['in', 'ccid', ''],
 		paint: {
@@ -114,8 +112,8 @@ export const state_bounds = {
 	ct: [16.91, 4.26, 18.28, 5.6],
 	fl: [7.61, -13.17, 14.83, -7.02],
 	ga: [8.89, -7.52, 13.2, -3.03],
-	// (matt): removing IA temporarily for political reasons
-	// ia: [-0.0, 1.77, 4.78, 4.92], 
+	// TEMP(matt): removing IA for QA/QC reasons
+	// ia: [-0.0, 1.77, 4.78, 4.92],
 	me: [17.78, 6.81, 20.72, 11.36],
 	md: [12.99, 0.78, 16.59, 2.66],
 	mi: [4.31, 3.41, 10.31, 9.68],
@@ -125,7 +123,7 @@ export const state_bounds = {
 	nv: [-17.81, -2.26, -12.77, 5.54],
 	nj: [15.94, 2.02, 17.0, 4.45],
 	nm: [-10.61, -6.74, -5.07, -1.01],
-	// (matt): removing NC temporarily for political reasons
+	// TEMP(matt): removing NC for partnership reasons
 	// nc: [9.92, -3.57, 16.91, -0.48],
 	or: [-20.12, 5.03, -13.74, 10.42],
 	pa: [11.84, 1.99, 16.45, 4.97],
@@ -346,7 +344,7 @@ export const senate_bounds = {
 		54: [9.27, -3.81, 9.96, -3.19],
 		51: [9.68, -3.81, 10.55, -3.13],
 	},
-	// (matt): removing IA temporarily for political reasons
+	// TEMP(matt): removing IA for QA/QC reasons
 	// ia: {
 	// 	50: [4.25, 3.87, 4.39, 4.0],
 	// 	21: [2.1, 2.82, 2.22, 2.95],
@@ -786,7 +784,7 @@ export const senate_bounds = {
 		41: [-6.56, -6.52, -5.44, -5.51],
 		16: [-8.16, -3.28, -8.01, -3.15],
 	},
-	// (matt): removing NC temporarily for political reasons
+	// TEMP(matt): removing NC for partnership reasons
 	// nc: {
 	// 	31: [12.67, -1.97, 13.19, -1.4],
 	// 	20: [14.02, -1.65, 14.25, -1.43],
@@ -1739,7 +1737,7 @@ export const house_bounds = {
 		61: [9.74, -4.51, 9.95, -4.34],
 		140: [10.31, -5.58, 10.82, -5.03],
 	},
-	// (matt): removing IA temporarily for political reasons
+	// TEMP(matt): removing IA for QA/QC reasons
 	// ia: {
 	// 	36: [2.16, 2.94, 2.21, 3.0],
 	// 	35: [2.19, 2.94, 2.24, 2.99],
@@ -2877,7 +2875,7 @@ export const house_bounds = {
 		42: [16.88, 3.84, 16.91, 3.88],
 		14: [17.14, 3.88, 17.25, 4.02]
 	},
-	// (matt): removing NC temporarily for political reasons
+	// TEMP(matt): removing NC for partnership reasons
 	// nc: {
 	// 	49: [14.17, -1.7, 14.33, -1.56],
 	// 	79: [15.37, -2.14, 16.1, -1.44],

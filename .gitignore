@@ -1,5 +1,4 @@
 scripts/data/geospatial/*
-*data/geospatial/topo-state-leg
 *scripts/reproject.py
 *scripts/mongo-to-csv.py
 *scripts/sample.ipynb
