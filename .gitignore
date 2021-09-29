@@ -1,9 +1,4 @@
-data/geospatial/*
-*data/geospatial/appended-state-leg
-*data/geospatial/source
-*data/geospatial/all
-*data/source
-*data/geospatial/topo-state-leg
+scripts/data/geospatial/*
 *scripts/reproject.py
 *scripts/mongo-to-csv.py
 *scripts/sample.ipynb
