@@ -28,7 +28,12 @@ SKIP_STATES = ['NC', 'IA']
 def append_scores_for_chamber(legi_df, raw_dir, cleaned_dir):
     for raw_shape in sorted(raw_dir.glob("*.geojson")):
         # store the file in a gdf
-        raw_gdf = gpd.read_file(raw_shape)
+        try:
+            raw_gdf = gpd.read_file(raw_shape)
+        except:
+            import pdb
+
+            pdb.set_trace()
         # if there's a ccid field, append the score
         if 'ccid' not in raw_gdf.columns:
             print('theres no ccid field. pass.')

@@ -13,6 +13,7 @@ script 3/4
 # import libraries
 import json
 import shutil
+import geojson
 import subprocess
 from pathlib import Path
 from shapely.geometry import shape, mapping, MultiPolygon
@@ -88,6 +89,26 @@ def reproject_chamber_shapes(raw_dir, clean_dir):
             ],
             shell=True,
         )
+
+        # TEMP(matt): for some reason, reprojecting in some state chambers
+        # makes the geojson invalid. This might be a problem with dirty-reproject,
+        # a workaround for now is to make sure the geojson came out valid, and
+        # re-export via mapshaper if not
+        if not geojson.load(open(clean_shape, 'r')).is_valid:
+            shape_to_fix = clean_shape.rename(
+                clean_shape.with_name(f"{clean_shape.stem}-temp{clean_shape.suffix}")
+            )
+
+            subprocess.run(
+                [
+                    "mapshaper "
+                    + str(shape_to_fix)
+                    + f' -o {str(clean_dir / raw_shape.name)}'
+                ],
+                shell=True,
+            )
+
+            shape_to_fix.unlink()
 
 
 if __name__ == "__main__":
