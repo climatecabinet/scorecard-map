@@ -28,9 +28,10 @@ if __name__ == "__main__":
             state_with_scores = (
                 raw_dir / chamber / raw_shape.name.replace('state', chamber)
             )
-            if state_with_scores.exists():
-                raw_shape = state_with_scores
-            shutil.copy(raw_shape, clean_dir / chamber / raw_shape.name)
+            shape_to_use = (
+                state_with_scores if state_with_scores.exists() else raw_shape
+            )
+            shutil.copy(shape_to_use, clean_dir / chamber / shape_to_use.name)
 
     # run geojson merge to merge everything in batches
     print('Merging geojsons into national shapefiles')

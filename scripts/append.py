@@ -14,6 +14,7 @@ script 4/4
 """
 
 # import libraries
+import re
 import pymongo
 import urllib
 import pandas as pd

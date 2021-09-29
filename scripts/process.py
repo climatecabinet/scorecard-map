@@ -51,6 +51,8 @@ def shp_to_geojson(geojson_path, is_state_file):
     # add bounds
     # gdf['bounds'] = gdf.bounds.round(2).apply(lambda row: list(row), axis=1)
 
+    chamber = 'House' if geojson_path.stem.endswith('sldl') else 'Senate'
+
     # parse to geojson
     gdf_parsed = gdf.to_json()
     geojson = json.loads(gdf_parsed)
@@ -83,8 +85,6 @@ def shp_to_geojson(geojson_path, is_state_file):
                 if feature["properties"]["LSAD"] == "LU"
                 else feature["properties"]["GEOID"] + "L"
             )
-
-            chamber = 'House' if feature["properties"]["LSAD"] == "LL" else 'Senate'
 
             district = (
                 feature["properties"]["SLDLST"].lstrip('0')
@@ -135,6 +135,7 @@ if __name__ == "__main__":
     # convert from shp to geojson
     for file in files:
         is_state_file = "state10" in file.name
+
         # create geojson in source folder
         newfilename = file.with_suffix(".geojson")
         if os.path.exists(newfilename):
@@ -156,7 +157,7 @@ if __name__ == "__main__":
                 check=True,
             )
         # create geojson in all folder
-        shp_to_geojson(file, is_state_file)
+        shp_to_geojson(newfilename, is_state_file)
 
     # finished message
     print("Done converting shp to geojson")
