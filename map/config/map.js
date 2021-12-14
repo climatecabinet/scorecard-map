@@ -4141,7 +4141,8 @@ export const initialsToState = {
 	ct: 'Connecticut',
 	fl: 'Florida',
 	ga: 'Georgia',
-	ia: 'Iowa', 
+	// (matt): removing IA temporarily for political reasons
+	// ia: 'Iowa', 
 	me: 'Maine',
 	md: 'Maryland',
 	mi: 'Michigan',
@@ -4151,7 +4152,8 @@ export const initialsToState = {
 	nv: 'Nevada',
 	nj: 'New Jersey',
 	nm: 'New Mexico',
-	nc: 'North Carolina',
+	// (matt): removing NC temporarily for political reasons
+	// nc: 'North Carolina',
 	or: 'Oregon',
 	pa: 'Pennsylvania',
 	sc: 'South Carolina',
