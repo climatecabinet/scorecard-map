@@ -3,6 +3,7 @@ import mapboxgl from '!mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { siteMetadata } from '../../../gatsby-config'
 import { useData } from '../Data/regions'
+import { has } from 'immutable'
 import { sources, layers, chambers,state_bounds, senate_bounds, house_bounds, initialsToState, statesToCodes, chamberToLetter} from '../../../config/map'
 import styled from '../../../util/style'
 import "typeface-lato";
@@ -407,8 +408,8 @@ const Map = () => {
 
     const incumbentId = selectedCcid && regionsIndex.getIn([selectedCcid, 'incumbents', 0, 'rep']);
     const regionName = selectedCcid && regionsIndex.getIn([selectedCcid, 'name']);
-    const incumbentsList = [];
-    if (selectedCcid) {
+    let incumbentsList = [];
+    if (selectedCcid && has(regionsIndex, selectedCcid)){
         for (let i = 0; i < regionsIndex.getIn([selectedCcid, 'incumbents']).size; i++) {
             incumbentsList.push(regionsIndex.getIn([selectedCcid, 'incumbents', i, 'rep']))
         }
