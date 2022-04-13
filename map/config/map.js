@@ -12,12 +12,12 @@ export const config = {
 // sources for the map layers
 export const sources = {
     house: {
-        type: 'vector', // last refreshed 9/29/2021
-        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allhousefinal09291/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'vector', // last refreshed 4/12/2022
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/all_house_final_0412/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     },
     senate: {
-        type: 'vector', // last refreshed 9/29/2021
-        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/allsenatefinal09291/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
+        type: 'vector', // last refreshed 4/12/2022
+        tiles: ['https://vectortileservices3.arcgis.com/BrDfCNAt6y4CiXSR/arcgis/rest/services/all_senate_final_0412/VectorTileServer/tile/{z}/{y}/{x}.pbf'],
     }
 }
 
@@ -25,7 +25,7 @@ export const layers = [
     {
       id: "house-fill",
       source: 'house',
-	  'source-layer': 'allhousefinal0929_0',
+	  'source-layer': 'all_house_final_0412_0',
       type: 'fill',
       paint: {
         'fill-color': [
@@ -54,7 +54,7 @@ export const layers = [
     {
         id: "senate-fill",
         source: 'senate',
-		'source-layer': 'allsenatefinal0929_0',
+		'source-layer': 'all_senate_final_0412_0',
         type: 'fill',
         paint: { 
             'fill-color': [
@@ -84,7 +84,7 @@ export const layers = [
 	{
 		id: "house-highlight",
 		source: "house",
-		'source-layer': 'allhousefinal0929_0',
+		'source-layer': 'all_house_final_0412_0',
 		type: "line",
 		filter: ['in', 'ccid', ''],
 		paint: {
@@ -95,7 +95,7 @@ export const layers = [
 	{
 		id: "senate-highlight",
 		source: "senate",
-		'source-layer': 'allsenatefinal0929_0',
+		'source-layer': 'all_senate_final_0412_0',
 		type: "line",
 		filter: ['in', 'ccid', ''],
 		paint: {
