@@ -23,7 +23,7 @@
     "apollo-link-http": "^1.5.17",
     "crypto-browserify": "^3.12.0",
     "fetch": "^1.1.0",
-    "gatsby": "^3.13.0",
+    "gatsby": "^3.14.6",
     "gatsby-plugin-react-helmet": "^4.7.1",
     "gatsby-plugin-styled-components": "^4.7.1",
     "gatsby-source-graphql": "^3.7.1",
