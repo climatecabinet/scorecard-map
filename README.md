@@ -18,9 +18,11 @@ npm run develop
 ```
 
 ## How to refresh the map files?
-1. Run the following script
+1. Run the following commands
 ```(shell)
-$ python scripts/all.py
+$ cd scripts
+$ . .env/bin/activate
+$ python all.py
 ``` 
 2. Upload both files to the Climate Cabinet ArcGIS Developer Account
 3. Convert feature layers into vector tile layers

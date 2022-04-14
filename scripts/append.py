@@ -22,15 +22,15 @@ import geopandas as gpd
 from pathlib import Path
 
 
+# TEMP(matt): prevent IL from generating with sub-district divisions
+SKIP_STATES = ["IL"]
+
+
 def append_scores_for_chamber(legi_df, raw_dir, cleaned_dir):
     for raw_shape in sorted(raw_dir.glob("*.geojson")):
         # store the file in a gdf
-        try:
-            raw_gdf = gpd.read_file(raw_shape)
-        except:
-            import pdb
+        raw_gdf = gpd.read_file(raw_shape)
 
-            pdb.set_trace()
         # if there's a ccid field, append the score
         if "ccid" not in raw_gdf.columns:
             print("theres no ccid field. pass.")
@@ -41,7 +41,7 @@ def append_scores_for_chamber(legi_df, raw_dir, cleaned_dir):
         # if there are no scores for this state, continue
         state_abbr = raw_shape.stem.split("-")[0]
 
-        if not len(clean_gdf):
+        if not len(clean_gdf) or state_abbr in SKIP_STATES:
             print(
                 f"Skipping {raw_shape.name}, no cc scores to include (or a skip state)."
             )
@@ -75,8 +75,6 @@ def extract_data_from_mongo():
 
 
 if __name__ == "__main__":
-    print("connect to the production database")
-
     regions, reps = extract_data_from_mongo()
 
     """ create tidy dataframe """
