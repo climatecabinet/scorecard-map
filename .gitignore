@@ -1,4 +1,5 @@
 scripts/data/geospatial/*
+scripts/.env
 *scripts/reproject.py
 *scripts/mongo-to-csv.py
 *scripts/sample.ipynb

@@ -23,7 +23,7 @@ step 3: parse into json
 step 4: add fields for chamber, district, state, ...
 step 5: export as geojson
 
-script 2/4
+script 2/5
 
 TODO: MD, NJ, NY, and WI house won't output for this script. figure out why. 
 """
@@ -51,7 +51,7 @@ def shp_to_geojson(geojson_path, is_state_file):
     # add bounds
     # gdf['bounds'] = gdf.bounds.round(2).apply(lambda row: list(row), axis=1)
 
-    chamber = 'House' if geojson_path.stem.endswith('sldl') else 'Senate'
+    chamber = "House" if geojson_path.stem.endswith("sldl") else "Senate"
 
     # parse to geojson
     gdf_parsed = gdf.to_json()
@@ -62,7 +62,7 @@ def shp_to_geojson(geojson_path, is_state_file):
         # rename keys in state files
         if is_state_file:
             for key in [k for k in feature["properties"].keys()]:
-                new_key = key.replace('10', '')
+                new_key = key.replace("10", "")
                 feature["properties"][new_key] = feature["properties"].pop(key)
 
         state = us.states.lookup(feature["properties"]["STATEFP"])
@@ -75,7 +75,7 @@ def shp_to_geojson(geojson_path, is_state_file):
         else:
             name = (
                 us.states.lookup(feature["properties"]["STATEFP"]).name
-                + ' '
+                + " "
                 + feature["properties"]["NAMELSAD"]
             )
 
@@ -87,9 +87,9 @@ def shp_to_geojson(geojson_path, is_state_file):
             )
 
             district = (
-                feature["properties"]["SLDLST"].lstrip('0')
+                feature["properties"]["SLDLST"].lstrip("0")
                 if "SLDLST" in feature["properties"].keys()
-                else feature["properties"]["SLDUST"].lstrip('0')
+                else feature["properties"]["SLDUST"].lstrip("0")
             )
 
         feature["properties"] = {
