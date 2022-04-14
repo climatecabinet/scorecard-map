@@ -10,7 +10,7 @@ process:
 7. Export as 1 file: geojson-merge house/*.geojson > all-house.geojson or geojson-merge senate/*.geojson > all-senate.geojson
 8. QA/QC in Mapshaper (and reduce file size if needed)
 
-script 4/4
+script 4/5
 """
 
 # import libraries
@@ -53,30 +53,41 @@ def append_scores_for_chamber(legi_df, raw_dir, cleaned_dir):
         clean_gdf.to_file(cleaned_dir / raw_shape.name, driver="GeoJSON")
 
 
-if __name__ == "__main__":
-    """pull data from MongoDB"""
+def extract_data_from_mongo():
+    """Returns the Regions and Representatives collections as Dataframes."""
     print("connect to the production database")
-    # read in regions data from mongodb
+
     username = urllib.parse.quote_plus("browse-data")
     password = urllib.parse.quote_plus("climate-cabinet-1963")
+
     client = pymongo.MongoClient(
-        f'mongodb+srv://{urllib.parse.quote_plus("browse-data")}:'
-        f'{urllib.parse.quote_plus("climate-cabinet-1963")}'
-        "@cluster1.kmeus.mongodb.net/"
+        f"mongodb+srv://{username}:{password}@cluster1.kmeus.mongodb.net/"
     )
+
     db = client["production-3-8-2022"]
-    df = pd.DataFrame(list(db.region.find()))
-    df1 = pd.DataFrame(list(db.representative.find()))
+
+    regions = pd.DataFrame(list(db.region.find()))
+    reps = pd.DataFrame(list(db.representative.find()))
+
     client.close()
+
+    return (regions, reps)
+
+
+if __name__ == "__main__":
+    print("connect to the production database")
+
+    regions, reps = extract_data_from_mongo()
 
     """ create tidy dataframe """
     print("creating tidy dataframe")
+
     # expanded incumbents
     df_incumbents = pd.concat(
         [
-            df.drop(["incumbents"], axis=1),
-            df["incumbents"].apply(pd.Series)[0].apply(pd.Series)[["name", "rep"]],
-            df["incumbents"].apply(pd.Series)[1].apply(pd.Series)[["name", "rep"]],
+            regions.drop(["incumbents"], axis=1),
+            regions["incumbents"].apply(pd.Series)[0].apply(pd.Series)[["name", "rep"]],
+            regions["incumbents"].apply(pd.Series)[1].apply(pd.Series)[["name", "rep"]],
         ],
         axis=1,
     )
@@ -104,8 +115,8 @@ if __name__ == "__main__":
     regions = regions[["state_abbr", "geoid", "ccid", "district_name"]]
 
     # filtered representative dataframe
-    rep_df = pd.concat(
-        [df1.drop(["office"], axis=1), df1["office"].apply(pd.Series)], axis=1
+    reps = pd.concat(
+        [reps.drop(["office"], axis=1), reps["office"].apply(pd.Series)], axis=1
     )[
         [
             "full_name",
@@ -120,7 +131,7 @@ if __name__ == "__main__":
 
     # get average score (for current legislators)
     representative = (
-        rep_df.query("is_current == True")
+        reps.query("is_current == True")
         .groupby("district_ccid")
         .mean()
         .reset_index(drop=False)[["district_ccid", "cc_score"]]
@@ -139,15 +150,15 @@ if __name__ == "__main__":
 
     # manual edits -- append districts with vacant seats
 
-    # set PA House District 113 cc score as SEAT VACANT (444)
-    # special election is nov 2021
-    ccscorecard_legislator.loc[len(ccscorecard_legislator.index)] = [
-        "PA",
-        "42113",
-        "42113L",
-        "State House District 113",
-        444,
-    ]
+    # # set PA House District 113 cc score as SEAT VACANT (444)
+    # # special election is nov 2021
+    # ccscorecard_legislator.loc[len(ccscorecard_legislator.index)] = [
+    #     "PA",
+    #     "42113",
+    #     "42113L",
+    #     "State House District 113",
+    #     444,
+    # ]
 
     # tidy dataframe
     ccscorecard_legislator = ccscorecard_legislator.sort_values(
